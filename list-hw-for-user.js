@@ -14,45 +14,71 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-(async function() {
-  let client, db;
-  try {
-    client = await MongoClient.connect(process.env.MONGOLAB_URI);
-    db = client.db(process.env.DB_NAME);
-    const colHw = db.collection(COLLECTION_HW);
-    const cursorHw = colHw.find({ itemUserRow: process.argv[2] });
+let client, db;
+
+const init = () => {
+  return new Promise((resolve, reject) => {
+    MongoClient
+      .connect(process.env.MONGOLAB_URI)
+      .then((cli) => {
+        client = cli;
+        db = client.db(process.env.DB_NAME);
+        resolve();
+      })
+      .catch((err) => { reject(err); });
+  });
+};
+
+const getHw = (user) => {
+  return new Promise((resolve, reject) => {
+    const col = db.collection(COLLECTION_HW);
+    const cursor = col.find({ itemUserRow: user });
     const results = [];
-    cursorHw.forEach((doc) => {
+    cursor.forEach((doc) => {
       results.push({
         item: doc.itemItemRow,
         type: doc.itemTypeRow,
+        date: doc.itemDateRow,
+        price: doc.itemPriceRow,
+        condition: doc.itemConditionRow,
         id: doc.itemIdRow,
         active: doc.itemDisabled === 'false',
         note: doc.itemNoteRow
       });
-    }, async (err1) => {
-      if (err1) { console.log(err1); }
+    }, (err) => {
+      if (err) { reject(err); }
       else {
-        // console.log(results);
-        if (client) { client.close(); }
-        client = await MongoClient.connect(process.env.MONGOLAB_URI);
-        db = client.db(process.env.DB_NAME);
-        const colHist = db.collection(COLLECTION_HIST);
-        const cursorHist = colHist.find({ itemId: results[0].id });
-        const hists = [];
-        cursorHist.forEach((hist) => {
-          hists.push({ date: hist.date, msg: hist.msg });
-        }, (e) => {
-          if (e) { console.log(e); }
-          results[0].history = hists.sort((a, b) => (a.date < b.date));
-          console.log(results[0]);
-          process.exit(0);
-        });
+        resolve(results);
       }
     });
-  } catch (err) {
-    console.log(err.stack);
-  }
+  });
+};
 
+const getHistory = (itemId) => {
+  return new Promise((resolve, reject) => {
+    const col = db.collection(COLLECTION_HIST);
+    const cursor = col.find({ itemId });
+    const results = [];
+    cursor.forEach((doc) => {
+      results.push({
+        date: doc.date,
+        msg: doc.msg
+      });
+    }, (err) => {
+      if (err) { reject(err); }
+      else {
+        resolve(results.sort((a, b) => { return a.date > b.date; }));
+      }
+    });
+  });
+};
+
+(async function () {
+  await init();
+  const hwItems = await getHw(process.argv[2]);
+  for (let i = 0; i < hwItems.length; i++) {
+    hwItems[i].history = await getHistory(hwItems[i].id);
+  }
+  console.log(JSON.stringify(hwItems, null, 8));
   if (client) { client.close(); }
 })();
