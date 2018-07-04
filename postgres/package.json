@@ -8,6 +8,7 @@
     "node-pg-migrate": "^3.6.0",
     "pg": "^7.4.3",
     "pg-promise": "^8.4.5",
+    "printf": "^0.3.0",
     "squel": "^5.12.1",
     "winston": "^3.0.0"
   },

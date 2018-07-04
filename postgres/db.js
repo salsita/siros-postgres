@@ -26,7 +26,7 @@ class Db {
           },
         });
         this.connected = true;
-        this.logger.info(`[${this.name}] connected`);
+        this.logger.debug(`[${this.name}] connected`);
       } catch (e) {
         this.logger.error(`[${this.name}] cannot connect to "${this.url}"`);
         this.reconnect();
