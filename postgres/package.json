@@ -1,0 +1,26 @@
+{
+  "name": "siros-scripts",
+  "version": "1.0.0",
+  "description": "New generation of HW / budget tracking system",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "node-pg-migrate": "^3.6.0",
+    "pg": "^7.4.3",
+    "pg-promise": "^8.4.5",
+    "squel": "^5.12.1",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0"
+  },
+  "scripts": {
+    "lint": "eslint . migrations",
+    "migrate": "node-pg-migrate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
+  "license": "MIT"
+}
