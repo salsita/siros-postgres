@@ -18,6 +18,7 @@ class Db {
   async connect() {
     if (!this.connected) {
       try {
+        this.logger.info(`[${this.name}] connecting ...`);
         await this.db.connect({
           onLost: () => {
             this.logger.error(`[${this.name}] connection lost, reconnecting ...`);
@@ -26,7 +27,7 @@ class Db {
           },
         });
         this.connected = true;
-        this.logger.debug(`[${this.name}] connected`);
+        this.logger.info(`[${this.name}] connected`);
       } catch (e) {
         this.logger.error(`[${this.name}] cannot connect to "${this.url}"`);
         this.reconnect();
