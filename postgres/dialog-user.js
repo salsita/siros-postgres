@@ -3,6 +3,11 @@ const printf = require('printf');
 const dialogStates = {
   init: 1,
   end: 2,
+  createUserName: 3,
+  createUserSystem: 4,
+  createUserStartDate: 5,
+  createUserPartTime: 6,
+  createUser: 7,
 };
 
 const questions = {
@@ -11,7 +16,7 @@ const questions = {
     handlers: [
       {
         match: /^[s]{0,1}$/i,
-        code: async (context) => {
+        code: async (answer, context) => {
           const users = await context.dbQuery.getUsers();
           let idWidth = 3;
           let nameWidth = 5;
@@ -41,19 +46,107 @@ const questions = {
       },
       {
         match: /^[c]$/i,
-        code: (context) => {
-          return dialogStates.init;
-        },
+        code: () => dialogStates.createUserName,
       },
       {
         match: /^[e]$/i,
-        code: (context) => {
-          return dialogStates.init;
-        },
+        code: () => dialogStates.init,
       },
       {
         match: /^[q]$/i,
         code: () => dialogStates.end,
+      },
+    ],
+  },
+
+  [dialogStates.createUserName]: {
+    text: 'enter (non-empty) name of the new user',
+    handlers: [
+      {
+        match: /^\S.*\S$/,
+        code: (answer, context) => {
+          context.newUser = { name: answer };
+          return dialogStates.createUserSystem;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createUserSystem]: {
+    text: 'is this user a system user? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: (answer, context) => {
+          context.newUser.system = true;
+          context.newUser.active = null;
+          context.newUser.start_date = null;
+          context.newUser.part_time = null;
+          const str = `\nabout to create the following user:\n${JSON.stringify(context.newUser, null, 2)}\n\n`;
+          process.stdout.write(str);
+          return dialogStates.createUser;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: (answer, context) => {
+          context.newUser.system = false;
+          context.newUser.active = true;
+          context.newUser.start_date = (new Date()).toISOString().substr(0, 10);
+          questions[dialogStates.createUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for ${context.newUser.start_date})`;
+          return dialogStates.createUserStartDate;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createUserStartDate]: {
+    text: '<replaced from [dialogStates.createUserSystem], handler "n">',
+    handlers: [
+      {
+        match: /^$/,
+        code: () => dialogStates.createUserPartTime,
+      },
+      {
+        match: /^20\d{2}-\d{2}-\d{2}$/,
+        code: (answer, context) => {
+          context.newUser.start_date = answer;
+          return dialogStates.createUserPartTime;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createUserPartTime]: {
+    text: 'part time? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: (answer, context) => {
+          context.newUser.part_time = true;
+          const str = `\nabout to create the following user:\n${JSON.stringify(context.newUser, null, 2)}\n\n`;
+          process.stdout.write(str);
+          return dialogStates.createUser;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: (answer, context) => {
+          context.newUser.part_time = false;
+          const str = `\nabout to create the following user:\n${JSON.stringify(context.newUser, null, 2)}\n\n`;
+          process.stdout.write(str);
+          return dialogStates.createUser;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createUser]: {
+    text: 'do you want to proceed? (y/N)',
+    handlers: [
+      {
+        match: /^.*$/,
+        code: () => dialogStates.init,
       },
     ],
   },
