@@ -39,7 +39,7 @@ const main = async () => {
     if (!code) {
       process.stdout.write('\n! that is unfortunately invalid answer, please try again\n\n');
     } else {
-      currentState = await code(answer, context);
+      currentState = await code(context, answer);
     }
   }
 
