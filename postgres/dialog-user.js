@@ -1,14 +1,54 @@
 const printf = require('printf');
 
+const printUsers = (users) => {
+  let idWidth = 3;
+  let nameWidth = 5;
+  let len;
+  let i;
+  users.forEach((user) => {
+    len = user.id.toString().length;
+    if (len > idWidth) { idWidth = len; }
+    len = user.name.length;
+    if (len > nameWidth) { nameWidth = len; }
+  });
+  let str = printf(` %${idWidth}s | S | A | name:\n`, 'id:');
+  process.stdout.write(str);
+  str = '-';
+  for (i = 0; i < idWidth; i += 1) { str += '-'; }
+  str += '-+---+---+-';
+  for (i = 0; i < nameWidth; i += 1) { str += '-'; }
+  str += '-\n';
+  process.stdout.write(str);
+  users.forEach((user) => {
+    str = printf(` %${idWidth}s | ${user.system === true ? 'x' : ' '} | ${user.active === true ? 'x' : ' '} | %s\n`, user.id, user.name);
+    process.stdout.write(str);
+  });
+  process.stdout.write(`(${users.length} rows)\n\n`);
+};
+
+const printChanges = (id, changes) => {
+  const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
+  process.stdout.write(str);
+};
+
 const dialogStates = {
   init: 1,
   end: 2,
+
   createUserName: 3,
   createUserSystem: 4,
   createUserStartDate: 5,
   createUserActive: 6,
   createUserPartTime: 7,
   createUser: 8,
+
+  editUserId: 9,
+  editUserName: 10,
+  editUserSystem: 11,
+  editUserStartDate: 12,
+  editUserActive: 13,
+  editUserPartTime: 14,
+  editUser: 15,
 };
 
 const questions = {
@@ -20,29 +60,7 @@ const questions = {
         code: async (context) => {
           const users = await context.dbQuery.getUsers();
           if (users === null) { return dialogStates.init; }
-          let idWidth = 3;
-          let nameWidth = 5;
-          let len;
-          let i;
-          users.forEach((user) => {
-            len = user.id.toString().length;
-            if (len > idWidth) { idWidth = len; }
-            len = user.name.length;
-            if (len > nameWidth) { nameWidth = len; }
-          });
-          let str = printf(` %${idWidth}s | S | A | name:\n`, 'id:');
-          process.stdout.write(str);
-          str = '-';
-          for (i = 0; i < idWidth; i += 1) { str += '-'; }
-          str += '-+---+---+-';
-          for (i = 0; i < nameWidth; i += 1) { str += '-'; }
-          str += '-\n';
-          process.stdout.write(str);
-          users.forEach((user) => {
-            str = printf(` %${idWidth}s | ${user.system === true ? 'x' : ' '} | ${user.active === true ? 'x' : ' '} | %s\n`, user.id, user.name);
-            process.stdout.write(str);
-          });
-          process.stdout.write(`(${users.length} rows)\n\n`);
+          printUsers(users);
           return dialogStates.init;
         },
       },
@@ -52,7 +70,7 @@ const questions = {
       },
       {
         match: /^[e]$/i,
-        code: () => dialogStates.init,
+        code: () => dialogStates.editUserId,
       },
       {
         match: /^[q]$/i,
@@ -94,7 +112,7 @@ const questions = {
         code: (context) => {
           context.newUser.system = false;
           context.newUser.start_date = (new Date()).toISOString().substr(0, 10);
-          questions[dialogStates.createUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for ${context.newUser.start_date})`;
+          questions[dialogStates.createUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for "${context.newUser.start_date}")`;
           return dialogStates.createUserStartDate;
         },
       },
@@ -172,6 +190,218 @@ const questions = {
           if (id !== null) {
             process.stdout.write(`\nnew user with id (${id}) successfully created\n\n`);
           }
+          context.newUser = undefined;
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+
+  [dialogStates.editUserId]: {
+    text: '(s)how existing users, go (b)ack, or enter user id to edit (S/b/<number>)',
+    handlers: [
+      {
+        match: /^[s]{0,1}$/i,
+        code: async (context) => {
+          const users = await context.dbQuery.getUsers();
+          if (users === null) { return dialogStates.init; }
+          printUsers(users);
+          return dialogStates.editUserId;
+        },
+      },
+      {
+        match: /^[b]$/i,
+        code: () => dialogStates.init,
+      },
+      {
+        match: /^\d+$/,
+        code: async (context, answer) => {
+          const id = parseInt(answer, 10);
+          const user = await context.dbQuery.getUser(id);
+          if (user === null) { return dialogStates.init; }
+          if (user === 0) {
+            process.stdout.write('\nno such user in DB\n\n');
+            return dialogStates.editUserId;
+          }
+          context.userId = id;
+          context.userData = user;
+          user.id = undefined;
+          process.stdout.write(`\nediting user:\n${JSON.stringify(user, null, 2)}\n\n`);
+
+          context.changes = {};
+          /* eslint-disable max-len */
+          questions[dialogStates.editUserName].text = `edit name of the new user (press enter for "${user.name}")`;
+          questions[dialogStates.editUserSystem].text = `system user? ${context.userData.system ? '(Y/n)' : '(y/N)'}`;
+          context.userData.start_date_default = context.userData.start_date || (new Date()).toISOString().substr(0, 10);
+          questions[dialogStates.editUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for "${context.userData.start_date_default}")`;
+          context.userData.active_default = context.userData.active === null ? true : context.userData.active;
+          questions[dialogStates.editUserActive].text = `active user? ${context.userData.active_default ? '(Y/n)' : '(y/N)'}`;
+          context.userData.part_time_default = context.userData.part_time === null ? false : context.userData.part_time;
+          questions[dialogStates.editUserPartTime].text = `part time? ${context.userData.part_time_default ? '(Y/n)' : '(y/N)'}`;
+
+          return dialogStates.editUserName;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editUserName]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^$/,
+        code: () => dialogStates.editUserSystem,
+      },
+      {
+        match: /^\S.*\S$/,
+        code: (context, answer) => {
+          if (answer !== context.userData.name) {
+            context.changes.name = answer;
+          }
+          return dialogStates.editUserSystem;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editUserSystem]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: (context) => {
+          if (context.userData.system === false) {
+            context.changes.system = true;
+            context.changes.active = null;
+            context.changes.start_date = null;
+            context.changes.part_time = null;
+            printChanges(context.userId, context.changes);
+            return dialogStates.editUser;
+          }
+          if (context.changes.name) {
+            printChanges(context.userId, context.changes);
+            return dialogStates.editUser;
+          }
+          process.stdout.write('\nthere is no change for given user then\n\n');
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]$/i,
+        code: (context) => {
+          if (context.userData.system === true) {
+            context.changes.system = false;
+          }
+          return dialogStates.editUserStartDate;
+        },
+      },
+      {
+        match: /^$/,
+        code: (context) => questions[dialogStates.editUserSystem].handlers[context.userData.system ? 0 : 1].code(context),
+      },
+    ],
+  },
+
+  [dialogStates.editUserStartDate]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^$/,
+        code: (context) => {
+          if (context.userData.start_date !== context.userData.start_date_default) {
+            context.changes.start_date = context.userData.start_date_default;
+          }
+          return dialogStates.editUserActive;
+        },
+      },
+      {
+        match: /^20\d{2}-\d{2}-\d{2}$/,
+        code: (context, answer) => {
+          if (context.userData.start_date !== answer) {
+            context.changes.start_date = answer;
+          }
+          return dialogStates.editUserActive;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editUserActive]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: (context) => {
+          if (context.userData.active !== true) {
+            context.changes.active = true;
+          }
+          return dialogStates.editUserPartTime;
+        },
+      },
+      {
+        match: /^[n]$/i,
+        code: (context) => {
+          if (context.userData.active !== false) {
+            context.changes.active = false;
+          }
+          return dialogStates.editUserPartTime;
+        },
+      },
+      {
+        match: /^$/,
+        code: (context) => questions[dialogStates.editUserActive].handlers[context.userData.active_default ? 0 : 1].code(context),
+      },
+    ],
+  },
+
+  [dialogStates.editUserPartTime]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: (context) => {
+          if (context.userData.part_time !== true) {
+            context.changes.part_time = true;
+          }
+          printChanges(context.userId, context.changes);
+          return dialogStates.editUser;
+        },
+      },
+      {
+        match: /^[n]$/i,
+        code: (context) => {
+          if (context.userData.part_time !== false) {
+            context.changes.part_time = false;
+          }
+          printChanges(context.userId, context.changes);
+          return dialogStates.editUser;
+        },
+      },
+      {
+        match: /^$/,
+        code: (context) => questions[dialogStates.editUserPartTime].handlers[context.userData.part_time_default ? 0 : 1].code(context),
+      },
+    ],
+  },
+
+  [dialogStates.editUser]: {
+    text: 'do you want to proceed? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const id = await context.dbQuery.updateUser(context.userId, context.changes);
+          if (id !== null) {
+            process.stdout.write(`\nuser with id (${id}) successfully updated\n\n`);
+          }
+          context.userId = undefined;
+          context.userData = undefined;
+          context.changes = undefined;
           return dialogStates.init;
         },
       },
