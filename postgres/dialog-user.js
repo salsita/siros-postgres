@@ -64,7 +64,7 @@ const questions = {
         match: /^[s]{0,1}$/i,
         code: async (context) => {
           const users = await context.dbQuery.getUsers();
-          if (users === null) { return dialogStates.init; }
+          if (!users) { return dialogStates.init; }
           printUsers(users);
           return dialogStates.init;
         },
@@ -192,7 +192,7 @@ const questions = {
         match: /^[y]$/i,
         code: async (context) => {
           const id = await context.dbQuery.createUser(context.newUser);
-          if (id !== null) {
+          if (id) {
             process.stdout.write(`\nnew user with id (${id}) successfully created\n\n`);
           }
           context.newUser = undefined;
@@ -214,7 +214,7 @@ const questions = {
         match: /^[s]{0,1}$/i,
         code: async (context) => {
           const users = await context.dbQuery.getUsers();
-          if (users === null) { return dialogStates.init; }
+          if (!users) { return dialogStates.init; }
           printUsers(users);
           return dialogStates.editUserId;
         },
@@ -392,7 +392,7 @@ const questions = {
         match: /^[y]$/i,
         code: async (context) => {
           const id = await context.dbQuery.updateUser(context.userId, context.changes);
-          if (id !== null) {
+          if (id) {
             process.stdout.write(`\nuser with id (${id}) successfully updated\n\n`);
           }
           context.userId = undefined;
