@@ -32,7 +32,7 @@ const main = async () => {
   for (let i = 0; i < users.length; i += 1) {
     const user = users[i];
     logger.info(`processing user "${user.name}" with id (${user.id})`);
-    const history = await dbQuery.getBudgetItems(user.id, 'initial-yearly');
+    const history = await dbQuery.getHwBudgetItems(user.id, 'initial-yearly');
     if (!history) { process.exit(1); }
     const updates = [];
     if (!history.length && (user.start_date >= config.hwBudget.startDate)) {
@@ -58,7 +58,7 @@ const main = async () => {
     }
     if (updates.length) {
       logger.info(`updates for the user:\n${JSON.stringify(updates, null, 2)}\n`);
-      const result = await dbQuery.addBudget(user.id, updates);
+      const result = await dbQuery.addHwBudget(user.id, updates);
       if (!result) { process.exit(1); }
     } else {
       logger.info('everything is up-to-date\n');

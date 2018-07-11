@@ -129,9 +129,9 @@ class DbQuery extends Db {
     }
   }
 
-  async getBudgetItems(userId, types) {
+  async getHwBudgetItems(userId, types) {
     if (!this.connected) {
-      this.logger.error(`[${this.name}] cannot perform getBudgetItems() operation in disconnected state`);
+      this.logger.error(`[${this.name}] cannot perform getHwBudgetItems() operation in disconnected state`);
       return null;
     }
     let query = squel.select()
@@ -151,15 +151,15 @@ class DbQuery extends Db {
       this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
       return res;
     } catch (e) {
-      this.logger.error(`[${this.name}] error during getBudgetItems() method`);
+      this.logger.error(`[${this.name}] error during getHwBudgetItems() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
   }
 
-  async addBudget(userId, updates) {
+  async addHwBudget(userId, updates) {
     if (!this.connected) {
-      this.logger.error(`[${this.name}] cannot perform addBudget() operation in disconnected state`);
+      this.logger.error(`[${this.name}] cannot perform addHwBudget() operation in disconnected state`);
       return null;
     }
     updates.forEach((item) => {
@@ -176,7 +176,34 @@ class DbQuery extends Db {
       this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
       return true;
     } catch (e) {
-      this.logger.error(`[${this.name}] error during addBudget() method`);
+      this.logger.error(`[${this.name}] error during addHwBudget() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getHwDetailFromHistory(historyId) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwDetailFromHistory() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('hw_categories.category', 'category')
+      .field('stores.store', 'store')
+      .field('hw.description', 'description')
+      .from('hw_history')
+      .join('hw', null, 'hw_history.hw_id = hw.id')
+      .join('hw_categories', null, 'hw.category = hw_categories.id')
+      .join('stores', null, 'hw.store = stores.id')
+      .where('hw_history.id = ?', historyId)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwDetailFromHistory() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
