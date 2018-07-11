@@ -27,8 +27,13 @@ const printUsers = (users) => {
 };
 
 const printChanges = (id, changes) => {
-  const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
-  process.stdout.write(str);
+  if (Object.keys(changes).length) {
+    const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
+    process.stdout.write(str);
+    return dialogStates.editUser;
+  }
+  process.stdout.write('\nthere is no change for given user then\n\n');
+  return dialogStates.init;
 };
 
 const dialogStates = {
@@ -280,15 +285,8 @@ const questions = {
             context.changes.active = null;
             context.changes.start_date = null;
             context.changes.part_time = null;
-            printChanges(context.userId, context.changes);
-            return dialogStates.editUser;
           }
-          if (context.changes.name) {
-            printChanges(context.userId, context.changes);
-            return dialogStates.editUser;
-          }
-          process.stdout.write('\nthere is no change for given user then\n\n');
-          return dialogStates.init;
+          return printChanges(context.userId, context.changes);
         },
       },
       {
@@ -368,8 +366,7 @@ const questions = {
           if (context.userData.part_time !== true) {
             context.changes.part_time = true;
           }
-          printChanges(context.userId, context.changes);
-          return dialogStates.editUser;
+          return printChanges(context.userId, context.changes);
         },
       },
       {
@@ -378,8 +375,7 @@ const questions = {
           if (context.userData.part_time !== false) {
             context.changes.part_time = false;
           }
-          printChanges(context.userId, context.changes);
-          return dialogStates.editUser;
+          return printChanges(context.userId, context.changes);
         },
       },
       {
