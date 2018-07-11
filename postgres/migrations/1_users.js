@@ -18,14 +18,14 @@ exports.up = (pgm) => {
         type: 'boolean',
         notNull: true,
         default: 'false',
-        comment: 'we calculate HW budgets only for (active) real users',
+        comment: 'we calculate hw budgets only for (active) real users',
       },
       active: {
         type: 'boolean',
         notNull: false,
         default: 'true',
         check: '((system is true) and (active is null)) or ((system is false) and (active is not null))',
-        comment: 'we calculate HW budgets only for active (real) users',
+        comment: 'we calculate hw budgets only for active (real) users',
       },
       start_date: {
         type: 'date',
@@ -39,21 +39,21 @@ exports.up = (pgm) => {
         notNull: false,
         default: 'false',
         check: '((system is true) and (part_time is null)) or ((system is false) and (part_time is not null))',
-        comment: 'HW budget increases differ for part-time and full-time users',
+        comment: 'hw budget increases differ for part-time and full-time users',
       },
     },
     {
       comment: 'real and system users',
     },
   );
+  // search by user name, get list of users ordered by name
   pgm.createIndex('users', 'name');
-  pgm.createIndex('users', 'system');
-  pgm.createIndex('users', 'active');
+  // updating budgets only for users where (system = false) and (active = true)
+  pgm.createIndex('users', ['system', 'active']);
 };
 
 exports.down = (pgm) => {
   pgm.dropIndex('users', 'name');
-  pgm.dropIndex('users', 'system');
-  pgm.dropIndex('users', 'active');
+  pgm.dropIndex('users', ['system', 'active']);
   pgm.dropTable('users');
 };
