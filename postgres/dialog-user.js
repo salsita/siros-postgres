@@ -26,16 +26,6 @@ const printUsers = (users) => {
   process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
-const printChanges = (id, changes) => {
-  if (Object.keys(changes).length) {
-    const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
-    process.stdout.write(str);
-    return dialogStates.editUser;
-  }
-  process.stdout.write('\nthere is no change for given user then\n\n');
-  return dialogStates.init;
-};
-
 const dialogStates = {
   init: 1,
   end: 2,
@@ -54,6 +44,16 @@ const dialogStates = {
   editUserActive: 13,
   editUserPartTime: 14,
   editUser: 15,
+};
+
+const printChanges = (id, changes) => {
+  if (Object.keys(changes).length) {
+    const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
+    process.stdout.write(str);
+    return dialogStates.editUser;
+  }
+  process.stdout.write('\nthere is no change for given user then\n\n');
+  return dialogStates.init;
 };
 
 const questions = {
