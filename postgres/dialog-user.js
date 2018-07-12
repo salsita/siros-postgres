@@ -1,5 +1,25 @@
 const printf = require('printf');
 
+const dialogStates = {
+  init: 1,
+  end: 2,
+
+  createUserName: 3,
+  createUserSystem: 4,
+  createUserStartDate: 5,
+  createUserActive: 6,
+  createUserPartTime: 7,
+  createUser: 8,
+
+  editUserId: 9,
+  editUserName: 10,
+  editUserSystem: 11,
+  editUserStartDate: 12,
+  editUserActive: 13,
+  editUserPartTime: 14,
+  editUser: 15,
+};
+
 const printUsers = (users) => {
   let idWidth = 3;
   let nameWidth = 5;
@@ -26,26 +46,6 @@ const printUsers = (users) => {
   process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
-const dialogStates = {
-  init: 1,
-  end: 2,
-
-  createUserName: 3,
-  createUserSystem: 4,
-  createUserStartDate: 5,
-  createUserActive: 6,
-  createUserPartTime: 7,
-  createUser: 8,
-
-  editUserId: 9,
-  editUserName: 10,
-  editUserSystem: 11,
-  editUserStartDate: 12,
-  editUserActive: 13,
-  editUserPartTime: 14,
-  editUser: 15,
-};
-
 const printChanges = (id, changes) => {
   if (Object.keys(changes).length) {
     const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
@@ -58,10 +58,10 @@ const printChanges = (id, changes) => {
 
 const questions = {
   [dialogStates.init]: {
-    text: '(s)how existing users, (c)reate a new user, (e)dit an existing user, or (q)uit? (S/c/e/q)',
+    text: '[main] (l)ist existing users, (c)reate a new user, (e)dit an existing user, or (q)uit? (L/c/e/q)',
     handlers: [
       {
-        match: /^[s]{0,1}$/i,
+        match: /^[l]{0,1}$/i,
         code: async (context) => {
           const users = await context.dbQuery.getUsers();
           if (!users) { return dialogStates.init; }
@@ -85,7 +85,7 @@ const questions = {
   },
 
   [dialogStates.createUserName]: {
-    text: 'enter (non-empty) name of the new user',
+    text: '[create user] enter (non-empty) name of the new user',
     handlers: [
       {
         match: /^\S.*\S$/,
@@ -98,7 +98,7 @@ const questions = {
   },
 
   [dialogStates.createUserSystem]: {
-    text: 'system user? (y/N)',
+    text: '[create user] system user? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
@@ -117,7 +117,7 @@ const questions = {
         code: (context) => {
           context.newUser.system = false;
           context.newUser.start_date = (new Date()).toISOString().substr(0, 10);
-          questions[dialogStates.createUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for "${context.newUser.start_date}")`;
+          questions[dialogStates.createUserStartDate].text = `[create user] start date (in YYYY-MM-DD format, press enter for "${context.newUser.start_date}")`;
           return dialogStates.createUserStartDate;
         },
       },
@@ -142,7 +142,7 @@ const questions = {
   },
 
   [dialogStates.createUserActive]: {
-    text: 'active user? (Y/n)',
+    text: '[create user] active user? (Y/n)',
     handlers: [
       {
         match: /^[y]{0,1}$/i,
@@ -162,7 +162,7 @@ const questions = {
   },
 
   [dialogStates.createUserPartTime]: {
-    text: 'part time? (y/N)',
+    text: '[create user] part time? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
@@ -186,7 +186,7 @@ const questions = {
   },
 
   [dialogStates.createUser]: {
-    text: 'do you want to proceed? (y/N)',
+    text: '[create user] do you want to proceed? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
@@ -208,10 +208,10 @@ const questions = {
 
 
   [dialogStates.editUserId]: {
-    text: '(s)how existing users, go (b)ack, or enter user id to edit (S/b/<number>)',
+    text: '[edit user] (l)ist existing users, go (b)ack, or enter user id to edit (L/b/<number>)',
     handlers: [
       {
-        match: /^[s]{0,1}$/i,
+        match: /^[l]{0,1}$/i,
         code: async (context) => {
           const users = await context.dbQuery.getUsers();
           if (!users) { return dialogStates.init; }
@@ -240,14 +240,14 @@ const questions = {
 
           context.changes = {};
           /* eslint-disable max-len */
-          questions[dialogStates.editUserName].text = `edit name of the new user (press enter for "${user.name}")`;
-          questions[dialogStates.editUserSystem].text = `system user? ${context.userData.system ? '(Y/n)' : '(y/N)'}`;
+          questions[dialogStates.editUserName].text = `[edit user] edit name of the new user (press enter for "${user.name}")`;
+          questions[dialogStates.editUserSystem].text = `[edit user] system user? ${context.userData.system ? '(Y/n)' : '(y/N)'}`;
           context.userData.start_date_default = context.userData.start_date || (new Date()).toISOString().substr(0, 10);
-          questions[dialogStates.editUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for "${context.userData.start_date_default}")`;
+          questions[dialogStates.editUserStartDate].text = `[edit user] start date (in YYYY-MM-DD format, press enter for "${context.userData.start_date_default}")`;
           context.userData.active_default = context.userData.active === null ? true : context.userData.active;
-          questions[dialogStates.editUserActive].text = `active user? ${context.userData.active_default ? '(Y/n)' : '(y/N)'}`;
+          questions[dialogStates.editUserActive].text = `[edit user] active user? ${context.userData.active_default ? '(Y/n)' : '(y/N)'}`;
           context.userData.part_time_default = context.userData.part_time === null ? false : context.userData.part_time;
-          questions[dialogStates.editUserPartTime].text = `part time? ${context.userData.part_time_default ? '(Y/n)' : '(y/N)'}`;
+          questions[dialogStates.editUserPartTime].text = `[edit user] part time? ${context.userData.part_time_default ? '(Y/n)' : '(y/N)'}`;
 
           return dialogStates.editUserName;
         },
@@ -386,7 +386,7 @@ const questions = {
   },
 
   [dialogStates.editUser]: {
-    text: 'do you want to proceed? (y/N)',
+    text: '[edit user] do you want to proceed? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,

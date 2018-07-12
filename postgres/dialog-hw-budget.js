@@ -1,5 +1,11 @@
 const printf = require('printf');
 
+const dialogStates = {
+  init: 1,
+  end: 2,
+  show: 3,
+};
+
 const printUsers = (users) => {
   let idWidth = 3;
   let nameWidth = 5;
@@ -26,22 +32,16 @@ const printUsers = (users) => {
   process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
-const dialogStates = {
-  init: 1,
-  end: 2,
-  show: 3,
-};
-
 const questions = {
   [dialogStates.init]: {
-    text: '(s)how existing active users, enter user id to show their budget, or (q)uit (S/<number>/q)',
+    text: '[main] (l)ist existing active users, enter user id to show their budget, or (q)uit (L/<number>/q)',
     handlers: [
       {
         match: /^[q]$/i,
         code: () => dialogStates.end,
       },
       {
-        match: /^[s]{0,1}$/i,
+        match: /^[l]{0,1}$/i,
         code: async (context) => {
           const users = await context.dbQuery.getBudgetUsers();
           if (users) { printUsers(users); }
@@ -60,7 +60,7 @@ const questions = {
   },
 
   [dialogStates.show]: {
-    text: 'show full history? (y/N)',
+    text: '[budget] show full history? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
