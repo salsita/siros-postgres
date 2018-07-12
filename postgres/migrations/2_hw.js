@@ -11,6 +11,7 @@ exports.up = (pgm) => {
       },
       category: {
         type: 'varchar(64)',
+        unique: true,
         notNull: true,
         comment: 'actual name of the category',
       },
@@ -32,6 +33,7 @@ exports.up = (pgm) => {
       },
       store: {
         type: 'varchar(128)',
+        unique: true,
         notNull: true,
         comment: 'actual name of the store',
       },
