@@ -58,7 +58,7 @@ const printChanges = (id, changes) => {
 
 const questions = {
   [dialogStates.init]: {
-    text: '[main] (l)ist existing users, (c)reate a new user, (e)dit an existing user, or (q)uit? (L/c/e/q)',
+    text: '[main] (l)ist existing users, (c)reate new user, (e)dit existing user, or (q)uit? (L/c/e/q)',
     handlers: [
       {
         match: /^[l]{0,1}$/i,
@@ -208,7 +208,7 @@ const questions = {
 
 
   [dialogStates.editUserId]: {
-    text: '[edit user] (l)ist existing users, go (b)ack, or enter user id to edit (L/b/<number>)',
+    text: '[edit user] enter user id to edit, (l)ist existing users, or go (b)ack (<number>/L/b)',
     handlers: [
       {
         match: /^[l]{0,1}$/i,
