@@ -34,7 +34,7 @@ const printUsers = (users) => {
 
 const questions = {
   [dialogStates.init]: {
-    text: '[main] enter user id to edit, (l)ist existing active users, or (q)uit (<number>/L/q)',
+    text: '[main] enter user id, (l)ist existing active users, or (q)uit (<number>/L/q)',
     handlers: [
       {
         match: /^[q]$/i,
