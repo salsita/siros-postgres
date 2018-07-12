@@ -20,6 +20,8 @@ exports.up = (pgm) => {
       comment: 'hw categories (monitor, laptop, ...)',
     },
   );
+  // lookup id by category name
+  pgm.createIndex('hw_categories', 'category');
 
   pgm.createTable(
     'stores',
@@ -212,5 +214,6 @@ exports.down = (pgm) => {
   pgm.dropIndex('stores', 'store');
   pgm.dropTable('stores');
 
+  pgm.dropIndex('hw_categories', 'category');
   pgm.dropTable('hw_categories');
 };
