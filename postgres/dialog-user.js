@@ -31,7 +31,7 @@ const printUsers = (users) => {
     len = user.name.length;
     if (len > nameWidth) { nameWidth = len; }
   });
-  let str = printf(` %${idWidth}s | S | A | name:\n`, 'id:');
+  let str = printf(` %-${idWidth}s | S | A | name:\n`, 'id:');
   process.stdout.write(str);
   str = '-';
   for (i = 0; i < idWidth; i += 1) { str += '-'; }
