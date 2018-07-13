@@ -137,7 +137,8 @@ class DbQuery extends Db {
     let query = squel.select()
       .field('action')
       .field('amount')
-      .field('hw_history_id')
+      .field('hw_owner_history_id')
+      .field('hw_repairs_id')
       .field("to_char(date, 'YYYY-MM-DD')", 'date')
       .from('hw_budgets')
       .where('user_id = ?', userId);
@@ -164,7 +165,8 @@ class DbQuery extends Db {
     }
     updates.forEach((item) => {
       item.user_id = userId;
-      item.hw_history_id = null;
+      item.hw_owner_history_id = null;
+      item.hw_repairs_id = null;
     });
     const query = squel.insert()
       .into('hw_budgets')
@@ -182,28 +184,113 @@ class DbQuery extends Db {
     }
   }
 
-  async getHwDetailFromHistory(historyId) {
+  async getHwCategories() {
     if (!this.connected) {
-      this.logger.error(`[${this.name}] cannot perform getHwDetailFromHistory() operation in disconnected state`);
+      this.logger.error(`[${this.name}] cannot perform getHwCategories() operation in disconnected state`);
       return null;
     }
     const query = squel.select()
-      .field('hw_categories.category', 'category')
-      .field('stores.store', 'store')
-      .field('hw.description', 'description')
-      .from('hw_history')
-      .join('hw', null, 'hw_history.hw_id = hw.id')
-      .join('hw_categories', null, 'hw.category = hw_categories.id')
-      .join('stores', null, 'hw.store = stores.id')
-      .where('hw_history.id = ?', historyId)
+      .from('hw_categories')
+      .field('id')
+      .field('category')
+      .order('category')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwCategories() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async createHwCategory(category) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform createHwCategory() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.insert()
+      .into('hw_categories')
+      .setFields(category)
+      .returning('id')
       .toParam();
     try {
       this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
       const res = await this.db.one(query);
       this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res.id;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during createHwCategory() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getStores() {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getStores() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .from('stores')
+      .field('id')
+      .field('store')
+      .order('store')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
       return res;
     } catch (e) {
-      this.logger.error(`[${this.name}] error during getHwDetailFromHistory() method`);
+      this.logger.error(`[${this.name}] error during getStores() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async createStore(store) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform createStore() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.insert()
+      .into('stores')
+      .setFields(store)
+      .returning('id')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res.id;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during createStore() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async createHw(hw) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform createHw() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.insert()
+      .into('hw')
+      .setFields(hw)
+      .returning('id')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res.id;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during createHw() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }

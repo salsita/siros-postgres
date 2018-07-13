@@ -11,6 +11,7 @@ module.exports = {
       fullTime: 22500,
       partTime: 11250,
     },
+    systemUserId: 1, // id of existing system user (default owner of all hw)
     getAgedPrice: (price, purchaseDate, ageDate) => {
       // price        -- integer
       // purchaseDate -- string YYYY-MM-DD
