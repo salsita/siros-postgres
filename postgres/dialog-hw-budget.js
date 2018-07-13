@@ -72,8 +72,11 @@ const questions = {
           for (let i = 0; i < history.length; i += 1) {
             const item = history[i];
             amount += item.amount;
-            if (item.hw_history_id) {
-              item.hw = await context.dbQuery.getHwDetailFromHistory(item.hw_history_id);
+            if (item.hw_owner_history_id) {
+              // TODO
+            }
+            if (item.hw_reapirs_id) {
+              // TODO
             }
           }
           // TODO: print the history here!

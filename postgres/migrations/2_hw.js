@@ -20,7 +20,7 @@ exports.up = (pgm) => {
       comment: 'hw categories (monitor, laptop, ...)',
     },
   );
-  // lookup id by category name
+  // lookup id or sort by category name
   pgm.createIndex('hw_categories', 'category');
 
   pgm.createTable(
@@ -44,7 +44,7 @@ exports.up = (pgm) => {
       comment: 'store names (alza, smarty, ...)',
     },
   );
-  // lookup id by store name
+  // lookup id or store by store name
   pgm.createIndex('stores', 'store');
 
   pgm.createType(
@@ -154,7 +154,7 @@ exports.up = (pgm) => {
   pgm.createIndex('hw', ['active', 'available']);
 
   pgm.createTable(
-    'hw_history',
+    'hw_owner_history',
     {
       id: {
         type: 'serial',
@@ -169,20 +169,22 @@ exports.up = (pgm) => {
         references: 'hw (id)',
         comment: 'what hw is this history info for',
       },
-      changed_field: {
-        type: 'varchar(64)',
+      old_user_id: {
+        type: 'integer',
         notNull: true,
-        comment: 'name of column in the hw table the value of which has changed',
+        references: 'users (id)',
+        comment: 'original user',
       },
-      old_value_str: {
-        type: 'varchar(512)',
+      new_user_id: {
+        type: 'integer',
         notNull: true,
-        comment: 'original value (stringified) before the change',
+        references: 'users (id)',
+        comment: 'new user',
       },
-      new_value_str: {
-        type: 'varchar(512)',
+      amount: {
+        type: 'integer',
         notNull: true,
-        comment: 'updated value (stringified) after the change',
+        comment: 'budget amount spent on changing the owner',
       },
       date: {
         type: 'date',
@@ -192,16 +194,65 @@ exports.up = (pgm) => {
       },
     },
     {
-      comment: 'track of all changes in hw',
+      comment: 'track of all owner changes',
     },
   );
   // search history for given hw id
-  pgm.createIndex('hw_history', 'hw_id');
+  pgm.createIndex('hw_owner_history', 'hw_id');
+
+  pgm.createTable(
+    'hw_repairs',
+    {
+      id: {
+        type: 'serial',
+        unique: true,
+        primaryKey: true,
+        notNull: true,
+        comment: 'auto-incremented id',
+      },
+      hw_id: {
+        type: 'integer',
+        notNull: true,
+        references: 'hw (id)',
+        comment: 'what hw has been repaired',
+      },
+      user_id: {
+        type: 'integer',
+        notNull: true,
+        references: 'users (id)',
+        comment: 'user charged for this repair',
+      },
+      amount: {
+        type: 'integer',
+        notNull: true,
+        comment: 'cost of the repair',
+      },
+      date: {
+        type: 'date',
+        notNull: true,
+        default: pgm.func('now()::date'),
+        comment: 'date of change, ISO 8601 format, YYYY-MM-DD',
+      },
+      description: {
+        type: 'varchar(512)',
+        notNull: true,
+        comment: 'description of the repair',
+      },
+    },
+    {
+      comment: 'track of all hw repairs',
+    },
+  );
+  // search repairs for given hw id
+  pgm.createIndex('hw_repairs', 'hw_id');
 };
 
 exports.down = (pgm) => {
-  pgm.dropIndex('hw_history', 'hw_id');
-  pgm.dropTable('hw_history');
+  pgm.dropIndex('hw_repairs', 'hw_id');
+  pgm.dropTable('hw_repairs');
+
+  pgm.dropIndex('hw_owner_history', 'hw_id');
+  pgm.dropTable('hw_owner_history');
 
   pgm.dropIndex('hw', 'category');
   pgm.dropIndex('hw', 'store');

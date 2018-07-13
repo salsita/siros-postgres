@@ -22,13 +22,21 @@ exports.up = (pgm) => {
         notNull: true,
         comment: 'budget update amount',
       },
-      hw_history_id: {
+      hw_owner_history_id: {
         type: 'integer',
         notNull: false,
-        references: 'hw_history (id)',
-        check: "(((action = 'initial' or action = 'yearly' or action = 'correction') and (hw_history_id is null)) or "
-             + " ((action = 'hw_buy'  or action = 'hw_sell' or action = 'hw_repair') and (hw_history_id is not null)))",
-        comment: 'link to hw item history when dealing with hw',
+        references: 'hw_owner_history (id)',
+        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_repair') and (hw_owner_history_id is null)) or "
+             + " ((action = 'hw_buy'  or action = 'hw_sell') and (hw_owner_history_id is not null)))",
+        comment: 'link to hw_owner_history table when user is charged for hw when buying / selling it',
+      },
+      hw_repairs_id: {
+        type: 'integer',
+        notNull: false,
+        references: 'hw_repairs (id)',
+        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_buy' or action = 'hw_sell') and (hw_repairs_id is null)) or "
+             + " ((action = 'hw_repair') and (hw_repairs_id is not null)))",
+        comment: 'link to hw_repairs table when user is charged for hw repair',
       },
       date: {
         type: 'date',
