@@ -334,6 +334,45 @@ class DbQuery extends Db {
       return null;
     }
   }
+
+  async getHwDetails(id) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwDetails() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('h.id', 'id')
+      .field('c.category', 'category')
+      .field('h.description', 'description')
+      .field('s.store', 'store')
+      .field("to_char(h.purchase_date, 'YYYY-MM-DD')", 'purchase_date')
+      .field('h.purchase_price', 'purchase_price')
+      .field('h.store_invoice_id', 'store_invoice_id')
+      .field('h.serial_id', 'serial_id')
+      .field('h.condition', 'condition')
+      .field('u.name', 'user')
+      .field('h.inventory_id', 'inventory_id')
+      .field('h.max_price', 'max_price')
+      .field('h.active', 'active')
+      .field('h.available', 'available')
+      .field('h.comment', 'comment')
+      .from('hw', 'h')
+      .join('hw_categories', 'c', 'h.category = c.id')
+      .join('stores', 's', 'h.store = s.id')
+      .join('users', 'u', 'h.user_id = u.id')
+      .where('h.id = ?', id)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwDetails() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
 }
 
 module.exports = DbQuery;

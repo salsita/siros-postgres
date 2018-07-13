@@ -484,10 +484,28 @@ const questions = {
         match: /^[s]$/i,
         code: () => dialogStates.showHwStoreId,
       },
-      // -- TODO --
       {
         match: /^\d+$/,
-        code: () => {
+        code: async (context, answer) => {
+          const hwId = parseInt(answer, 10);
+          const hw = await context.dbQuery.getHwDetails(hwId);
+          if (!hw) { return dialogStates.init; }
+          if (!hw.length) {
+            process.stdout.write(`hw item with id (${hwId}) not found!\n\n`);
+            return dialogStates.init;
+          }
+          const today = (new Date()).toISOString().substr(0, 10);
+          hw[0].current_price_calc = hw[0].condition === 'new'
+            ? hw[0].purchase_price
+            : config.hwBudget.getAgedPrice(hw[0].purchase_price, hw[0].purchase_price, today);
+          if (hw[0].max_price !== null) {
+            hw[0].current_price_calc = Math.min(hw[0].current_price_calc, hw[0].max_price);
+          }
+          process.stdout.write(`\nhw details:\n${JSON.stringify(hw[0], null, 2)}\n\n`);
+          // TODO
+          // const ownerHistory = await context.dbQuery...
+          // const hwRepairs = await context.dbQuery...
+          return dialogStates.init;
         },
       },
     ],
