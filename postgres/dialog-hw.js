@@ -22,6 +22,10 @@ const dialogStates = {
 
   showHwMain: 17,
   showHwAll: 18,
+  showHwCategoryId: 19,
+  showHwCategoryAll: 20,
+  showHwStoreId: 21,
+  showHwStoreAll: 22,
 };
 
 const printCategories = (categories) => {
@@ -462,7 +466,7 @@ const questions = {
   },
 
   [dialogStates.showHwMain]: {
-    text: '[show hw] list (a)ll items, only for selected (c)ategory, only for selected (s)hop, full history for one id, or go (b)ack? (A/c/s/<number>/b)',
+    text: '[show hw] list (a)ll items, only for selected (c)ategory, only for selected (s)tore, full history for one id, or go (b)ack? (A/c/s/<number>/b)',
     handlers: [
       {
         match: /^[a]{0,1}$/i,
@@ -472,17 +476,15 @@ const questions = {
         match: /^[b]$/i,
         code: () => dialogStates.init,
       },
-      // -- TODO --
       {
         match: /^[c]$/i,
-        code: () => {
-        },
+        code: () => dialogStates.showHwCategoryId,
       },
       {
         match: /^[s]$/i,
-        code: () => {
-        },
+        code: () => dialogStates.showHwStoreId,
       },
+      // -- TODO --
       {
         match: /^\d+$/,
         code: () => {
@@ -507,6 +509,116 @@ const questions = {
         match: /^[n]{0,1}$/i,
         code: async (context) => {
           const hw = await context.dbQuery.getHw({ 'h.active': true });
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.showHwCategoryId]: {
+    text: '[show hw] enter category id, (l)ist existing categories, or go (b)ack (<number>/L/b)',
+    handlers: [
+      {
+        match: /^\d+$/,
+        code: (context, answer) => {
+          context.showHwCategoryId = parseInt(answer, 10);
+          return dialogStates.showHwCategoryAll;
+        },
+      },
+      {
+        match: /^[l]{0,1}$/i,
+        code: async (context) => {
+          const categories = await context.dbQuery.getHwCategories();
+          if (!categories) { return dialogStates.init; }
+          printCategories(categories);
+          return dialogStates.showHwCategoryId;
+        },
+      },
+      {
+        match: /^[b]$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+  [dialogStates.showHwCategoryAll]: {
+    text: '[show hw] include inactive (sold) items? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({ 'h.category': context.showHwCategoryId });
+          context.showHwCategoryId = undefined;
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({
+            'h.category': context.showHwCategoryId,
+            'h.active': true,
+          });
+          context.showHwCategoryId = undefined;
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.showHwStoreId]: {
+    text: '[show hw] enter store id, (l)ist existing stores, or go (b)ack (<number>/L/b)',
+    handlers: [
+      {
+        match: /^\d+$/,
+        code: (context, answer) => {
+          context.showHwStoreId = parseInt(answer, 10);
+          return dialogStates.showHwStoreAll;
+        },
+      },
+      {
+        match: /^[l]{0,1}$/i,
+        code: async (context) => {
+          const stores = await context.dbQuery.getStores();
+          if (!stores) { return dialogStates.init; }
+          printStores(stores);
+          return dialogStates.showHwStoreId;
+        },
+      },
+      {
+        match: /^[b]$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+  [dialogStates.showHwStoreAll]: {
+    text: '[show hw] include inactive (sold) items? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({ 'h.store': context.showHwStoreId });
+          context.showHwStoreId = undefined;
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({
+            'h.store': context.showHwStoreId,
+            'h.active': true,
+          });
+          context.showHwStoreId = undefined;
           if (!hw) { return dialogStates.init; }
           printHw(hw);
           return dialogStates.init;
