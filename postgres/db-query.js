@@ -373,6 +373,61 @@ class DbQuery extends Db {
       return null;
     }
   }
+
+  async getHwOwners(id) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwOwners() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field("to_char(h.date, 'YYYY-MM-DD')", 'date')
+      .field('u1.name', 'old_user')
+      .field('u2.name', 'new_user')
+      .field('h.amount', 'amount')
+      .from('hw_owner_history', 'h')
+      .join('users', 'u1', 'h.old_user_id = u1.id')
+      .join('users', 'u2', 'h.new_user_id = u2.id')
+      .where('hw_id = ?', id)
+      .order('date')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwOwners() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getHwRepairs(id) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwRepairs() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field("to_char(h.date, 'YYYY-MM-DD')", 'date')
+      .field('u.name', 'user')
+      .field('h.amount', 'amount')
+      .field('h.description', 'description')
+      .from('hw_repairs', 'h')
+      .join('users', 'u', 'h.user_id = u.id')
+      .where('hw_id = ?', id)
+      .order('date')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwRepairs() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
 }
 
 module.exports = DbQuery;

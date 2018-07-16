@@ -501,10 +501,13 @@ const questions = {
           if (hw[0].max_price !== null) {
             hw[0].current_price_calc = Math.min(hw[0].current_price_calc, hw[0].max_price);
           }
-          process.stdout.write(`\nhw details:\n${JSON.stringify(hw[0], null, 2)}\n\n`);
-          // TODO
-          // const ownerHistory = await context.dbQuery...
-          // const hwRepairs = await context.dbQuery...
+          process.stdout.write(`\nhw details:\n${JSON.stringify(hw[0], null, 2)}\n`);
+          const ownerHistory = await context.dbQuery.getHwOwners(hwId);
+          if (!ownerHistory) { return dialogStates.init; }
+          process.stdout.write(`\nhw owners:\n${JSON.stringify(ownerHistory, null, 2)}\n`);
+          const hwRepairs = await context.dbQuery.getHwRepairs(hwId);
+          if (!hwRepairs) { return dialogStates.init; }
+          process.stdout.write(`\nhw repairs:\n${JSON.stringify(hwRepairs, null, 2)}\n\n`);
           return dialogStates.init;
         },
       },
