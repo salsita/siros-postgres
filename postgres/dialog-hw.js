@@ -28,6 +28,25 @@ const dialogStates = {
   showHwCategoryAll: 22,
   showHwStoreId: 23,
   showHwStoreAll: 24,
+
+  editHwId: 25,
+  editHwCategory: 26,
+  editHwCreateCategoryName: 27,
+  editHwCreateCategory: 28,
+  editHwDescription: 29,
+  editHwStore: 30,
+  editHwCreateStoreName: 31,
+  editHwCreateStore: 32,
+  editHwPurchaseDate: 33,
+  editHwPurchasePrice: 34,
+  editHwInvoiceId: 35,
+  editHwSerialId: 36,
+  editHwCondition: 37,
+  editHwInventoryId: 38,
+  editHwMaxPrice: 39,
+  editHwAvailable: 40,
+  editHwComment: 41,
+  editHw: 42,
 };
 
 const printCategories = (categories) => {
@@ -189,19 +208,15 @@ const printUsers = (users) => {
   process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
-// -- garbage below --
-
 const printChanges = (id, changes) => {
   if (Object.keys(changes).length) {
-    const str = `\nabout to update the user (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
+    const str = `\nabout to update the hw item (${id}) with the following changes:\n${JSON.stringify(changes, null, 2)}\n\n`;
     process.stdout.write(str);
-    return dialogStates.editUser;
+    return dialogStates.editHw;
   }
-  process.stdout.write('\nthere is no change for given user then\n\n');
+  process.stdout.write('\nthere is no change for given hw item then\n\n');
   return dialogStates.init;
 };
-
-// -- end of garbage --
 
 const questions = {
   [dialogStates.init]: {
@@ -222,7 +237,7 @@ const questions = {
             active: true,
             available: false,
           };
-          questions[dialogStates.createHwPurchaseDate].text = `[create hw] purchase date (in YYYY-MM-DD format, press enter for "${context.newHw.purchase_date}")`;
+          questions[dialogStates.createHwPurchaseDate].text = `[create hw] enter purchase date (in YYYY-MM-DD format, press enter for "${context.newHw.purchase_date}")`;
           return dialogStates.createHwCategory;
         },
       },
@@ -230,7 +245,6 @@ const questions = {
         match: /^[q]$/i,
         code: () => dialogStates.end,
       },
-      // -- TODO --
       {
         match: /^[e]$/i,
         code: () => dialogStates.editHwId,
@@ -473,7 +487,7 @@ const questions = {
   },
 
   [dialogStates.createHw]: {
-    text: 'do you want to proceed? (y/N)',
+    text: '[create hw] do you want to proceed? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
@@ -523,7 +537,7 @@ const questions = {
           const hw = await context.dbQuery.getHwDetails(hwId);
           if (!hw) { return dialogStates.init; }
           if (!hw.length) {
-            process.stdout.write(`hw item with id (${hwId}) not found!\n\n`);
+            process.stdout.write(`\nhw item with id (${hwId}) not found!\n\n`);
             return dialogStates.init;
           }
           const today = (new Date()).toISOString().substr(0, 10);
@@ -735,201 +749,336 @@ const questions = {
     ],
   },
 
-  // -------------------------------------------------------------------------------
-  // -- garbage below --
-  // -------------------------------------------------------------------------------
-
-  [dialogStates.editUserId]: {
-    text: '(s)how existing users, go (b)ack, or enter user id to edit (S/b/<number>)',
+  [dialogStates.editHwId]: {
+    text: '[edit hw] enter hw id to edit, or go (b)ack (<number>/B)\n(note: to change user (owner) or active flag, use different scripts)',
     handlers: [
       {
-        match: /^[s]{0,1}$/i,
-        code: async (context) => {
-          const users = await context.dbQuery.getUsers();
-          if (users === null) { return dialogStates.init; }
-          // printUsers(users);
-          return dialogStates.editUserId;
+        match: /^\d+$/,
+        code: async (context, answer) => {
+          const id = parseInt(answer, 10);
+          const hw = await context.dbQuery.getHwDetails(id);
+          if (!hw) { return dialogStates.init; }
+          if (!hw.length) {
+            process.stdout.write(`\nhw item with id (${id}) not found!\n\n`);
+            return dialogStates.init;
+          }
+          context.editHwId = id;
+          const hwItem = hw[0];
+          hwItem.id = undefined;
+          context.editHw = hwItem;
+          process.stdout.write(`\nediting hw item:\n${JSON.stringify(hwItem, null, 2)}\n\n`);
+          context.changes = {};
+          return dialogStates.editHwCategory;
         },
+      },
+      {
+        match: /^[b]{0,1}$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+  [dialogStates.editHwCategory]: {
+    text: '[edit hw] enter category id, (l)ist existing categories, (c)reate new category, or go (b)ack\n'
+      + '(<number>/l/c/b, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^\d*$/,
+        code: (context, answer) => {
+          const newCateg = (answer === '' ? context.editHw.category_id : parseInt(answer, 10));
+          if (newCateg !== context.editHw.category_id) { context.changes.category = newCateg; }
+          return dialogStates.editHwDescription;
+        },
+      },
+      {
+        match: /^[l]$/i,
+        code: async (context) => {
+          const categories = await context.dbQuery.getHwCategories();
+          if (!categories) { return dialogStates.init; }
+          printCategories(categories);
+          return dialogStates.editHwCategory;
+        },
+      },
+      {
+        match: /^[c]$/i,
+        code: () => dialogStates.editHwCreateCategoryName,
       },
       {
         match: /^[b]$/i,
         code: () => dialogStates.init,
       },
-      {
-        match: /^\d+$/,
-        code: async (context, answer) => {
-          const id = parseInt(answer, 10);
-          const user = await context.dbQuery.getUser(id);
-          if (user === null) { return dialogStates.init; }
-          if (user === 0) {
-            process.stdout.write('\nno such user in DB\n\n');
-            return dialogStates.editUserId;
-          }
-          context.userId = id;
-          context.userData = user;
-          user.id = undefined;
-          process.stdout.write(`\nediting user:\n${JSON.stringify(user, null, 2)}\n\n`);
-
-          context.changes = {};
-          /* eslint-disable max-len */
-          questions[dialogStates.editUserName].text = `edit name of the new user (press enter for "${user.name}")`;
-          questions[dialogStates.editUserSystem].text = `system user? ${context.userData.system ? '(Y/n)' : '(y/N)'}`;
-          context.userData.start_date_default = context.userData.start_date || (new Date()).toISOString().substr(0, 10);
-          questions[dialogStates.editUserStartDate].text = `start date (in YYYY-MM-DD format, press enter for "${context.userData.start_date_default}")`;
-          context.userData.active_default = context.userData.active === null ? true : context.userData.active;
-          questions[dialogStates.editUserActive].text = `active user? ${context.userData.active_default ? '(Y/n)' : '(y/N)'}`;
-          context.userData.part_time_default = context.userData.part_time === null ? false : context.userData.part_time;
-          questions[dialogStates.editUserPartTime].text = `part time? ${context.userData.part_time_default ? '(Y/n)' : '(y/N)'}`;
-
-          return dialogStates.editUserName;
-        },
-      },
     ],
   },
 
-  [dialogStates.editUserName]: {
-    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+  [dialogStates.editHwCreateCategoryName]: {
+    text: '[edit hw] enter (non-empty) name of the new category',
     handlers: [
-      {
-        match: /^$/,
-        code: () => dialogStates.editUserSystem,
-      },
       {
         match: /^\S.*\S$/,
         code: (context, answer) => {
-          if (answer !== context.userData.name) {
-            context.changes.name = answer;
-          }
-          return dialogStates.editUserSystem;
+          context.newCategory = { category: answer };
+          const str = `\nabout to create the following category:\n${JSON.stringify(context.newCategory, null, 2)}\n\n`;
+          process.stdout.write(str);
+          return dialogStates.editHwCreateCategory;
         },
       },
     ],
   },
 
-  [dialogStates.editUserSystem]: {
-    text: '<replaced from [dialogStates.editUserId], handler (number)>',
-    handlers: [
-      {
-        match: /^[y]$/i,
-        code: (context) => {
-          if (context.userData.system === false) {
-            context.changes.system = true;
-            context.changes.active = null;
-            context.changes.start_date = null;
-            context.changes.part_time = null;
-          }
-          return printChanges(context.userId, context.changes);
-        },
-      },
-      {
-        match: /^[n]$/i,
-        code: (context) => {
-          if (context.userData.system === true) {
-            context.changes.system = false;
-          }
-          return dialogStates.editUserStartDate;
-        },
-      },
-      {
-        match: /^$/,
-        code: (context) => questions[dialogStates.editUserSystem].handlers[context.userData.system ? 0 : 1].code(context),
-      },
-    ],
-  },
-
-  [dialogStates.editUserStartDate]: {
-    text: '<replaced from [dialogStates.editUserId], handler (number)>',
-    handlers: [
-      {
-        match: /^$/,
-        code: (context) => {
-          if (context.userData.start_date !== context.userData.start_date_default) {
-            context.changes.start_date = context.userData.start_date_default;
-          }
-          return dialogStates.editUserActive;
-        },
-      },
-      {
-        match: /^20\d{2}-\d{2}-\d{2}$/,
-        code: (context, answer) => {
-          if (context.userData.start_date !== answer) {
-            context.changes.start_date = answer;
-          }
-          return dialogStates.editUserActive;
-        },
-      },
-    ],
-  },
-
-  [dialogStates.editUserActive]: {
-    text: '<replaced from [dialogStates.editUserId], handler (number)>',
-    handlers: [
-      {
-        match: /^[y]$/i,
-        code: (context) => {
-          if (context.userData.active !== true) {
-            context.changes.active = true;
-          }
-          return dialogStates.editUserPartTime;
-        },
-      },
-      {
-        match: /^[n]$/i,
-        code: (context) => {
-          if (context.userData.active !== false) {
-            context.changes.active = false;
-          }
-          return dialogStates.editUserPartTime;
-        },
-      },
-      {
-        match: /^$/,
-        code: (context) => questions[dialogStates.editUserActive].handlers[context.userData.active_default ? 0 : 1].code(context),
-      },
-    ],
-  },
-
-  [dialogStates.editUserPartTime]: {
-    text: '<replaced from [dialogStates.editUserId], handler (number)>',
-    handlers: [
-      {
-        match: /^[y]$/i,
-        code: (context) => {
-          if (context.userData.part_time !== true) {
-            context.changes.part_time = true;
-          }
-          return printChanges(context.userId, context.changes);
-        },
-      },
-      {
-        match: /^[n]$/i,
-        code: (context) => {
-          if (context.userData.part_time !== false) {
-            context.changes.part_time = false;
-          }
-          return printChanges(context.userId, context.changes);
-        },
-      },
-      {
-        match: /^$/,
-        code: (context) => questions[dialogStates.editUserPartTime].handlers[context.userData.part_time_default ? 0 : 1].code(context),
-      },
-    ],
-  },
-
-  [dialogStates.editUser]: {
-    text: 'do you want to proceed? (y/N)',
+  [dialogStates.editHwCreateCategory]: {
+    text: '[edit hw] do you want to proceed? (y/N)',
     handlers: [
       {
         match: /^[y]$/i,
         code: async (context) => {
-          const id = await context.dbQuery.updateUser(context.userId, context.changes);
-          if (id !== null) {
-            process.stdout.write(`\nuser with id (${id}) successfully updated\n\n`);
+          const id = await context.dbQuery.createHwCategory(context.newCategory);
+          context.newCategory = undefined;
+          if (!id) { return dialogStates.editHwCategory; }
+          process.stdout.write(`\nnew category with id (${id}) successfully created\n\n`);
+          context.changes.category = id;
+          return dialogStates.editHwDescription;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: () => dialogStates.editHwCategory,
+      },
+    ],
+  },
+
+  [dialogStates.editHwDescription]: {
+    text: '[edit hw] enter description (press enter to keep original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = (answer === '' ? context.editHw.description : answer.trim());
+          if (str !== context.editHw.description) { context.changes.description = str; }
+          return dialogStates.editHwStore;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwStore]: {
+    text: '[edit hw] enter store id, (l)ist existing stores, (c)reate new store, or go (b)ack\n'
+    + '(<number>/l/c/b, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^\d*$/,
+        code: (context, answer) => {
+          const newStore = (answer === '' ? context.editHw.store_id : parseInt(answer, 10));
+          if (newStore !== context.editHw.store_id) { context.changes.store = newStore; }
+          return dialogStates.editHwPurchaseDate;
+        },
+      },
+      {
+        match: /^[l]{0,1}$/i,
+        code: async (context) => {
+          const stores = await context.dbQuery.getStores();
+          if (!stores) { return dialogStates.init; }
+          printStores(stores);
+          return dialogStates.editHwStore;
+        },
+      },
+      {
+        match: /^[c]$/i,
+        code: () => dialogStates.editHwCreateStoreName,
+      },
+      {
+        match: /^[b]$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+  [dialogStates.editHwCreateStoreName]: {
+    text: '[edit hw] enter (non-empty) name of the new store',
+    handlers: [
+      {
+        match: /^\S.*\S$/,
+        code: (context, answer) => {
+          context.newStore = { store: answer };
+          const str = `\nabout to create the following store:\n${JSON.stringify(context.newStore, null, 2)}\n\n`;
+          process.stdout.write(str);
+          return dialogStates.editHwCreateStore;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwCreateStore]: {
+    text: '[edit hw] do you want to proceed? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const id = await context.dbQuery.createStore(context.newStore);
+          context.newStore = undefined;
+          if (!id) { return dialogStates.editHwStore; }
+          process.stdout.write(`\nnew store with id (${id}) successfully created\n\n`);
+          context.changes.store = id;
+          return dialogStates.editHwPurchaseDate;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: () => dialogStates.editHwStore,
+      },
+    ],
+  },
+
+  [dialogStates.editHwPurchaseDate]: {
+    text: '[edit hw] enter purchase date (in YYYY-MM-DD format, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^$/,
+        code: () => dialogStates.editHwPurchasePrice,
+      },
+      {
+        match: /^20\d{2}-\d{2}-\d{2}$/,
+        code: (context, answer) => {
+          if (context.editHw.purchase_date !== answer) { context.changes.purchase_date = answer; }
+          return dialogStates.editHwPurchasePrice;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwPurchasePrice]: {
+    text: '[edit hw] enter purchase price (press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^\d*$/,
+        code: (context, answer) => {
+          const price = (answer === '' ? context.editHw.purchase_price : parseInt(answer, 10));
+          if (price !== context.editHw.purchase_price) { context.changes.purchase_price = price; }
+          return dialogStates.editHwInvoiceId;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwInvoiceId]: {
+    text: '[edit hw] enter invoice id (string, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = (answer === '' ? context.editHw.store_invoice_id : answer.trim());
+          if (str !== context.editHw.store_invoice_id) { context.changes.store_invoice_id = str; }
+          return dialogStates.editHwSerialId;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwSerialId]: {
+    text: '[edit hw] enter serial id (string, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = (answer === '' ? context.editHw.serial_id : answer.trim());
+          if (str !== context.editHw.serial_id) { context.changes.serial_id = str; }
+          return dialogStates.editHwCondition;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwCondition]: {
+    text: '[edit hw] enter condition ("new"/"used"/"broken"/"repaired"/"missing", or press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^(new|used|broken|repaired|missing|)$/i,
+        code: (context, answer) => {
+          const cond = (answer === '' ? context.editHw.condition : answer);
+          if (cond !== context.editHw.condition) { context.changes.condition = cond; }
+          return dialogStates.editHwInventoryId;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwInventoryId]: {
+    text: '[edit hw] enter (local) inventory id (string, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = (answer === '' ? context.editHw.inventory_id : answer.trim());
+          if (str !== context.editHw.inventory_id) { context.changes.inventory_id = str; }
+          return dialogStates.editHwMaxPrice;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwMaxPrice]: {
+    text: '[edit hw] enter max price (number, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^\d*$/,
+        code: (context, answer) => {
+          const price = (answer === '' ? context.editHw.max_price : parseInt(answer, 10));
+          if (price !== context.editHw.max_price) { context.changes.max_price = price; }
+          return dialogStates.editHwAvailable;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwAvailable]: {
+    text: '[edit hw] available item? (marketplace; y/n, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /^$/,
+        code: () => dialogStates.editHwComment,
+      },
+      {
+        match: /^[y]$/i,
+        code: (context) => {
+          if (!context.editHw.available) { context.changes.available = true; }
+          return dialogStates.editHwComment;
+        },
+      },
+      {
+        match: /^[n]$/i,
+        code: (context) => {
+          if (context.editHw.available) { context.changes.available = false; }
+          return dialogStates.editHwComment;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHwComment]: {
+    text: '[edit hw] enter comment (press enter to keep the original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = (answer === '' ? context.editHw.comment : answer.trim());
+          if (str !== context.editHw.comment) { context.changes.comment = str; }
+          return printChanges(context.editHwId, context.changes);
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editHw]: {
+    text: '[edit hw] do you want to proceed? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const id = await context.dbQuery.updateHw(context.editHwId, context.changes);
+          if (id) {
+            process.stdout.write(`\nhw item with id (${id}) successfully updated\n\n`);
           }
-          context.userId = undefined;
-          context.userData = undefined;
-          context.changes = undefined;
+          context.editHwId = undefined;
+          context.editHw = undefined;
           return dialogStates.init;
         },
       },
