@@ -22,10 +22,12 @@ const dialogStates = {
 
   showHwMain: 17,
   showHwAll: 18,
-  showHwCategoryId: 19,
-  showHwCategoryAll: 20,
-  showHwStoreId: 21,
-  showHwStoreAll: 22,
+  showHwUserId: 19,
+  showHwUserAll: 20,
+  showHwCategoryId: 21,
+  showHwCategoryAll: 22,
+  showHwStoreId: 23,
+  showHwStoreAll: 24,
 };
 
 const printCategories = (categories) => {
@@ -159,6 +161,32 @@ const printHw = (hw) => {
     process.stdout.write(str);
   });
   process.stdout.write(`(${hw.length} rows)\n\n`);
+};
+
+const printUsers = (users) => {
+  let idWidth = 3;
+  let nameWidth = 5;
+  let len;
+  let i;
+  users.forEach((user) => {
+    len = user.id.toString().length;
+    if (len > idWidth) { idWidth = len; }
+    len = user.name.length;
+    if (len > nameWidth) { nameWidth = len; }
+  });
+  let str = printf(` %-${idWidth}s | S | A | name:\n`, 'id:');
+  process.stdout.write(str);
+  str = '-';
+  for (i = 0; i < idWidth; i += 1) { str += '-'; }
+  str += '-+---+---+-';
+  for (i = 0; i < nameWidth; i += 1) { str += '-'; }
+  str += '-\n';
+  process.stdout.write(str);
+  users.forEach((user) => {
+    str = printf(` %${idWidth}s | ${user.system === true ? 'x' : ' '} | ${user.active === true ? 'x' : ' '} | %s\n`, user.id, user.name);
+    process.stdout.write(str);
+  });
+  process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
 // -- garbage below --
@@ -466,7 +494,7 @@ const questions = {
   },
 
   [dialogStates.showHwMain]: {
-    text: '[show hw] list (a)ll items, only for selected (c)ategory, only for selected (s)tore, full history for one id, or go (b)ack? (A/c/s/<number>/b)',
+    text: '[show hw] list (a)ll items, only for selected (u)ser / (c)ategory / (s)tore, full history for one id, or go (b)ack? (A/u/c/s/<number>/b)',
     handlers: [
       {
         match: /^[a]{0,1}$/i,
@@ -475,6 +503,10 @@ const questions = {
       {
         match: /^[b]$/i,
         code: () => dialogStates.init,
+      },
+      {
+        match: /^[u]$/i,
+        code: () => dialogStates.showHwUserId,
       },
       {
         match: /^[c]$/i,
@@ -530,6 +562,61 @@ const questions = {
         match: /^[n]{0,1}$/i,
         code: async (context) => {
           const hw = await context.dbQuery.getHw({ 'h.active': true });
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.showHwUserId]: {
+    text: '[show hw] enter user id, (l)ist existing users, or go (b)ack (<number>/L/b)',
+    handlers: [
+      {
+        match: /^\d+$/,
+        code: (context, answer) => {
+          context.showHwUserId = parseInt(answer, 10);
+          return dialogStates.showHwUserAll;
+        },
+      },
+      {
+        match: /^[l]{0,1}$/i,
+        code: async (context) => {
+          const users = await context.dbQuery.getUsers();
+          if (!users) { return dialogStates.init; }
+          printUsers(users);
+          return dialogStates.showHwUserId;
+        },
+      },
+      {
+        match: /^[b]$/i,
+        code: () => dialogStates.init,
+      },
+    ],
+  },
+
+  [dialogStates.showHwUserAll]: {
+    text: '[show hw] include inactive (sold) items? (y/N)',
+    handlers: [
+      {
+        match: /^[y]$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({ 'h.user_id': context.showHwUserId });
+          context.showHwUserId = undefined;
+          if (!hw) { return dialogStates.init; }
+          printHw(hw);
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: async (context) => {
+          const hw = await context.dbQuery.getHw({
+            'h.user_id': context.showHwUserId,
+            'h.active': true,
+          });
+          context.showHwUserId = undefined;
           if (!hw) { return dialogStates.init; }
           printHw(hw);
           return dialogStates.init;
