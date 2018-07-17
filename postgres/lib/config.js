@@ -1,4 +1,5 @@
 module.exports = {
+
   hwBudget: {
     startDate: '2015-04-01', // when the budget calculation starts
     initial: {
@@ -11,7 +12,17 @@ module.exports = {
       fullTime: 22500,
       partTime: 11250,
     },
+  },
+
+  hwDisplay: {
+    // limits for display column widths
+    descriptionWidth: 30,
+    commentWidth: 20,
+  },
+
+  hwItems: {
     systemUserId: 1, // id of existing system user (default owner of all hw)
+
     getAgedPrice: (price, purchaseDate, ageDate) => {
       // price        -- integer
       // purchaseDate -- string YYYY-MM-DD
@@ -49,4 +60,5 @@ module.exports = {
       return Math.round(price80 * (1 - agingFraction) + price5 * agingFraction);
     },
   },
+
 };

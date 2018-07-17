@@ -102,8 +102,8 @@ const printStores = (stores) => {
 };
 
 const printHw = (hw) => {
-  const descrWidthMax = 20;
-  const commentWidthMax = 20;
+  const descrWidthMax = config.hwDisplay.descriptionWidth;
+  const commentWidthMax = config.hwDisplay.commentWidth;
   let idWidth = 3;
   let categoryWidth = 9;
   let descrWidth = 6;
@@ -232,7 +232,7 @@ const questions = {
           context.newHw = {
             purchase_date: (new Date()).toISOString().substr(0, 10),
             condition: 'new',
-            user_id: config.hwBudget.systemUserId,
+            user_id: config.hwItems.systemUserId,
             max_price: null,
             active: true,
             available: false,
@@ -543,7 +543,7 @@ const questions = {
           const today = (new Date()).toISOString().substr(0, 10);
           hw[0].current_price_calc = hw[0].condition === 'new'
             ? hw[0].purchase_price
-            : config.hwBudget.getAgedPrice(hw[0].purchase_price, hw[0].purchase_price, today);
+            : config.hwItems.getAgedPrice(hw[0].purchase_price, hw[0].purchase_date, today);
           if (hw[0].max_price !== null) {
             hw[0].current_price_calc = Math.min(hw[0].current_price_calc, hw[0].max_price);
           }
