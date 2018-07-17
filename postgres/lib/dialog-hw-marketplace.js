@@ -79,6 +79,7 @@ const printHw = (hw) => {
   hw.forEach((item) => {
     item.curPrice = config.hwItems.getAgedPrice(item.purchase_price, item.purchase_date, today);
     if (item.max_price !== null) { item.curPrice = Math.min(item.curPrice, item.max_price); }
+    if (item.condition === 'new') { item.curPrice = item.purchase_price; }
     len = item.id.toString().length;
     if (len > idWidth) { idWidth = len; }
     len = item.condition.length;

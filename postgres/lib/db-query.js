@@ -1,4 +1,5 @@
 const squel = require('squel').useFlavour('postgres');
+const config = require('./config');
 const Db = require('./db');
 
 class DbQuery extends Db {
@@ -352,6 +353,7 @@ class DbQuery extends Db {
       .field('h.store_invoice_id', 'store_invoice_id')
       .field('h.serial_id', 'serial_id')
       .field('h.condition', 'condition')
+      .field('h.user_id', 'user_id')
       .field('u.name', 'user')
       .field('h.inventory_id', 'inventory_id')
       .field('h.max_price', 'max_price')
@@ -452,6 +454,114 @@ class DbQuery extends Db {
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
+  }
+
+  async runInTransaction(query) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform "${query.name}" operation in runInTransaction(): disconnected state`);
+      return null;
+    }
+    try {
+      this.logger.debug(`[${this.name}] running "${query.name}" in transaction, db query: ${JSON.stringify(query.query, null, 2)}`);
+      let res = await this.db[query.method](query.query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      if (query.method === 'none' && res === null) { res = true; }
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error in transaction, part "${query.name}" failed`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      try {
+        await this.db.none({ text: 'ROLLBACK', values: [] });
+      } catch (f) {
+        // pass
+      }
+      return null;
+    }
+  }
+
+  async transferHw(options) {
+    let res;
+
+    res = await this.runInTransaction({
+      name: 'begin transaction',
+      method: 'none',
+      query: {
+        text: 'BEGIN',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'update hw table (user, condition, avaiable)',
+      method: 'none',
+      query: squel.update()
+        .table('hw')
+        .setFields({
+          user_id: options.newUser,
+          condition: (options.condition === 'new' ? 'used' : options.condition),
+          available: options.newUser === config.hwItems.systemUserId,
+        })
+        .where('id = ?', options.id)
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'create record in hw_owner_history',
+      method: 'one',
+      query: squel.insert()
+        .into('hw_owner_history')
+        .setFields({
+          hw_id: options.id,
+          old_user_id: options.oldUser,
+          new_user_id: options.newUser,
+          amount: options.price,
+          date: options.date,
+        })
+        .returning('id')
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'update hw_budgets',
+      method: 'none',
+      query: squel.insert()
+        .into('hw_budgets')
+        .setFieldsRows([
+          // seller
+          {
+            user_id: options.oldUser,
+            action: 'hw_sell',
+            amount: options.price,
+            hw_owner_history_id: res.id,
+            date: options.date,
+          },
+          // buyer
+          {
+            user_id: options.newUser,
+            action: 'hw_buy',
+            amount: -options.price,
+            hw_owner_history_id: res.id,
+            date: options.date,
+          },
+        ])
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'commit transaction',
+      method: 'none',
+      query: {
+        text: 'COMMIT',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    return options.id;
   }
 }
 

@@ -541,12 +541,10 @@ const questions = {
             return dialogStates.init;
           }
           const today = (new Date()).toISOString().substr(0, 10);
-          hw[0].current_price_calc = hw[0].condition === 'new'
-            ? hw[0].purchase_price
-            : config.hwItems.getAgedPrice(hw[0].purchase_price, hw[0].purchase_date, today);
-          if (hw[0].max_price !== null) {
-            hw[0].current_price_calc = Math.min(hw[0].current_price_calc, hw[0].max_price);
-          }
+          let price = config.hwItems.getAgedPrice(hw[0].purchase_price, hw[0].purchase_date, today);
+          if (hw[0].max_price !== null) { price = Math.min(hw[0].max_price, price); }
+          if (hw[0].condition === 'new') { price = hw[0].purchase_price; }
+          hw[0].current_price_calc = price;
           process.stdout.write(`\nhw details:\n${JSON.stringify(hw[0], null, 2)}\n`);
           const ownerHistory = await context.dbQuery.getHwOwners(hwId);
           if (!ownerHistory) { return dialogStates.init; }
