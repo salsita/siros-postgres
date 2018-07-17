@@ -159,6 +159,38 @@ class DbQuery extends Db {
     }
   }
 
+  async getHwChangeDetails(historyId) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwChangeDetails() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('u1.name', 'old_user')
+      .field('u2.name', 'new_user')
+      .field('c.category', 'category')
+      .field('h.description', 'description')
+      .field('s.store', 'store')
+      .field('h.id', 'id')
+      .from('hw_owner_history', 'hist')
+      .join('users', 'u1', 'hist.old_user_id = u1.id')
+      .join('users', 'u2', 'hist.new_user_id = u2.id')
+      .join('hw', 'h', 'hist.hw_id = h.id')
+      .join('hw_categories', 'c', 'c.id = h.category')
+      .join('stores', 's', 's.id = h.store')
+      .where('hist.id = ?', historyId)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwChangeDetails() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
   async addHwBudget(userId, updates) {
     if (!this.connected) {
       this.logger.error(`[${this.name}] cannot perform addHwBudget() operation in disconnected state`);

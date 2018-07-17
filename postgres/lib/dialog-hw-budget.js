@@ -73,15 +73,17 @@ const questions = {
             const item = history[i];
             amount += item.amount;
             if (item.hw_owner_history_id) {
-              // TODO
+              item.hw = await context.dbQuery.getHwChangeDetails(item.hw_owner_history_id);
+              if (!item.hw) { return dialogStates.init; }
             }
+            item.hw_owner_history_id = undefined;
             if (item.hw_reapirs_id) {
               // TODO
             }
+            item.hw_repairs_id = undefined;
+            process.stdout.write(`\n${JSON.stringify(item, null, 2)}`);
           }
-          // TODO: print the history here!
-          process.stdout.write('\n--- HERE COMES THE FULL HISTORY ---\n');
-          process.stdout.write(`\ncurrent hw budget of user with id (${context.userId}) is ${amount}\n\n`);
+          process.stdout.write(`\n\ncurrent hw budget of user with id (${context.userId}) is ${amount}\n\n`);
           return dialogStates.init;
         },
       },
