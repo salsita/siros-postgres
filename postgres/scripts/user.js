@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
 const winston = require('winston');
 
-const DbQuery = require('./db-query');
-const { readAnswer, findHandler } = require('./dialog');
-const { dialogStates, questions } = require('./dialog-hw');
+const DbQuery = require('../lib/db-query');
+const { readAnswer, findHandler } = require('../lib/dialog');
+const { dialogStates, questions } = require('../lib/dialog-user');
 
 dotenv.config();
 

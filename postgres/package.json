@@ -18,7 +18,7 @@
     "eslint-plugin-import": "^2.13.0"
   },
   "scripts": {
-    "lint": "eslint . migrations",
+    "lint": "eslint lib scripts migrations",
     "migrate": "node-pg-migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

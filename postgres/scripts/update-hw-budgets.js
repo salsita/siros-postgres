@@ -1,8 +1,8 @@
 const dotenv = require('dotenv');
 const winston = require('winston');
 
-const config = require('./config');
-const DbQuery = require('./db-query');
+const config = require('../lib/config');
+const DbQuery = require('../lib/db-query');
 
 dotenv.config();
 
