@@ -146,8 +146,6 @@ exports.up = (pgm) => {
   pgm.createIndex('hw', 'category');
   // search hw by store
   pgm.createIndex('hw', 'store');
-  // search hw by category and store
-  pgm.createIndex('hw', ['category', 'store']);
   // search hw by owner
   pgm.createIndex('hw', 'user_id');
   // marketplace: (active = true) and (available = true)
@@ -256,7 +254,6 @@ exports.down = (pgm) => {
 
   pgm.dropIndex('hw', 'category');
   pgm.dropIndex('hw', 'store');
-  pgm.dropIndex('hw', ['category', 'store']);
   pgm.dropIndex('hw', 'user_id');
   pgm.dropIndex('hw', ['active', 'available']);
   pgm.dropTable('hw');

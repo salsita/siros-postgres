@@ -77,7 +77,7 @@ const questions = {
               if (!item.hw) { return dialogStates.init; }
             }
             item.hw_owner_history_id = undefined;
-            if (item.hw_reapirs_id) {
+            if (item.hw_repairs_id) {
               // TODO
             }
             item.hw_repairs_id = undefined;

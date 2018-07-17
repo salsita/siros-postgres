@@ -1,7 +1,7 @@
 exports.up = (pgm) => {
   pgm.createType(
     'type_budget_action',
-    ['initial', 'yearly', 'correction', 'hw_buy', 'hw_sell', 'hw_repair'],
+    ['initial', 'yearly', 'correction', 'hw_buy', 'hw_sell', 'hw_repurchase', 'hw_repair'],
   );
   pgm.createTable(
     'hw_budgets',
@@ -26,15 +26,15 @@ exports.up = (pgm) => {
         type: 'integer',
         notNull: false,
         references: 'hw_owner_history (id)',
-        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_repair') and (hw_owner_history_id is null)) or "
-             + " ((action = 'hw_buy'  or action = 'hw_sell') and (hw_owner_history_id is not null)))",
+        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_repair') and (hw_owner_history_id is null)) or"
+             + " ((action = 'hw_buy' or action = 'hw_sell' or action = 'hw_repurchase') and (hw_owner_history_id is not null)))",
         comment: 'link to hw_owner_history table when user is charged for hw when buying / selling it',
       },
       hw_repairs_id: {
         type: 'integer',
         notNull: false,
         references: 'hw_repairs (id)',
-        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_buy' or action = 'hw_sell') and (hw_repairs_id is null)) or "
+        check: "(((action = 'initial' or action = 'yearly' or action = 'correction' or action = 'hw_buy' or action = 'hw_sell' or action = 'hw_repurchase') and (hw_repairs_id is null)) or"
              + " ((action = 'hw_repair') and (hw_repairs_id is not null)))",
         comment: 'link to hw_repairs table when user is charged for hw repair',
       },

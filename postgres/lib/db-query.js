@@ -525,7 +525,7 @@ class DbQuery extends Db {
     if (!res) { return null; }
 
     res = await this.runInTransaction({
-      name: 'update hw table (user, condition, avaiable)',
+      name: 'update hw table (user, condition, available)',
       method: 'none',
       query: squel.update()
         .table('hw')
@@ -579,6 +579,82 @@ class DbQuery extends Db {
             date: options.date,
           },
         ])
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'commit transaction',
+      method: 'none',
+      query: {
+        text: 'COMMIT',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    return options.id;
+  }
+
+  async sellHw(options) {
+    let res;
+
+    res = await this.runInTransaction({
+      name: 'begin transaction',
+      method: 'none',
+      query: {
+        text: 'BEGIN',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    const fields = {
+      user_id: options.newUser,
+      available: false,
+      active: false,
+    };
+    if (options.setComment) { fields.comment = options.comment; }
+    res = await this.runInTransaction({
+      name: 'update hw table (user, available, active)',
+      method: 'none',
+      query: squel.update()
+        .table('hw')
+        .setFields(fields)
+        .where('id = ?', options.id)
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'create record in hw_owner_history',
+      method: 'one',
+      query: squel.insert()
+        .into('hw_owner_history')
+        .setFields({
+          hw_id: options.id,
+          old_user_id: options.oldUser,
+          new_user_id: options.newUser,
+          amount: options.price,
+          date: options.date,
+        })
+        .returning('id')
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'update hw_budgets',
+      method: 'none',
+      query: squel.insert()
+        .into('hw_budgets')
+        .setFields({
+          user_id: options.newUser,
+          action: 'hw_repurchase',
+          amount: options.price,
+          hw_owner_history_id: res.id,
+          date: options.date,
+        })
         .toParam(),
     });
     if (!res) { return null; }
