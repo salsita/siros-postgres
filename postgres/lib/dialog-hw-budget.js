@@ -78,7 +78,8 @@ const questions = {
             }
             item.hw_owner_history_id = undefined;
             if (item.hw_repairs_id) {
-              // TODO
+              item.hw = await context.dbQuery.getHwRepairDetails(item.hw_repairs_id);
+              if (!item.hw) { return dialogStates.init; }
             }
             item.hw_repairs_id = undefined;
             process.stdout.write(`\n${JSON.stringify(item, null, 2)}`);

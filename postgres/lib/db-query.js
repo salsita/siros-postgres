@@ -181,11 +181,40 @@ class DbQuery extends Db {
       .toParam();
     try {
       this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
-      const res = await this.db.any(query);
+      const res = await this.db.one(query);
       this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
       return res;
     } catch (e) {
       this.logger.error(`[${this.name}] error during getHwChangeDetails() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getHwRepairDetails(repairId) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwRepairDetails() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('c.category', 'category')
+      .field('h.description', 'description')
+      .field('s.store', 'store')
+      .field('h.id', 'id')
+      .field('r.description', 'repair_description')
+      .from('hw_repairs', 'r')
+      .join('hw', 'h', 'r.hw_id = h.id')
+      .join('hw_categories', 'c', 'c.id = h.category')
+      .join('stores', 's', 's.id = h.store')
+      .where('r.id = ?', repairId)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwRepairDetails() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
@@ -653,6 +682,76 @@ class DbQuery extends Db {
           action: 'hw_repurchase',
           amount: options.price,
           hw_owner_history_id: res.id,
+          date: options.date,
+        })
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'commit transaction',
+      method: 'none',
+      query: {
+        text: 'COMMIT',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    return options.id;
+  }
+
+  async repairHw(options) {
+    let res;
+
+    res = await this.runInTransaction({
+      name: 'begin transaction',
+      method: 'none',
+      query: {
+        text: 'BEGIN',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'update hw table (condition)',
+      method: 'none',
+      query: squel.update()
+        .table('hw')
+        .setFields({ condition: 'repaired' })
+        .where('id = ?', options.id)
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'create record in hw_repairs',
+      method: 'one',
+      query: squel.insert()
+        .into('hw_repairs')
+        .setFields({
+          hw_id: options.id,
+          user_id: options.chargeUser,
+          amount: options.price,
+          date: options.date,
+          description: options.description,
+        })
+        .returning('id')
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'update hw_budgets',
+      method: 'none',
+      query: squel.insert()
+        .into('hw_budgets')
+        .setFields({
+          user_id: options.chargeUser,
+          action: 'hw_repair',
+          amount: -options.price,
+          hw_repairs_id: res.id,
           date: options.date,
         })
         .toParam(),
