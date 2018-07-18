@@ -344,13 +344,20 @@ const questions = {
     handlers: [
       {
         match: /^\d+$/,
-        code: (context, answer) => {
+        code: async (context, answer) => {
           const id = parseInt(answer, 10);
           context.transfer.userId = id;
           if (id === context.transfer.hw.user_id) {
             process.stdout.write(`\nthis user (id: ${id}) is already the owner of the hw item!\n\n`);
             return dialogStates.init;
           }
+          const user = await context.dbQuery.getUser(id);
+          if (user === null) { return dialogStates.init; }
+          if (user === 0) {
+            process.stdout.write(`\nuser with id (${id}) not found!\n\n`);
+            return dialogStates.init;
+          }
+          context.transfer.user = user;
           return dialogStates.transferDate;
         },
       },
@@ -409,7 +416,7 @@ const questions = {
         match: /^$/,
         code: (context) => {
           const str = `\nabout to transfer the hw item (id: ${context.transfer.id}):\n`
-          + `+ to user (id: ${context.transfer.userId})\n`
+          + `+ to user (id: ${context.transfer.userId}, name: ${context.transfer.user.name})\n`
           + `+ effective on (date: ${context.transfer.date})\n`
           + `+ for (amount: ${context.transfer.price})\n\n`;
           process.stdout.write(str);
@@ -421,7 +428,7 @@ const questions = {
         code: (context, answer) => {
           context.transfer.price = parseInt(answer, 10);
           const str = `\nabout to transfer the hw item (id: ${context.transfer.id}):\n`
-          + `+ to user (id: ${context.transfer.userId})\n`
+          + `+ to user (id: ${context.transfer.userId}, name: ${context.transfer.user.name})\n`
           + `+ effective on (date: ${context.transfer.date})\n`
           + `+ for (amount: ${context.transfer.price})\n\n`;
           process.stdout.write(str);
