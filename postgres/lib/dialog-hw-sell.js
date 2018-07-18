@@ -439,7 +439,8 @@ const questions = {
           const str = `\nabout to sell the hw item (id: ${context.sellHw.id}):\n`
           + `+ to user (id: ${context.sellHw.userId}, name: ${context.sellHw.user.name})\n`
           + `+ effective on (date: ${context.sellHw.date})\n`
-          + `+ for (amount: ${context.sellHw.price})\n\n`;
+          + `+ for (amount: ${context.sellHw.price})\n`
+          + `+ with comment "${context.sellHw.comment}"\n\n`;
           process.stdout.write(str);
           return dialogStates.sellHw;
         },

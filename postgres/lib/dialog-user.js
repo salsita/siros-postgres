@@ -8,16 +8,18 @@ const dialogStates = {
   createUserSystem: 4,
   createUserStartDate: 5,
   createUserActive: 6,
-  createUserPartTime: 7,
-  createUser: 8,
+  createUserEmail: 7,
+  createUserPartTime: 8,
+  createUser: 9,
 
-  editUserId: 9,
-  editUserName: 10,
-  editUserSystem: 11,
-  editUserStartDate: 12,
-  editUserActive: 13,
-  editUserPartTime: 14,
-  editUser: 15,
+  editUserId: 10,
+  editUserName: 11,
+  editUserSystem: 12,
+  editUserStartDate: 13,
+  editUserActive: 14,
+  editUserEmail: 15,
+  editUserPartTime: 16,
+  editUser: 17,
 };
 
 const printUsers = (users) => {
@@ -105,6 +107,7 @@ const questions = {
         code: (context) => {
           context.newUser.system = true;
           context.newUser.active = null;
+          context.newUser.email = null;
           context.newUser.start_date = null;
           context.newUser.part_time = null;
           const str = `\nabout to create the following user:\n${JSON.stringify(context.newUser, null, 2)}\n\n`;
@@ -148,13 +151,27 @@ const questions = {
         match: /^[y]{0,1}$/i,
         code: (context) => {
           context.newUser.active = true;
-          return dialogStates.createUserPartTime;
+          return dialogStates.createUserEmail;
         },
       },
       {
         match: /^[n]$/i,
         code: (context) => {
           context.newUser.active = false;
+          context.newUser.email = null;
+          return dialogStates.createUserPartTime;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createUserEmail]: {
+    text: '[create user] enter (non-empty) email of the new user',
+    handlers: [
+      {
+        match: /^\S+$/,
+        code: (context, answer) => {
+          context.newUser.email = answer;
           return dialogStates.createUserPartTime;
         },
       },
@@ -240,12 +257,17 @@ const questions = {
 
           context.changes = {};
           /* eslint-disable max-len */
-          questions[dialogStates.editUserName].text = `[edit user] edit name of the new user (press enter for "${user.name}")`;
+          questions[dialogStates.editUserName].text = `[edit user] edit name of the user (press enter for "${user.name}")`;
           questions[dialogStates.editUserSystem].text = `[edit user] system user? ${context.userData.system ? '(Y/n)' : '(y/N)'}`;
           context.userData.start_date_default = context.userData.start_date || (new Date()).toISOString().substr(0, 10);
           questions[dialogStates.editUserStartDate].text = `[edit user] start date (in YYYY-MM-DD format, press enter for "${context.userData.start_date_default}")`;
           context.userData.active_default = context.userData.active === null ? true : context.userData.active;
           questions[dialogStates.editUserActive].text = `[edit user] active user? ${context.userData.active_default ? '(Y/n)' : '(y/N)'}`;
+          if (user.active === true) {
+            questions[dialogStates.editUserEmail].text = `[edit user] edit email of the user (press enter for "${user.email}")`;
+          } else {
+            questions[dialogStates.editUserEmail].text = '[edit user] enter (non-empty) email of new user';
+          }
           context.userData.part_time_default = context.userData.part_time === null ? false : context.userData.part_time;
           questions[dialogStates.editUserPartTime].text = `[edit user] part time? ${context.userData.part_time_default ? '(Y/n)' : '(y/N)'}`;
 
@@ -285,6 +307,7 @@ const questions = {
             context.changes.active = null;
             context.changes.start_date = null;
             context.changes.part_time = null;
+            if (context.userData.email !== null) { context.changes.email = null; }
           }
           return printChanges(context.userId, context.changes);
         },
@@ -338,7 +361,7 @@ const questions = {
           if (context.userData.active !== true) {
             context.changes.active = true;
           }
-          return dialogStates.editUserPartTime;
+          return dialogStates.editUserEmail;
         },
       },
       {
@@ -346,6 +369,7 @@ const questions = {
         code: (context) => {
           if (context.userData.active !== false) {
             context.changes.active = false;
+            if (context.userData.email !== null) { context.changes.email = null; }
           }
           return dialogStates.editUserPartTime;
         },
@@ -353,6 +377,31 @@ const questions = {
       {
         match: /^$/,
         code: (context) => questions[dialogStates.editUserActive].handlers[context.userData.active_default ? 0 : 1].code(context),
+      },
+    ],
+  },
+
+  [dialogStates.editUserEmail]: {
+    text: '<replaced from [dialogStates.editUserId], handler (number)>',
+    handlers: [
+      {
+        match: /^\S+$/,
+        code: (context, answer) => {
+          if (context.userData.email !== answer) {
+            context.changes.email = answer;
+          }
+          return dialogStates.editUserPartTime;
+        },
+      },
+      {
+        match: /^$/,
+        code: (context) => {
+          if (!context.userData.email) {
+            process.stdout.write('\n! that is unfortunately invalid answer, please try again\n\n');
+            return dialogStates.editUserEmail;
+          }
+          return dialogStates.editUserPartTime;
+        },
       },
     ],
   },

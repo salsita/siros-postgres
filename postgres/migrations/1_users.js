@@ -27,6 +27,13 @@ exports.up = (pgm) => {
         check: '((system is true) and (active is null)) or ((system is false) and (active is not null))',
         comment: 'we calculate hw budgets only for active (real) users',
       },
+      email: {
+        type: 'varchar(128)',
+        notNull: false,
+        unique: true,
+        check: '((active is true) and (email is not null)) or ((active is not true) and (email is null))',
+        comment: 'google mail that is used to auth the web user',
+      },
       start_date: {
         type: 'date',
         notNull: false,
@@ -48,12 +55,15 @@ exports.up = (pgm) => {
   );
   // search by user name, get list of users ordered by name
   pgm.createIndex('users', 'name');
+  // lookup user by email
+  pgm.createIndex('users', 'email');
   // updating budgets only for users where (system = false) and (active = true)
   pgm.createIndex('users', ['system', 'active']);
 };
 
 exports.down = (pgm) => {
   pgm.dropIndex('users', 'name');
+  pgm.dropIndex('users', 'email');
   pgm.dropIndex('users', ['system', 'active']);
   pgm.dropTable('users');
 };
