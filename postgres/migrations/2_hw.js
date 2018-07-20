@@ -190,6 +190,11 @@ exports.up = (pgm) => {
         default: pgm.func('now()::date'),
         comment: 'date of change, ISO 8601 format, YYYY-MM-DD',
       },
+      condition: {
+        type: 'type_hw_condition',
+        notNull: true,
+        comment: 'hw condition when changing the owner',
+      },
     },
     {
       comment: 'track of all owner changes',

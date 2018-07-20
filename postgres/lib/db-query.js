@@ -169,6 +169,7 @@ class DbQuery extends Db {
       .field('u2.name', 'new_user')
       .field('c.category', 'category')
       .field('h.description', 'description')
+      .field('hist.condition', 'condition')
       .field('s.store', 'store')
       .field('h.id', 'id')
       .from('hw_owner_history', 'hist')
@@ -448,6 +449,7 @@ class DbQuery extends Db {
       .field("to_char(h.date, 'YYYY-MM-DD')", 'date')
       .field('u1.name', 'old_user')
       .field('u2.name', 'new_user')
+      .field('h.condition', 'condition')
       .field('h.amount', 'amount')
       .from('hw_owner_history', 'h')
       .join('users', 'u1', 'h.old_user_id = u1.id')
@@ -579,6 +581,7 @@ class DbQuery extends Db {
           new_user_id: options.newUser,
           amount: options.price,
           date: options.date,
+          condition: options.condition,
         })
         .returning('id')
         .toParam(),
@@ -666,6 +669,7 @@ class DbQuery extends Db {
           new_user_id: options.newUser,
           amount: options.price,
           date: options.date,
+          condition: options.condition,
         })
         .returning('id')
         .toParam(),
@@ -769,6 +773,67 @@ class DbQuery extends Db {
     if (!res) { return null; }
 
     return options.id;
+  }
+
+  async getHwProtocolDates(userId) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwProtocolDates() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('action')
+      .field("to_char(date, 'YYYY-MM-DD')", 'date')
+      .from('hw_budgets')
+      .where('user_id = ?', userId)
+      .where("action = 'hw_buy' OR action = 'hw_sell' OR action = 'hw_repurchase'")
+      .order('date')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwProtocolDates() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getHwProtocolItems(userId, date, type) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getHwProtocolItems() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('c.category', 'category')
+      .field('hw.description', 'description')
+      .field('s.store', 'store')
+      .field("to_char(hw.purchase_date, 'YYYY-MM-DD')", 'purchase_date')
+      .field('hw.purchase_price', 'purchase_price')
+      .field('hw.store_invoice_id', 'store_invoice_id')
+      .field('hw.serial_id', 'serial_id')
+      .field('hist.amount', 'amount')
+      .field('hist.condition', 'condition')
+      .from('hw_budgets', 'b')
+      .join('hw_owner_history', 'hist', 'hist.id = b.hw_owner_history_id')
+      .join('hw', 'hw', 'hw.id = hist.hw_id')
+      .join('hw_categories', 'c', 'c.id = hw.category')
+      .join('stores', 's', 's.id = hw.store')
+      .where('b.user_id = ?', userId)
+      .where('b.date = ?', date)
+      .where('b.action = ?', type)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwProtocolItems() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
   }
 }
 

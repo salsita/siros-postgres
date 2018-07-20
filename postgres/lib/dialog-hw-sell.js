@@ -474,6 +474,7 @@ const questions = {
             price: context.sellHw.price,
             comment: context.sellHw.comment,
             setComment: context.sellHw.setComment,
+            condition: context.sellHw.hw.condition,
           });
           context.sellHw = undefined;
           if (!id) { return dialogStates.init; }
