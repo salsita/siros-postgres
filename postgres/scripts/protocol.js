@@ -4,6 +4,7 @@ const winston = require('winston');
 const DbQuery = require('../lib/db-query');
 const { readAnswer, findHandler } = require('../lib/dialog');
 const { dialogStates, questions } = require('../lib/dialog-protocol');
+const { setLogger } = require('../lib/generatePdf');
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const logger = winston.createLogger({
     winston.format.printf((info) => `${info.timestamp} (${info.level}): ${info.message}`),
   ),
 });
+setLogger(logger);
 
 const dbQuery = new DbQuery({ url: config.dbUrl, logger });
 

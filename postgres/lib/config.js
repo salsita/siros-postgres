@@ -61,4 +61,8 @@ module.exports = {
     },
   },
 
+  pdf: {
+    outputDir: '../protocols',
+  },
+
 };

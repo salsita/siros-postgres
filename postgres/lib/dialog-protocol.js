@@ -1,4 +1,5 @@
 const printf = require('printf');
+const { generatePdf } = require('./generatePdf');
 
 const dialogStates = {
   init: 1,
@@ -71,6 +72,12 @@ const questions = {
         match: /^\d+$/,
         code: async (context, answer) => {
           const userId = parseInt(answer, 10);
+          const user = await context.dbQuery.getUser(userId);
+          if (user === null) { return dialogStates.init; }
+          if (user === 0) {
+            process.stdout.write(`\nthere is no user with id ${userId}!\n\n`);
+            return dialogStates.init;
+          }
           const hwDates = await context.dbQuery.getHwProtocolDates(userId);
           if (!hwDates) { return dialogStates.init; }
           if (!hwDates.length) {
@@ -100,6 +107,7 @@ const questions = {
           process.stdout.write(`\n${protocolCount} protocol(s) available\n\n`);
           context.protocol = {
             userId,
+            user,
             dates,
             defaultDate,
           };
@@ -248,8 +256,19 @@ const questions = {
     text: 'do you want to proceed? (y/N)',
     handlers: [
       {
-        match: /.*/,
-        code: () => dialogStates.init,
+        match: /^[y]$/i,
+        code: async (context) => {
+          await generatePdf(context.protocol);
+          context.protocol = undefined;
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[n]{0,1}$/i,
+        code: async (context) => {
+          context.protocol = undefined;
+          return dialogStates.init;
+        },
       },
     ],
   },

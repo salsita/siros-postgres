@@ -1,4 +1,6 @@
 node_modules/
+protocols/
+.DS_Store
 .*.swp
 *.zip
 *.log
