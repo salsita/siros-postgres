@@ -52,6 +52,30 @@ const actionMap = {
   hw_repurchase: 'invoice',
 };
 
+const formatPrice = (price) => {
+  const elems = [];
+  price.toString().split('').reverse().forEach((digit, idx) => {
+    if (idx && (idx % 3 === 0)) { elems.push(','); }
+    elems.push(digit);
+  });
+  return elems.reverse().join('');
+};
+
+const monthMap = {
+  '01': 'January',
+  '02': 'February',
+  '03': 'March',
+  '04': 'April',
+  '05': 'May',
+  '06': 'June',
+  '07': 'July',
+  '08': 'August',
+  '09': 'September',
+  10: 'October',
+  11: 'November',
+  12: 'December',
+};
+
 const generatePdf = (options) => new Promise((resolve) => {
   // document definition
   const document = {
@@ -79,24 +103,23 @@ const generatePdf = (options) => new Promise((resolve) => {
     content: [],
     defaultStyle: {
       font: 'OpenSans',
-      fontSize: 9,
+      fontSize: 8,
     },
     styles: {
-      footer: { font: 'OpenSansLight', fontSize: 8 },
-      title: {
-        font: 'OpenSansSemi',
-        fontSize: 16,
-        bold: true,
-        margin: [0, 0, 0, 20],
-      },
-      subtitle: { bold: true },
+      title: { font: 'OpenSansSemi', fontSize: 16, bold: true },
+      bold: { bold: true },
+      tableCellL: { font: 'OpenSansLight' },
+      tableCellR: { alignment: 'right' },
+      signature: { font: 'OpenSansLight', fontSize: 6 },
+      footer: { font: 'OpenSansLight', fontSize: 6 },
     },
   };
   if (options.type !== 'hw_repurchase') {
-    document.content.push({ text: 'Handover protocol', style: 'title' });
+    // handover protocol
+    document.content.push({ text: 'Handover protocol', style: 'title', margin: [0, 0, 0, 20] });
     const parties = {
-      giving: [{ text: 'Handed over by:', style: 'subtitle' }],
-      receiving: [{ text: 'Taken over by:', style: 'subtitle' }],
+      giving: [{ text: 'Handed over by:', style: 'bold' }],
+      receiving: [{ text: 'Taken over by:', style: 'bold' }],
     };
     parties[(options.type === 'hw_buy' ? 'receiving' : 'giving')].push({ text: options.user.name });
     parties[(options.type === 'hw_buy' ? 'giving' : 'receiving')].push(
@@ -106,12 +129,96 @@ const generatePdf = (options) => new Promise((resolve) => {
       { text: 'Czech Republic' },
     );
     document.content.push({
-      columns: [parties.giving, parties.receiving],
-      columnGap: 10,
+      table: {
+        widths: [40, '*', 40, '*', 40],
+        headerRows: 1,
+        body: [['', parties.giving, '', parties.receiving, '']],
+      },
+      layout: {
+        hLineWidth: () => 0,
+        vLineWidth: () => 0,
+      },
       margin: [0, 0, 0, 20],
     });
-    document.content.push({ text: 'table here' });
+    const tableBody = [
+      [{ text: 'Description', style: 'bold' }, { text: 'Price CZK', style: ['bold', { alignment: 'right' }] }],
+    ];
+    options.hwList.forEach((item) => {
+      const descr = [{
+        text: [
+          { text: 'Category: ', style: { italics: true } },
+          { text: `${item.category} (${item.condition})`, style: { font: 'OpenSans' } },
+        ],
+      }];
+      if (item.description) {
+        descr.push({ text: [{ text: 'Specification: ', style: { italics: true } }, item.description] });
+      }
+      if (item.serial_id) {
+        descr.push({ text: [{ text: 'Serial ID: ', style: { italics: true } }, item.serial_id] });
+      }
+      const purchase = [
+        { text: 'Purchased in ', style: { italics: true } },
+        item.store,
+        { text: ' on ', style: { italics: true } },
+        item.purchase_date,
+        { text: ' for (CZK) ', style: { italics: true } },
+        formatPrice(item.purchase_price),
+      ];
+      if (item.store_invoice_id) {
+        purchase.push({ text: ' with invoice ID ', style: { italics: true } }, item.store_invoice_id);
+      }
+      descr.push({ text: purchase });
+      const price = { text: formatPrice(item.amount), style: 'tableCellR' };
+      tableBody.push([descr, price]);
+    });
+    if (options.includeKey) {
+      tableBody.push([{ text: 'Office key', style: { font: 'OpenSans' } }, '']);
+    }
+    document.content.push({
+      style: 'tableCellL',
+      table: {
+        widths: ['*', 40],
+        headerRows: 1,
+        body: tableBody,
+      },
+      layout: {
+        hLineWidth: (i) => (i === 1 ? 0.5 : 0),
+        vLineWidth: () => 0,
+      },
+      margin: [0, 0, 0, 20],
+    });
+    const dateArr = options.date.split('-');
+    document.content.push({
+      text: `In Prague, on ${monthMap[dateArr[1]]} ${parseInt(dateArr[2], 10)}, ${dateArr[0]}.`,
+      margin: [0, 0, 0, 60],
+    });
+    const signitures = {
+      giving: {},
+      receiving: {},
+    };
+    signitures[(options.type === 'hw_buy' ? 'receiving' : 'giving')] = { text: options.user.name };
+    signitures[(options.type === 'hw_buy' ? 'giving' : 'receiving')] = { text: 'Salsita s.r.o.' };
+    document.content.push({
+      table: {
+        widths: [40, '*', 40, '*', 40],
+        headerRows: 1,
+        body: [[
+          { text: '', style: 'signature', border: [false, false, false, false] },
+          { text: signitures.giving, style: 'signature', border: [false, true, false, false] },
+          { text: '', style: 'signature', border: [false, false, false, false] },
+          { text: signitures.receiving, style: 'signature', border: [false, true, false, false] },
+          { text: '', style: 'signature', border: [false, false, false, false] },
+        ]],
+      },
+      layout: {
+        hLineWidth: (i) => (!i ? 0.5 : 0),
+        vLineWidth: () => 0,
+      },
+    });
   } else {
+    // invoice
+    // TODO
+    document.content.push({ text: 'INVOICE -- TODO', style: 'title' });
   }
 
   // generating the PDF document
