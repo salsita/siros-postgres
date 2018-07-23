@@ -96,7 +96,7 @@ const generatePdf = (options) => new Promise((resolve) => {
         },
         {
           text: `Page ${current} of ${total}`,
-          style: ['footer', { alignment: 'right' }],
+          style: ['footer', 'right'],
         },
       ],
     }),
@@ -109,8 +109,8 @@ const generatePdf = (options) => new Promise((resolve) => {
       title: { font: 'OpenSansSemi', fontSize: 16, bold: true },
       bold: { bold: true },
       italics: { italics: true },
-      tableCellL: { font: 'OpenSansLight' },
-      tableCellR: { alignment: 'right' },
+      table: { font: 'OpenSansLight' },
+      right: { alignment: 'right' },
       signature: { font: 'OpenSansLight', fontSize: 6 },
       footer: { font: 'OpenSansLight', fontSize: 6 },
     },
@@ -142,7 +142,7 @@ const generatePdf = (options) => new Promise((resolve) => {
       margin: [0, 0, 0, 20],
     });
     const tableBody = [
-      [{ text: 'Description', style: 'bold' }, { text: 'Price CZK', style: ['bold', { alignment: 'right' }] }],
+      [{ text: 'Description', style: 'bold' }, { text: 'Price CZK', style: ['bold', 'right'] }],
     ];
     options.hwList.forEach((item) => {
       const descr = [{
@@ -169,14 +169,14 @@ const generatePdf = (options) => new Promise((resolve) => {
         purchase.push({ text: ' with invoice ID ', style: 'italics' }, item.store_invoice_id);
       }
       descr.push({ text: purchase });
-      const price = { text: formatPrice(item.amount), style: 'tableCellR' };
+      const price = { text: formatPrice(item.amount), style: 'right' };
       tableBody.push([descr, price]);
     });
     if (options.includeKey) {
       tableBody.push([{ text: 'Office key', style: { font: 'OpenSans' } }, '']);
     }
     document.content.push({
-      style: 'tableCellL',
+      style: 'table',
       table: {
         widths: ['*', 40],
         headerRows: 1,
@@ -245,9 +245,11 @@ const generatePdf = (options) => new Promise((resolve) => {
       },
       margin: [0, 0, 0, 20],
     });
-    const tableBody = [
-      [{ text: 'Description', style: 'bold' }, { text: 'Price CZK (tax incl.)', style: ['bold', { alignment: 'right' }] }],
-    ];
+    const tableBody = [[
+      { text: 'Description', style: 'bold', border: [false, false, false, true] },
+      { text: 'Price CZK (tax incl.)', style: ['bold', 'right'], border: [false, false, false, true] },
+    ]];
+    let invoiceTotal = 0;
     options.hwList.forEach((item) => {
       const descr = [{
         text: [
@@ -273,18 +275,27 @@ const generatePdf = (options) => new Promise((resolve) => {
         purchase.push({ text: ' with invoice ID ', style: 'italics' }, item.store_invoice_id);
       }
       descr.push({ text: purchase });
-      const price = { text: formatPrice(item.amount), style: 'tableCellR' };
-      tableBody.push([descr, price]);
+      const price = { text: formatPrice(item.amount), style: 'right', border: [false, false, false, false] };
+      tableBody.push([{ stack: descr, border: [false, false, false, false] }, price]);
+      invoiceTotal += item.amount;
     });
+    tableBody.push([
+      { text: '', border: [false, false, false, false] },
+      { text: 'Total CZK (tax incl.)', style: ['bold', 'right'], border: [false, false, false, false] },
+    ]);
+    tableBody.push([
+      { text: '', border: [false, false, false, false] },
+      { text: formatPrice(invoiceTotal), style: 'right', border: [false, true, false, false] },
+    ]);
     document.content.push({
-      style: 'tableCellL',
+      style: 'table',
       table: {
         widths: ['*', 75],
         headerRows: 1,
         body: tableBody,
       },
       layout: {
-        hLineWidth: (i) => (i === 1 ? 0.5 : 0),
+        hLineWidth: () => 0.5,
         vLineWidth: () => 0,
       },
       margin: [0, 0, 0, 20],
