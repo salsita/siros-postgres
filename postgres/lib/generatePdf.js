@@ -49,7 +49,7 @@ const pdfPrinter = new PdfPrinter(fonts);
 const actionMap = {
   hw_buy: 'receive',
   hw_sell: 'return',
-  hw_repurchase: 'invoice',
+  hw_repurchase: 'invoice_data',
 };
 
 const formatPrice = (price) => {
@@ -108,6 +108,7 @@ const generatePdf = (options) => new Promise((resolve) => {
     styles: {
       title: { font: 'OpenSansSemi', fontSize: 16, bold: true },
       bold: { bold: true },
+      italics: { italics: true },
       tableCellL: { font: 'OpenSansLight' },
       tableCellR: { alignment: 'right' },
       signature: { font: 'OpenSansLight', fontSize: 6 },
@@ -146,26 +147,26 @@ const generatePdf = (options) => new Promise((resolve) => {
     options.hwList.forEach((item) => {
       const descr = [{
         text: [
-          { text: 'Category: ', style: { italics: true } },
+          { text: 'Category: ', style: 'italics' },
           { text: `${item.category} (${item.condition})`, style: { font: 'OpenSans' } },
         ],
       }];
       if (item.description) {
-        descr.push({ text: [{ text: 'Specification: ', style: { italics: true } }, item.description] });
+        descr.push({ text: [{ text: 'Specification: ', style: 'italics' }, item.description] });
       }
       if (item.serial_id) {
-        descr.push({ text: [{ text: 'Serial ID: ', style: { italics: true } }, item.serial_id] });
+        descr.push({ text: [{ text: 'Serial ID: ', style: 'italics' }, item.serial_id] });
       }
       const purchase = [
-        { text: 'Purchased in ', style: { italics: true } },
+        { text: 'Purchased in ', style: 'italics' },
         item.store,
-        { text: ' on ', style: { italics: true } },
+        { text: ' on ', style: 'italics' },
         item.purchase_date,
-        { text: ' for (CZK) ', style: { italics: true } },
+        { text: ' for (CZK) ', style: 'italics' },
         formatPrice(item.purchase_price),
       ];
       if (item.store_invoice_id) {
-        purchase.push({ text: ' with invoice ID ', style: { italics: true } }, item.store_invoice_id);
+        purchase.push({ text: ' with invoice ID ', style: 'italics' }, item.store_invoice_id);
       }
       descr.push({ text: purchase });
       const price = { text: formatPrice(item.amount), style: 'tableCellR' };
@@ -217,8 +218,82 @@ const generatePdf = (options) => new Promise((resolve) => {
     });
   } else {
     // invoice
-    // TODO
-    document.content.push({ text: 'INVOICE -- TODO', style: 'title' });
+    document.content.push({ text: 'Invoice data (for copy-paste)', style: 'title', margin: [0, 0, 0, 20] });
+    const parties = {
+      buying: [
+        { text: 'Issued for:', style: 'bold' },
+        { text: options.user.name },
+        { text: '... address here ...', style: 'italics' },
+      ],
+      selling: [
+        { text: 'Issued by:', style: 'bold' },
+        { text: 'Salsita s.r.o.' },
+        { text: 'Štefánikova 18/25' },
+        { text: '15000, Prague 5' },
+        { text: 'Czech Republic' },
+      ],
+    };
+    document.content.push({
+      table: {
+        widths: [40, '*', 40, '*', 40],
+        headerRows: 1,
+        body: [['', parties.buying, '', parties.selling, '']],
+      },
+      layout: {
+        hLineWidth: () => 0,
+        vLineWidth: () => 0,
+      },
+      margin: [0, 0, 0, 20],
+    });
+    const tableBody = [
+      [{ text: 'Description', style: 'bold' }, { text: 'Price CZK (tax incl.)', style: ['bold', { alignment: 'right' }] }],
+    ];
+    options.hwList.forEach((item) => {
+      const descr = [{
+        text: [
+          { text: 'Category: ', style: 'italics' },
+          { text: `${item.category} (${item.condition})`, style: { font: 'OpenSans' } },
+        ],
+      }];
+      if (item.description) {
+        descr.push({ text: [{ text: 'Specification: ', style: 'italics' }, item.description] });
+      }
+      if (item.serial_id) {
+        descr.push({ text: [{ text: 'Serial ID: ', style: 'italics' }, item.serial_id] });
+      }
+      const purchase = [
+        { text: 'Purchased in ', style: 'italics' },
+        item.store,
+        { text: ' on ', style: 'italics' },
+        item.purchase_date,
+        { text: ' for (CZK) ', style: 'italics' },
+        formatPrice(item.purchase_price),
+      ];
+      if (item.store_invoice_id) {
+        purchase.push({ text: ' with invoice ID ', style: 'italics' }, item.store_invoice_id);
+      }
+      descr.push({ text: purchase });
+      const price = { text: formatPrice(item.amount), style: 'tableCellR' };
+      tableBody.push([descr, price]);
+    });
+    document.content.push({
+      style: 'tableCellL',
+      table: {
+        widths: ['*', 75],
+        headerRows: 1,
+        body: tableBody,
+      },
+      layout: {
+        hLineWidth: (i) => (i === 1 ? 0.5 : 0),
+        vLineWidth: () => 0,
+      },
+      margin: [0, 0, 0, 20],
+    });
+    const dateArr = options.date.split('-');
+    document.content.push({
+      text: `In Prague, on ${monthMap[dateArr[1]]} ${parseInt(dateArr[2], 10)}, ${dateArr[0]}.`,
+      margin: [0, 0, 0, 60],
+    });
   }
 
   // generating the PDF document
