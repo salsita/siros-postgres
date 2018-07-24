@@ -4,5 +4,4 @@ protocols/
 .*.swp
 *.zip
 *.log
-.env
-data/
+.env*
