@@ -5,3 +5,4 @@ protocols/
 *.zip
 *.log
 .env*
+working*.json

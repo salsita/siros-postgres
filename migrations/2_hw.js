@@ -49,7 +49,7 @@ exports.up = (pgm) => {
 
   pgm.createType(
     'type_hw_condition',
-    ['new', 'used', 'broken', 'repaired', 'missing'],
+    ['new', 'used', 'broken', 'repaired', 'missing', 'discarded'],
   );
   pgm.createTable(
     'hw',
