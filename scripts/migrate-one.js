@@ -50,6 +50,7 @@ const main = async () => {
 
   logger.debug('writing updated working file');
   fs.writeFileSync('../working.json', JSON.stringify(hwItems, null, 2));
+  process.stdout.write(`\nawesome, now only ${hwItems.length} more items to migrate!\n\n`);
   logger.debug('script finished successfully');
   process.exit(0);
 };
