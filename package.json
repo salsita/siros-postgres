@@ -1,6 +1,6 @@
 {
   "name": "siros-scripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "New generation of HW / budget tracking system",
   "main": "index.js",
   "dependencies": {

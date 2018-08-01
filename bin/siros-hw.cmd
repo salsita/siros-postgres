@@ -1,0 +1,1 @@
+node ../scripts/hw.js
