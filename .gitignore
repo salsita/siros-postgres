@@ -6,3 +6,4 @@ protocols/
 *.log
 .env*
 working*.json
+*.tgz

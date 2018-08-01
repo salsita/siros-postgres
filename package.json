@@ -19,6 +19,7 @@
     "eslint-plugin-import": "^2.13.0"
   },
   "scripts": {
+    "bundle": "COPYFILE_DISABLE=1 tar cfvz ${npm_package_name}-${npm_package_version}.tgz .eslintrc.js README.md LICENSE bin fonts images lib migrations scripts package.json package-lock.json",
     "lint": "eslint lib scripts migrations",
     "migrate": "node-pg-migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
