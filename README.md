@@ -9,7 +9,8 @@ In (temporary) absence of web-app for managing the hw, this is the list of scrip
 * siros-show-hw-marketplace: show list of hw items available on markeplace,
 * siros-protocol: generate PDF documents for hand-over and sell events,
 * siros-update-hw-budgets: update hw budgets with initial and yearly increments,
-* siros-show-hw-budget: show hw budget for individual users.
+* siros-show-hw-budget: show hw budget for individual users,
+* siros-hw-discard: discard hw items.
 
 For easy reading, the scripts are not optimized for code-sharing, many parts are copy-pasted.
 
@@ -29,8 +30,8 @@ write permission there before attempting to generate a PDF protocol. The path is
 ```
 
 ```
-> vi bin/.env  # enter connection string there as DATABASE_URL="postgres://siros:<password>@<dns-name>:5432/siros"
-> npm run migrate up
+$ vi bin/.env  # enter connection string there as DATABASE_URL="postgres://siros:<password>@<dns-name>:5432/siros"
+$ npm run migrate up
 ```
 
 ## System user
