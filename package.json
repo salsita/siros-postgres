@@ -1,22 +1,22 @@
 {
   "name": "siros-scripts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "New generation of HW / budget tracking system",
   "main": "index.js",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "node-pg-migrate": "^3.6.1",
-    "pdfmake": "^0.1.37",
+    "node-pg-migrate": "^3.11.0",
+    "pdfmake": "^0.1.38",
     "pg": "^7.4.3",
-    "pg-promise": "^8.4.5",
+    "pg-promise": "^8.4.6",
     "printf": "^0.3.0",
     "squel": "^5.12.2",
-    "winston": "^3.0.0"
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   },
   "scripts": {
     "bundle": "COPYFILE_DISABLE=1 tar cfvz ${npm_package_name}-${npm_package_version}.tgz .eslintrc.js LICENSE README.md bin/siros* fonts images lib migrations package-lock.json package.json scripts",
