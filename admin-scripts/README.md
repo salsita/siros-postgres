@@ -1,16 +1,16 @@
 # Admin scripts
 
 Here you can find command-line scripts for Siros administration tasks:
-* siros-user: create and update (system and real) users,
-* siros-hw: create and update hw items,
-* siros-hw-repair: account transactions for hw item repairs,
-* siros-hw-transfer: change owner of hw items and update budgets accordingly,
-* siros-hw-sell: remove hw items from active evidence after selling them outside Salsita,
-* siros-show-hw-marketplace: show list of hw items available on markeplace,
-* siros-protocol: generate PDF documents for hand-over and sell events,
-* siros-update-hw-budgets: update hw budgets with initial and yearly increments,
-* siros-show-hw-budget: show hw budget for individual users,
-* siros-hw-discard: discard hw items.
+* `siros-user`: create and update (system and real) users,
+* `siros-hw`: create and update hw items,
+* `siros-hw-repair`: account transactions for hw item repairs,
+* `siros-hw-transfer`: change owner of hw items and update budgets accordingly,
+* `siros-hw-sell`: remove hw items from active evidence after selling them outside Salsita,
+* `siros-show-hw-marketplace`: show list of hw items available on markeplace,
+* `siros-protocol`: generate PDF documents for hand-over and sell events,
+* `siros-update-hw-budgets`: update hw budgets with initial and yearly increments,
+* `siros-show-hw-budget`: show hw budget for individual users,
+* `siros-hw-discard`: discard hw items.
 
 For easy reading, the source code of the scripts are not optimized for code-sharing, many parts are copy-pasted.
 
