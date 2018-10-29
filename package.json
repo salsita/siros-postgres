@@ -1,20 +1,20 @@
 {
-  "name": "siros-scripts",
-  "version": "1.1.1",
+  "name": "siros-postgres",
+  "version": "1.1.2",
   "description": "New generation of HW / budget tracking system",
   "main": "index.js",
   "dependencies": {
-    "dotenv": "^6.0.0",
-    "node-pg-migrate": "^3.11.0",
+    "dotenv": "^6.1.0",
+    "node-pg-migrate": "^3.12.0",
     "pdfmake": "^0.1.38",
-    "pg": "^7.4.3",
-    "pg-promise": "^8.4.6",
-    "printf": "^0.3.0",
+    "pg": "^7.6.0",
+    "pg-promise": "^8.5.1",
+    "printf": "^0.5.1",
     "squel": "^5.12.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0"
   },
