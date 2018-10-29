@@ -15,8 +15,8 @@ const config = {
 
   hwDisplay: {
     // limits for display column widths
-    descriptionWidth: 70,
-    commentWidth: 35,
+    descriptionWidth: 65,
+    commentWidth: 34,
   },
 
   hwItems: {

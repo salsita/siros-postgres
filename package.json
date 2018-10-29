@@ -1,28 +1,12 @@
 {
   "name": "siros-postgres",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "New generation of HW / budget tracking system",
-  "main": "index.js",
-  "dependencies": {
-    "dotenv": "^6.1.0",
-    "node-pg-migrate": "^3.12.0",
-    "pdfmake": "^0.1.38",
-    "pg": "^7.6.0",
-    "pg-promise": "^8.5.1",
-    "printf": "^0.5.1",
-    "squel": "^5.12.2",
-    "winston": "^3.1.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.8.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0"
-  },
   "scripts": {
-    "bundle": "COPYFILE_DISABLE=1 tar cfvz ${npm_package_name}-${npm_package_version}.tgz .eslintrc.js LICENSE README.md bin/siros* fonts images lib migrations package-lock.json package.json scripts",
-    "lint": "eslint lib scripts migrations",
-    "migrate": "node-pg-migrate",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./build-scripts/build.sh",
+    "postinstall": "./build-scripts/install-packages.sh",
+    "set-version": "./build-scripts/set-version.sh",
+    "test": "./build-scripts/test.sh"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "repository": "git@github.com:salsita/siros-postgres.git",

@@ -1,0 +1,24 @@
+{
+  "name": "siros-postgres",
+  "version": "1.2.0",
+  "description": "Siros DB schema",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "node-pg-migrate": "^3.12.0",
+    "pg": "^7.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  },
+  "scripts": {
+    "build": "../build-scripts/build-db-schema.sh",
+    "lint": "eslint migrations",
+    "migrate": "node-pg-migrate",
+    "test": "npm run lint"
+  },
+  "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
+  "repository": "git@github.com:salsita/siros-postgres.git",
+  "license": "MIT"
+}
