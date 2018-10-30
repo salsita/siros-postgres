@@ -7,6 +7,8 @@ New generation of HW / budget tracking system.
 The whole system is composed of the following components:
 * [db-schema](db-schema/README.md)
 * [admin-scripts](admin-scripts/README.md)
+* [api-server](api-server/README.md)
+* [web-server](web-server/README.md)
 
 ## Top-level `package.json`
 
