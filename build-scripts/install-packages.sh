@@ -15,3 +15,4 @@ npm_install='npm install --no-production'
 
 install_one db-schema "${npm_install}"
 install_one admin-scripts "${npm_install}"
+install_one api-server "${npm_install}"

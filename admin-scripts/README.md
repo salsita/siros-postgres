@@ -16,7 +16,7 @@ For easy reading, the source code of the scripts are not optimized for code-shar
 
 The scripts are developed on/for MacOS only (but it turns out they also run on Windows as well).
 
-## DB
+## `.env` file
 
 The connection string of the DB needs to be provided in `bin/` directory here in `.env` file.
 The format of the connection string in the file is

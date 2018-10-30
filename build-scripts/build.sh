@@ -15,6 +15,7 @@ npm_build='npm run build'
 
 build_one db-schema "${npm_build}"
 build_one admin-scripts "${npm_build}"
+build_one api-server "${npm_build}"
 
 echo "resulting artifacts:"
 echo ""
