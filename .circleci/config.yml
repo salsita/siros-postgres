@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/siros-postgres
+    steps:
+      - checkout
+
+      - run:
+          name: Set version
+          command: npm run set-version
+
+      - run:
+          name: Install packages
+          command: npm install
+
+      - run:
+          name: Run tests
+          command: npm test
+
+      - run:
+          name: Build
+          command: npm run build
+
+      - store_artifacts:
+          path: ~/siros-postgres/build

@@ -1,9 +1,10 @@
+build/
 node_modules/
-protocols/
+admin-scripts/protocols/
+
 .DS_Store
+.env*
 .*.swp
 *.zip
-*.log
-.env*
-working*.json
 *.tgz
+*.log
