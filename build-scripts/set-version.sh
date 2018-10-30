@@ -4,7 +4,7 @@ set -e
 function set_ver {
   echo "setting version in $1 ..."
   cd $1
-  npm --no-git-tag-version version ${npm_package_version}
+  npm --no-git-tag-version --allow-same-version version ${npm_package_version}
   echo "... done"
   echo ""
   cd ..
