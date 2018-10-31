@@ -12,7 +12,9 @@ function test_one {
 }
 
 npm_test='npm test'
+yarn_test='yarn test'
 
 test_one db-schema "${npm_test}"
 test_one admin-scripts "${npm_test}"
 test_one api-server "${npm_test}"
+test_one web-client "${yarn_test}"

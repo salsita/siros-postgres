@@ -13,3 +13,4 @@ function set_ver {
 set_ver db-schema
 set_ver admin-scripts
 set_ver api-server
+set_ver web-client

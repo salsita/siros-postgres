@@ -5,10 +5,11 @@ New generation of HW / budget tracking system.
 ## Components
 
 The whole system is composed of the following components:
-* [db-schema](db-schema/README.md)
-* [admin-scripts](admin-scripts/README.md)
-* [api-server](api-server/README.md)
-* [web-server](web-server/README.md)
+* [db-schema](db-schema)
+* [admin-scripts](admin-scripts)
+* [api-server](api-server)
+* [web-server](web-server)
+* [web-client](web-client)
 
 ## Top-level `package.json`
 
@@ -24,6 +25,6 @@ components:
 ## Build artifacts
 
 Build artifacts can be found in `build/` directory. All of them are bundled with
-production `node_modules`, so after unpacking the artifacts they are ready.
+production `node_modules`i as needed, so after unpacking the artifacts they are ready.
 You only need to add `.env` files for some of them, of adjust configuration JS files.
 For detailed instructions please check respective README files of the components.

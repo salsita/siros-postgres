@@ -1,0 +1,44 @@
+{
+  "name": "siros-postgres",
+  "version": "1.2.0",
+  "description": "Siros Web client",
+  "private": true,
+  "scripts": {
+    "start": "yarn run gen-ver && react-scripts start",
+    "build": "../build-scripts/build-web-client.sh",
+    "bundle": "react-scripts build",
+    "test": "yarn run lint # && react-scripts test --env=jsdom",
+    "gen-ver": "echo \"export const version = '${npm_package_version}';\" > src/version.js",
+    "lint": "eslint --ignore-pattern src/registerServiceWorker.js src",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:3001",
+  "dependencies": {
+    "babel-loader": "^8.0.4",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-redux": "^5.0.7",
+    "react-router5": "^6.5.3",
+    "react-scripts": "^2.0.3",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-router5": "^6.0.5",
+    "redux-saga": "^0.16.2",
+    "reduxsauce": "^1.0.0",
+    "router5": "^6.6.1"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-react": "^7.11.1"
+  },
+  "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
+  "license": "MIT",
+  "repository": "git@github.com:salsita/siros-postgres.git",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
