@@ -25,6 +25,6 @@ components:
 ## Build artifacts
 
 Build artifacts can be found in `build/` directory. All of them are bundled with
-production `node_modules`i as needed, so after unpacking the artifacts they are ready.
+production `node_modules` as needed, so after unpacking the artifacts they are ready.
 You only need to add `.env` files for some of them, of adjust configuration JS files.
 For detailed instructions please check respective README files of the components.
