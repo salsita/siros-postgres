@@ -5,7 +5,7 @@ export const config = {
   devRedirect: 'localhost:3001',
 
   // -----
-  // !!! CODE BELOW IS TAKEN FROM SIROS-POSTGRES/LIB/CONFIG.JS, KEEP THEM IN SYNC !!!
+  // !!! CODE BELOW IS TAKEN FROM ../../ADMIN-SCRIPTS/LIB/CONFIG.JS, KEEP THEM IN SYNC !!!
   // -----
 
   hwBudget: {
