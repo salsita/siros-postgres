@@ -58,7 +58,7 @@ const addRoutes = (router, config) => {
   const devMode = (process.env.NODE_ENV === 'development');
   const failureRedirect = `${devMode ? webServerUrl : ''}${CLIENT_ROUTES.login}?reason=domain`;
   const successRedirect = `${devMode ? webServerUrl : ''}${CLIENT_ROUTES.default}`;
-  router.get(ROUTES.authGoogle, passport.authenticate('google', { scope: ['email'] }));
+  router.get(ROUTES.authGoogle, passport.authenticate('google', { scope: ['profile', 'email'] }));
   router.get(
     ROUTES.authGoogleCb,
     passport.authenticate('google', { failureRedirect }),
