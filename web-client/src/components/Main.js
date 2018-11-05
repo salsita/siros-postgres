@@ -11,8 +11,9 @@ import {
 
 export class MainView extends PureComponent {
   render() {
-    const { route } = this.props;
+    const { user, route } = this.props;
     if (route.name === names.LOGIN) { return null; }
+    if (!user.name && !user.email) { return null; }
     return (
       <React.Fragment>
         <Nav />
@@ -27,6 +28,7 @@ export class MainView extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
+  user: state.user,
   route: state.router.route,
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Siros API server",
   "main": "server.js",
   "scripts": {
