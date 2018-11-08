@@ -55,10 +55,6 @@ export class MarketplaceView extends PureComponent {
       </article>
     );
   }
-
-  componentDidMount() {
-    this.props.getMarketplaceData();
-  }
 }
 
 // 'reselect' library doesn't work for me, it is not memoizing the results
@@ -92,7 +88,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   filterItems: (event) => { dispatch(actions.marketplaceFilter(event.target.value)); },
-  getMarketplaceData: () => { dispatch(actions.marketplaceRequest()); },
 });
 
 export const Marketplace = connect(mapStateToProps, mapDispatchToProps)(MarketplaceView);

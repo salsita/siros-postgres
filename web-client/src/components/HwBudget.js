@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { actions } from '../reducers/hw-budget';
-
 export class HwBudgetView extends PureComponent {
   render() {
     const { error, items, total } = this.props.budget;
@@ -53,10 +51,6 @@ export class HwBudgetView extends PureComponent {
         )}
       </article>
     );
-  }
-
-  componentDidMount() {
-    this.props.dispatch(actions.hwBudgetRequest());
   }
 }
 

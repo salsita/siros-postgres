@@ -16,13 +16,6 @@ class UserView extends PureComponent {
     }
     return null;
   }
-
-  componentDidMount() {
-    const { user, route, dispatch } = this.props;
-    if ((route.name !== names.LOGIN) && !user.name) {
-      dispatch(actions.userVerifyRequest());
-    }
-  }
 }
 
 const mapStateToProps = (state) => ({
