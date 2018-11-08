@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { actions } from '../reducers/hw-list';
-
 export class HwListView extends PureComponent {
   render() {
     const { error, items } = this.props.list;
@@ -46,10 +44,6 @@ export class HwListView extends PureComponent {
         )}
       </article>
     );
-  }
-
-  componentDidMount() {
-    this.props.dispatch(actions.hwListRequest());
   }
 }
 
