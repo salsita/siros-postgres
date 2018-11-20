@@ -1,4 +1,5 @@
 import { createReducer, createActions } from 'reduxsauce';
+import { types as userTypes } from './user';
 
 const initialState = {
   total: null,
@@ -8,8 +9,8 @@ const initialState = {
 
 const { Types, Creators } = createActions({
   hwBudgetRequest: null, // handled in saga
-  hwBudgetUpdate: ['response', 'error'], // handled here
-  hwBudgetReset: null, // handled here
+  hwBudgetUpdateData: ['response'], // handled here
+  hwBudgetUpdateError: ['error'], // handled here
 });
 
 export const types = Types;
@@ -17,35 +18,33 @@ export const actions = Creators;
 
 // handlers
 
-const update = (state = initialState, action) => { // eslint-disable-line no-unused-vars
-  const { response, error } = action;
-  if (response) {
-    return {
-      total: response.total,
-      items: response.items,
-      error: null,
-    };
-  }
-  return {
-    total: null,
-    items: null,
-    error,
-  };
-};
+const updateData = (state = initialState, action) => ({
+  ...state,
+  total: action.response.total,
+  items: action.response.items,
+  error: null,
+});
 
-const reset = (state = initialState, action) => ( // eslint-disable-line no-unused-vars
-  {
-    total: null,
-    items: null,
-    error: null,
-  }
-);
+const updateError = (state = initialState, action) => ({
+  ...state,
+  total: null,
+  items: null,
+  error: action.error,
+});
+
+const reset = (state = initialState, action) => ({ // eslint-disable-line no-unused-vars
+  ...state,
+  total: null,
+  items: null,
+  error: null,
+});
 
 // reducer
 export const reducer = createReducer(
   initialState,
   {
-    [Types.HW_BUDGET_UPDATE]: update,
-    [Types.HW_BUDGET_RESET]: reset,
+    [Types.HW_BUDGET_UPDATE_DATA]: updateData,
+    [Types.HW_BUDGET_UPDATE_ERROR]: updateError,
+    [userTypes.USER_LOGOUT_REQUEST]: reset,
   },
 );

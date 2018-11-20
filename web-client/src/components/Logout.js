@@ -1,16 +1,14 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
-export class Logout extends PureComponent {
-  render() {
-    const { name, email, onClick } = this.props;
-    return (
+export const Logout = (props) => {
+  const { name, email, onClick } = props;
+  return (
+    <div>
       <div>
-        <div>
-          <div>{name || 'not provided'}</div>
-          <div>{email}</div>
-        </div>
-        <button type='button' onClick={onClick}>Logout</button>
+        <div>{name || 'not provided'}</div>
+        <div>{email}</div>
       </div>
-    );
-  }
-}
+      <button type="button" onClick={onClick}>Logout</button>
+    </div>
+  );
+};

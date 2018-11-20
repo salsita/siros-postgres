@@ -1,26 +1,31 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import { names } from '../router';
-import { Login, Logout } from './index';
+import { names } from '../router/routes';
+import { Login } from './Login';
+import { Logout } from './Logout';
 import { actions } from '../reducers/user';
 
-class UserView extends PureComponent {
-  render() {
-    const { user, route, dispatch } = this.props;
-    if (route.name === names.LOGIN) {
-      return <Login reason={route.params.reason} onClick={() => { dispatch(actions.userLoginRequest()); }}/>;
-    }
-    if (user.name || user.email) {
-      return <Logout name={user.name} email={user.email} onClick={() => { dispatch(actions.userLogoutRequest()); }}/>;
-    }
-    return null;
+const UserView = (props) => {
+  const { user, route } = props;
+  const { onLoginClick, onLogoutClick } = props;
+  if (route.name === names.LOGIN) {
+    return <Login reason={route.params.reason} onClick={onLoginClick}/>;
   }
-}
+  if (user.name || user.email) {
+    return <Logout name={user.name} email={user.email} onClick={onLogoutClick}/>;
+  }
+  return null;
+};
 
 const mapStateToProps = (state) => ({
   user: state.user,
   route: state.router.route,
 });
 
-export const User = connect(mapStateToProps)(UserView);
+const mapDispatchToProps = (dispatch) => ({
+  onLoginClick: () => { dispatch(actions.userLoginRequest()); },
+  onLogoutClick: () => { dispatch(actions.userLogoutRequest()); },
+});
+
+export const User = connect(mapStateToProps, mapDispatchToProps)(UserView);

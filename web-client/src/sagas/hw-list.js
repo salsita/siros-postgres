@@ -1,40 +1,31 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga/effects';
+
 import { types, actions as hwListActions } from '../reducers/hw-list';
 import { actions as userActions } from '../reducers/user';
+import { fetchJSON, getCurrentPrice } from './utils';
 
-// ---
-
-const hwListApi = async () => {
-  const response = await fetch('/api/v1/hw-list');
-  let body;
-  if (response.ok) {
-    body = await response.json();
-  }
-  body = body || {};
-  return {
-    ok: response.ok,
-    status: response.status,
-    error: response.statusText,
-    items: body.items,
-  };
-};
+const { hwListUpdateData, hwListUpdateError } = hwListActions;
+const { userLogoutRequest } = userActions;
 
 function* fetchHwList() {
-  try {
-    const data = yield call(hwListApi);
-    if (data.ok) {
-      yield put(hwListActions.hwListUpdate(data.items, null));
-    } else if (data.status === 401) {
-      yield put(userActions.userLogoutRequest());
-    } else {
-      yield put(hwListActions.hwListUpdate(null, data.error));
-    }
-  } catch (e) {
-    yield put(hwListActions.hwListUpdate(null, e.message));
-  }
+  return yield* fetchJSON(
+    'api/v1/hw-list',
+    hwListUpdateData,
+    hwListUpdateError,
+    userLogoutRequest,
+    (response) => {
+      const today = (new Date()).toISOString().substr(0, 10);
+      const items = response.items.map((item) => ({
+        ...item,
+        current_price: getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price),
+      }));
+      return {
+        ...response,
+        items,
+      };
+    },
+  );
 }
-
-// ---
 
 export function* saga() {
   yield takeLatest(types.HW_LIST_REQUEST, fetchHwList);
