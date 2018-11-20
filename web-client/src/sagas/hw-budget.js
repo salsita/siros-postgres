@@ -1,40 +1,20 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga/effects';
+
 import { types, actions as hwBudgetActions } from '../reducers/hw-budget';
 import { actions as userActions } from '../reducers/user';
+import { fetchJSON } from './utils';
 
-// ---
-
-const hwBudgetApi = async () => {
-  const response = await fetch('/api/v1/hw-budget');
-  let body;
-  if (response.ok) {
-    body = await response.json();
-  }
-  body = body || {};
-  return {
-    ok: response.ok,
-    status: response.status,
-    error: response.statusText,
-    response: body.items,
-  };
-};
+const { hwBudgetUpdateData, hwBudgetUpdateError } = hwBudgetActions;
+const { userLogoutRequest } = userActions;
 
 function* fetchHwBudget() {
-  try {
-    const data = yield call(hwBudgetApi);
-    if (data.ok) {
-      yield put(hwBudgetActions.hwBudgetUpdate(data.response, null));
-    } else if (data.status === 401) {
-      yield put(userActions.userLogoutRequest());
-    } else {
-      yield put(hwBudgetActions.hwBudgetUpdate(null, data.error));
-    }
-  } catch (e) {
-    yield put(hwBudgetActions.hwBudgetUpdate(null, e.message));
-  }
+  return yield* fetchJSON(
+    '/api/v1/hw-budget',
+    hwBudgetUpdateData,
+    hwBudgetUpdateError,
+    userLogoutRequest,
+  );
 }
-
-// ---
 
 export function* saga() {
   yield takeLatest(types.HW_BUDGET_REQUEST, fetchHwBudget);

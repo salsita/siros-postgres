@@ -1,41 +1,39 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
-import { types, actions as marketplaceActions } from '../reducers/marketplace';
+import { takeLatest, put } from 'redux-saga/effects';
+
+import { types, actions as marketplaceActions, marketplaceNoFilterText } from '../reducers/marketplace';
 import { actions as userActions } from '../reducers/user';
+import { fetchJSON, getCurrentPrice } from './utils';
 
-// ---
-
-const marketplaceApi = async () => {
-  const response = await fetch('/api/v1/market');
-  let body;
-  if (response.ok) {
-    body = await response.json();
-  }
-  body = body || {};
-  return {
-    ok: response.ok,
-    status: response.status,
-    error: response.statusText,
-    response: body.items,
-  };
-};
+const { marketplaceUpdateData, marketplaceUpdateError } = marketplaceActions;
+const { userLogoutRequest } = userActions;
 
 function* fetchMarketplace() {
-  try {
-    const data = yield call(marketplaceApi);
-    if (data.ok) {
-      yield put(marketplaceActions.marketplaceUpdate(data.response, null));
-    } else if (data.status === 401) {
-      yield put(userActions.userLogoutRequest());
-    } else {
-      yield put(marketplaceActions.marketplaceUpdate(null, data.error));
-    }
-  } catch (e) {
-    yield put(marketplaceActions.marketplaceUpdate(null, e.message));
-  }
+  return yield* fetchJSON(
+    '/api/v1/market',
+    marketplaceUpdateData,
+    marketplaceUpdateError,
+    userLogoutRequest,
+    (response) => {
+      const today = (new Date()).toISOString().substr(0, 10);
+      const items = response.items.map((item) => ({
+        ...item,
+        current_price: getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price),
+      }));
+      return {
+        ...response,
+        items,
+      };
+    },
+  );
 }
 
-// ---
+const localStorageFilterName = 'sirosActiveFilter';
+const storedFilter = localStorage.getItem(localStorageFilterName) || marketplaceNoFilterText;
+const storeFilter = (action) => { localStorage.setItem(localStorageFilterName, action.category); };
 
 export function* saga() {
   yield takeLatest(types.MARKETPLACE_REQUEST, fetchMarketplace);
+  yield takeLatest(types.MARKETPLACE_FILTER, storeFilter);
+  // load stored marketplace filter
+  yield put(marketplaceActions.marketplaceFilter(storedFilter));
 }

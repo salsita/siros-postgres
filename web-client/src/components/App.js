@@ -1,15 +1,11 @@
-import React, { PureComponent } from 'react';
-import { Header, Main } from './index';
-
+import React from 'react';
+import { Header } from './Header';
+import { Main } from './Main';
 import './App.css';
 
-export class App extends PureComponent {
-  render() {
-    return (
-      <React.Fragment>
-        <Header />
-        <Main />
-      </React.Fragment>
-    );
-  }
-}
+export const App = () => (
+  <React.Fragment>
+    <Header />
+    <Main />
+  </React.Fragment>
+);
