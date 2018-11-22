@@ -4,6 +4,7 @@ import {
   call,
   put,
   select,
+  fork,
 } from 'redux-saga/effects';
 import { actions as routerActions, actionTypes } from 'redux-router5';
 
@@ -48,9 +49,13 @@ const logoutApi = async () => {
   await fetch('/logout');
 };
 
+function* navigateToLogin() {
+  yield put(routerActions.navigateTo(names.LOGIN));
+}
+
 function* logout() {
   try {
-    yield put(routerActions.navigateTo(names.LOGIN));
+    yield fork(navigateToLogin);
     yield call(logoutApi);
   } catch (e) {
     // pass
