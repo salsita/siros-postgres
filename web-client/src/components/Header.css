@@ -1,0 +1,20 @@
+.right-box {
+  display: inline-block;
+}
+
+.right-box-content {
+  float: right;
+  clear: both;
+}
+
+.right-margin {
+  margin-right: 16px !important;
+}
+
+h3 + span {
+  margin-top: -6px !important;
+}
+
+h5 + span {
+  margin-top: -6px !important;
+}

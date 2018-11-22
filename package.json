@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "New generation of HW / budget tracking system",
   "scripts": {
     "build": "./build-scripts/build.sh",
