@@ -1,7 +1,9 @@
-body {
-  padding: 8px;
-}
-
-thead {
-  text-align: left;
+div#root {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  display: flex;
+  flex-direction: column;
 }

@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { actions as routerActions } from 'redux-router5';
 import Button from '@material-ui/core/Button';
 
-import { routes } from '../router/routes';
+import { names, routes } from '../router/routes';
 import './Nav.css';
 
 const NavView = (props) => {
-  const { routeName, onClick } = props;
+  const { routeName, user, onClick } = props;
+  if (routeName === names.LOGIN) { return null; }
+  if (!user.name && !user.email) { return null; }
   return (
     <nav>
       {
@@ -26,6 +28,7 @@ const NavView = (props) => {
 };
 
 const mapStateToProps = (state) => ({
+  user: state.user,
   routeName: state.router.route.name,
 });
 
