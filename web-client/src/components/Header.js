@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { User } from './User';
 import { version } from '../version';
+import { Nav } from './Nav';
 import './Header.css';
 
 export const Header = () => (
@@ -17,5 +18,6 @@ export const Header = () => (
         <User />
       </Grid>
     </Grid>
+    <Nav />
   </header>
 );

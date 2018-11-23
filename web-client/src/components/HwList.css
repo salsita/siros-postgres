@@ -1,0 +1,53 @@
+article.hw-list > div {
+  margin-top: 8px;
+}
+
+article.hw-list > div:last-child {
+  margin-bottom: 4px;
+}
+
+div.card-inactive {
+  background-color: #e0e0e0;
+}
+
+div.card-marketplace {
+  background-color: #c5cAe9;
+}
+
+div.small-card-actions {
+  padding-top: 0px;
+  margin-top: -8px;
+  float: right;
+}
+
+div.hw-list-item-small-collapsed {
+  display: flex;
+}
+
+div.hw-list-item-small-block-align-right {
+  flex: 0;
+  text-align: right;
+  padding-right: 4px;
+}
+
+div.hw-list-item-small-block-align-right > div {
+  white-space: nowrap;
+}
+
+div.hw-list-item-small-block-align-left {
+  flex: auto;
+  overflow: hidden;
+}
+
+div.hw-list-item-small-block-align-left > div {
+  white-space: nowrap;
+}
+
+p.hw-list-item-small-para {
+  padding-left: 24px;
+  margin-bottom: 4px;
+}
+
+p.hw-list-item-small-para:last-child {
+  margin-bottom: 0px;
+}

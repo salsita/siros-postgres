@@ -38,3 +38,18 @@ export const getCurrentPrice = (currentDate, purchaseDate, purchasePrice, maxPri
   if (maxPrice !== null) { price = Math.min(maxPrice, price); }
   return price;
 };
+
+export const formatCurrency = (number) => (
+  number
+    .toString()
+    .split('')
+    .reverse()
+    .map((char, idx) => (idx % 3 ? char : `${char} `))
+    .reverse()
+    .join('')
+    .trim()
+);
+
+export const formatDate = (dateStr) => (
+  dateStr.replace(/-/g, '\u2013') // unicode for en-dash
+);
