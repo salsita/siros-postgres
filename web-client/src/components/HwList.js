@@ -1,46 +1,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
+
+import { actions } from '../reducers/hw-list';
+import { HwListItemSmallCollapsed } from './HwListItemSmallCollapsed';
+import { HwListItemSmallExpanded } from './HwListItemSmallExpanded';
+import './HwList.css';
 
 const HwListView = (props) => {
   const { error, items } = props.list;
+  const { onClick } = props;
   if (!error && !items) { return null; }
-
-  // For code reviewer: this layout is temporary and will change for sure :-)
   return (
-    <article>
-      {error && <div>{error}</div>}
-      {items && (
-        <table className="hw-list">
-          <thead>
-            <tr>
-              <th>Purchase date</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Purchase price</th>
-              <th>Current price</th>
-              <th>Active</th>
-              <th>On marketplace</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              items.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.purchase_date}</td>
-                  <td>{item.category}</td>
-                  <td>{item.description}</td>
-                  <td>{item.purchase_price}</td>
-                  <td>{item.current_price}</td>
-                  <td>{item.active ? 'yes' : 'no'}</td>
-                  <td>{item.available ? 'yes' : 'no'}</td>
-                  <td>{item.comment || ''}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      )}
+    <article className="hw-list">
+      {error && <Typography variant="h6" color="error">{error}!</Typography>}
+      {items && items.map((item, idx) => {
+        let cardClass = '';
+        if (!item.active) {
+          cardClass = 'card-inactive';
+        } else if (item.marketplace) {
+          cardClass = 'card-marketplace';
+        }
+        return (
+          <Hidden key={item.id}>
+            { item.collapsed
+              ? <HwListItemSmallCollapsed hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
+              : <HwListItemSmallExpanded hwItem={item} cardClass={cardClass} onClick={onClick(idx)} /> }
+          </Hidden>
+        );
+      })}
     </article>
   );
 };
@@ -49,4 +38,8 @@ const mapStateToProps = (state) => ({
   list: state.list,
 });
 
-export const HwList = connect(mapStateToProps)(HwListView);
+const mapDispatchToProps = (dispatch) => ({
+  onClick: (index) => () => { dispatch(actions.hwListItemChange(index)); },
+});
+
+export const HwList = connect(mapStateToProps, mapDispatchToProps)(HwListView);

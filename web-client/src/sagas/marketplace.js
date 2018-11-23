@@ -2,7 +2,7 @@ import { takeLatest, put } from 'redux-saga/effects';
 
 import { types, actions as marketplaceActions, marketplaceNoFilterText } from '../reducers/marketplace';
 import { actions as userActions } from '../reducers/user';
-import { fetchJSON, getCurrentPrice } from './utils';
+import { fetchJSON, getCurrentPrice, formatCurrency } from './utils';
 
 const { marketplaceUpdateData, marketplaceUpdateError } = marketplaceActions;
 const { userLogoutRequest } = userActions;
@@ -17,7 +17,8 @@ function* fetchMarketplace() {
       const today = (new Date()).toISOString().substr(0, 10);
       const items = response.items.map((item) => ({
         ...item,
-        current_price: getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price),
+        purchase_price: formatCurrency(item.purchase_price),
+        current_price: formatCurrency(getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price)),
       }));
       return {
         ...response,
