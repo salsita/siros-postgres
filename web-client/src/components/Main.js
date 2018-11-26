@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { names } from '../router/routes';
-import { HwList } from './HwList';
-import { HwBudget } from './HwBudget';
-import { Marketplace } from './Marketplace';
+import { HwList } from './hw-list/HwList';
+import { HwBudget } from './hw-budget/HwBudget';
+import { Marketplace } from './marketplace/Marketplace';
 
 import './Main.css';
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { actions as routerActions } from 'redux-router5';
 import Button from '@material-ui/core/Button';
 
-import { names, routes } from '../router/routes';
+import { names, routes } from '../../router/routes';
 import './Nav.css';
 
 const NavView = (props) => {

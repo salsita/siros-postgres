@@ -2,9 +2,9 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import { User } from './User';
 import { version } from '../version';
-import { Nav } from './Nav';
+import { User } from './header/User';
+import { Nav } from './header/Nav';
 import './Header.css';
 
 export const Header = () => (

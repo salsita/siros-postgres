@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import groupBy from 'lodash.groupby';
 
-import { actions, marketplaceNoFilterText } from '../reducers/marketplace';
+import { actions, marketplaceNoFilterText } from '../../reducers/marketplace';
 import { Filters } from './Filters';
 
 const MarketplaceView = (props) => {

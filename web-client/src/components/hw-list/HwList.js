@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 
-import { actions } from '../reducers/hw-list';
+import { actions } from '../../reducers/hw-list';
 import { HwListItemSmallCollapsed } from './HwListItemSmallCollapsed';
 import { HwListItemSmallExpanded } from './HwListItemSmallExpanded';
 import './HwList.css';
@@ -19,7 +19,7 @@ const HwListView = (props) => {
         let cardClass = '';
         if (!item.active) {
           cardClass = 'card-inactive';
-        } else if (item.marketplace) {
+        } else if (item.available) {
           cardClass = 'card-marketplace';
         }
         return (
