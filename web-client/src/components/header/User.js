@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { names } from '../router/routes';
+import { names } from '../../router/routes';
 import { Login } from './Login';
 import { Logout } from './Logout';
-import { actions } from '../reducers/user';
+import { actions } from '../../reducers/user';
 
 const UserView = (props) => {
   const { user, route } = props;
