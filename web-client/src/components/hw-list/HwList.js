@@ -6,6 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { actions } from '../../reducers/hw-list';
 import { HwListItemSmallCollapsed } from './HwListItemSmallCollapsed';
 import { HwListItemSmallExpanded } from './HwListItemSmallExpanded';
+import { HwListItemBig } from './HwListItemBig';
 import './HwList.css';
 
 const HwListView = (props) => {
@@ -23,11 +24,16 @@ const HwListView = (props) => {
           cardClass = 'card-marketplace';
         }
         return (
-          <Hidden key={item.id}>
-            { item.collapsed
-              ? <HwListItemSmallCollapsed hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
-              : <HwListItemSmallExpanded hwItem={item} cardClass={cardClass} onClick={onClick(idx)} /> }
-          </Hidden>
+          <React.Fragment key={item.id}>
+            <Hidden smUp>
+              { item.collapsed
+                ? <HwListItemSmallCollapsed hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
+                : <HwListItemSmallExpanded hwItem={item} cardClass={cardClass} onClick={onClick(idx)} /> }
+            </Hidden>
+            <Hidden xsDown>
+              <HwListItemBig hwItem={item} cardClass={cardClass} />
+            </Hidden>
+          </React.Fragment>
         );
       })}
     </article>
