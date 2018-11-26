@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
-import { HwListItemSmallBlock } from './HwListItemSmallBlock';
+import { HwListItemBlock } from './HwListItemBlock';
 
 export const HwListItemSmallCollapsed = (props) => {
   const { hwItem, cardClass, onClick } = props;
@@ -18,8 +18,8 @@ export const HwListItemSmallCollapsed = (props) => {
   return (
     <Card className={cardClass}>
       <CardContent className="hw-list-item-small-collapsed">
-        <HwListItemSmallBlock align="right" textColor="textSecondary">{labels}</HwListItemSmallBlock>
-        <HwListItemSmallBlock align="left" textColor="textPrimary">{values}</HwListItemSmallBlock>
+        <HwListItemBlock side="left" textColor="textSecondary">{labels}</HwListItemBlock>
+        <HwListItemBlock side="right" textColor="textPrimary">{values}</HwListItemBlock>
       </CardContent>
       <CardActions className="small-card-actions">
         <Button size="small" onClick={onClick}>Show more</Button>
