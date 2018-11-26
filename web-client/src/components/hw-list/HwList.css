@@ -24,30 +24,68 @@ div.hw-list-item-small-collapsed {
   display: flex;
 }
 
-div.hw-list-item-small-block-align-right {
-  flex: 0;
+div.hw-list-item-block-left {
   text-align: right;
   padding-right: 4px;
 }
 
-div.hw-list-item-small-block-align-right > div {
+div.hw-list-item-block-left > div {
   white-space: nowrap;
 }
 
-div.hw-list-item-small-block-align-left {
-  flex: auto;
+div.hw-list-item-block-right {
   overflow: hidden;
 }
 
-div.hw-list-item-small-block-align-left > div {
+div.hw-list-item-block-right > div {
   white-space: nowrap;
 }
 
-p.hw-list-item-small-para {
+p.hw-list-item-para {
   padding-left: 24px;
   margin-bottom: 4px;
 }
 
-p.hw-list-item-small-para:last-child {
+p.hw-list-item-para:last-child {
   margin-bottom: 0px;
+}
+
+p.hw-list-item-big-title {
+  font-weight: 500;
+  padding-top: 8px;
+}
+
+div.hw-list-item-big-container {
+  display: flex;
+  padding-top: 8px;
+}
+
+div.hw-list-item-big-box-left {
+  width: 50%;
+}
+
+div.hw-list-item-big-box-left > div {
+  display: flex;
+  padding-right: 4px;
+}
+
+div.hw-list-item-big-box-right {
+  width: 50%;
+}
+
+div.hw-list-item-big-box-right > div {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 4px;
+}
+
+
+div.hw-list-item-big-comment {
+  display: flex;
+  padding-top: 8px;
+}
+
+span.hw-list-item-big-comment-text {
+  font-style: italic;
+  padding-left: 4px;
 }
