@@ -15,6 +15,7 @@ class DbQuery extends Db {
       .field('c.category', 'category')
       .field('h.description', 'description')
       .field('s.store', 'store')
+      .field('h.serial_id', 'serial_id')
       .field("to_char(h.purchase_date, 'YYYY-MM-DD')", 'purchase_date')
       .field('h.purchase_price', 'purchase_price')
       .field('h.condition', 'condition')
@@ -50,6 +51,7 @@ class DbQuery extends Db {
         .join('users', 'u', 'b.user_id = u.id')
         .where('u.email = ?', userEmail)
         .order('date', false)
+        .order('b.amount')
         .toParam();
 
       const res = await cl.q(query, `getHwBudget(email: ${userEmail})`);
@@ -83,6 +85,9 @@ class DbQuery extends Db {
       .field('u2.name', 'new_user')
       .field('c.category', 'category')
       .field('h.description', 'description')
+      .field('h.serial_id', 'serial_id')
+      .field("to_char(h.purchase_date, 'YYYY-MM-DD')", 'purchase_date')
+      .field('h.purchase_price', 'purchase_price')
       .field('hist.condition', 'condition')
       .field('s.store', 'store')
       .field('h.id', 'id')
@@ -102,6 +107,9 @@ class DbQuery extends Db {
     const query = squel.select()
       .field('c.category', 'category')
       .field('h.description', 'description')
+      .field('h.serial_id', 'serial_id')
+      .field("to_char(h.purchase_date, 'YYYY-MM-DD')", 'purchase_date')
+      .field('h.purchase_price', 'purchase_price')
       .field('s.store', 'store')
       .field('h.id', 'id')
       .field('r.description', 'repair_description')

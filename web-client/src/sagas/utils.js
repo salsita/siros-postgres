@@ -39,16 +39,17 @@ export const getCurrentPrice = (currentDate, purchaseDate, purchasePrice, maxPri
   return price;
 };
 
-export const formatCurrency = (number) => (
-  number
+export const formatCurrency = (number) => {
+  const str = Math.abs(number)
     .toString()
     .split('')
     .reverse()
     .map((char, idx) => (idx % 3 ? char : `${char} `))
     .reverse()
     .join('')
-    .trim()
-);
+    .trim();
+  return (number < 0 ? `\u2013${str}` : str);
+};
 
 export const formatDate = (dateStr) => (
   dateStr.replace(/-/g, '\u2013') // unicode for en-dash
