@@ -15,7 +15,7 @@
   "repository": "git@github.com:salsita/siros-postgres.git",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "koa": "^2.5.3",
+    "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-compress": "^3.0.0",
     "koa-helmet": "^4.0.0",
@@ -24,14 +24,14 @@
     "koa-router": "^7.4.0",
     "koa-session": "^5.9.0",
     "passport-google-oauth20": "^1.0.0",
-    "pg": "^7.4.3",
+    "pg": "^7.6.1",
     "squel": "^5.12.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.7"
   }
 }
