@@ -10,6 +10,10 @@ export const HwListItemBig = (props) => {
   const { hwItem, cardClass } = props;
   const labelsLeft = ['category:'];
   const valuesLeft = [hwItem.category];
+  if (hwItem.serial_id) {
+    labelsLeft.push('serial id:');
+    valuesLeft.push(hwItem.serial_id);
+  }
   if (hwItem.active) {
     labelsLeft.push('condition:');
     valuesLeft.push(hwItem.condition);

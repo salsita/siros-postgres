@@ -14,6 +14,7 @@ export const HwListItemSmallExpanded = (props) => {
       <CardContent className="hw-list-item-small-expanded">
         <HwListItemPara header="category:" text={hwItem.category} />
         <HwListItemPara header="description:" text={hwItem.description} />
+        {hwItem.serial_id && <HwListItemPara header="serial id:" text={hwItem.serial_id} />}
         {!hwItem.active && <HwListItemPara header="active:" text="no" />}
         {hwItem.active && <HwListItemPara header="on marketplace:" text={hwItem.available ? 'yes' : 'no'} />}
         <HwListItemPara header="purchase date:" text={hwItem.purchase_date} />
