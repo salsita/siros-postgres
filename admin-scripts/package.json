@@ -4,15 +4,15 @@
   "description": "Siros admin scripts (command line)",
   "dependencies": {
     "dotenv": "^6.1.0",
-    "pdfmake": "^0.1.38",
-    "pg": "^7.6.0",
-    "pg-promise": "^8.5.1",
+    "pdfmake": "^0.1.39",
+    "pg": "^7.6.1",
+    "pg-promise": "^8.5.2",
     "printf": "^0.5.1",
     "squel": "^5.12.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0"
   },
