@@ -782,24 +782,51 @@ class DbQuery extends Db {
       this.logger.error(`[${this.name}] cannot perform getHwProtocolDates() operation in disconnected state`);
       return null;
     }
-    const query = squel.select()
+    let res1;
+    let res2;
+    // hw_buy OR hw_sell
+    const query1 = squel.select()
       .field('action')
       .field("to_char(date, 'YYYY-MM-DD')", 'date')
       .from('hw_budgets')
       .where('user_id = ?', userId)
-      .where("action = 'hw_buy' OR action = 'hw_sell' OR action = 'hw_repurchase'")
+      .where("action = 'hw_buy' OR action = 'hw_sell'")
       .order('date')
       .toParam();
     try {
-      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
-      const res = await this.db.any(query);
-      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
-      return res;
+      this.logger.debug(`[${this.name}] db query1: ${JSON.stringify(query1, null, 2)}`);
+      res1 = await this.db.any(query1);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res1, null, 2)}`);
     } catch (e) {
       this.logger.error(`[${this.name}] error during getHwProtocolDates() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
+    // hw_repurchase
+    const query2 = squel.select()
+      .field('b.action', 'action')
+      .field("to_char(b.date, 'YYYY-MM-DD')", 'date')
+      .from('hw_budgets', 'b')
+      .join('hw_owner_history', 'h', 'b.hw_owner_history_id = h.id')
+      .where("b.action = 'hw_repurchase'")
+      .where('h.new_user_id = ?', userId)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query2: ${JSON.stringify(query2, null, 2)}`);
+      res2 = await this.db.any(query2);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res2, null, 2)}`);
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getHwProtocolDates() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+    if (!res2.length) { return res1; }
+    const result = res1.concat(res2).sort((a, b) => {
+      if (a.date < b.date) { return -1; }
+      if (a.date > b.date) { return 1; }
+      return 0;
+    });
+    return result;
   }
 
   async getHwProtocolItems(userId, date, type) {
@@ -822,7 +849,7 @@ class DbQuery extends Db {
       .join('hw', 'hw', 'hw.id = hist.hw_id')
       .join('hw_categories', 'c', 'c.id = hw.category')
       .join('stores', 's', 's.id = hw.store')
-      .where('b.user_id = ?', userId)
+      .where((type === 'hw_repurchase') ? 'hist.new_user_id = ?' : 'b.user_id = ?', userId)
       .where('b.date = ?', date)
       .where('b.action = ?', type)
       .toParam();
