@@ -1,0 +1,41 @@
+div.hw-budget-item-small {
+  padding-top: 8px;
+  padding-bottom: 8px !important;
+  padding-right: 0px;
+}
+
+div.hw-budget-item-small-header {
+  display: flex;
+  align-items: center;
+}
+
+p.hw-budget-item-small-amount {
+  width: 21%;
+  padding-right: 4px;
+  text-align: right;
+}
+
+p.hw-budget-item-small-category {
+  width: 21%;
+  padding-right: 4px;
+  text-align: right;
+}
+
+p.hw-budget-item-small-date{
+  width: 34%;
+  padding-right: 4px;
+  text-align: right;
+}
+
+div.hw-budget-item-small-button {
+  width: 24%;
+  min-height: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+div.hw-budget-item-small-details {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  margin-right: 16px;
+}

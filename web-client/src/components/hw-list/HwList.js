@@ -14,7 +14,7 @@ const HwListView = (props) => {
   const { onClick } = props;
   if (!error && !items) { return null; }
   return (
-    <article className="hw-list">
+    <article>
       {error && <Typography variant="h6" color="error">{error}!</Typography>}
       {items && items.map((item, idx) => {
         let cardClass = '';
@@ -26,9 +26,9 @@ const HwListView = (props) => {
         return (
           <React.Fragment key={item.id}>
             <Hidden smUp>
-              { item.collapsed
+              {item.collapsed
                 ? <HwListItemSmallCollapsed hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
-                : <HwListItemSmallExpanded hwItem={item} cardClass={cardClass} onClick={onClick(idx)} /> }
+                : <HwListItemSmallExpanded hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />}
             </Hidden>
             <Hidden xsDown>
               <HwListItemBig hwItem={item} cardClass={cardClass} />
