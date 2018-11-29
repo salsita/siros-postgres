@@ -1,51 +1,37 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
+
+import { actions } from '../../reducers/hw-budget';
+import { HwBudgetItemSmall } from './HwBudgetItemSmall';
+import './HwBudget.css';
 
 const HwBudgetView = (props) => {
   const { error, items, total } = props.budget;
+  const { onClick } = props;
   if (!error && !items) { return null; }
-
-  // For code reviewer: this layout is temporary and will change for sure :-)
   return (
     <article>
-      {error && <div>{error}</div>}
+      {error && <Typography variant="h6" color="error">{error}!</Typography>}
       {items && (
         <React.Fragment>
-          <div>Your current HW budget: {total}</div>
-          <table className="hw-budget">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                items.map((item, idx) => (
-                  <tr key={idx}>
-                    <td>{item.date}</td>
-                    <td>{item.action}</td>
-                    <td>{item.amount}</td>
-                    <td>
-                      {
-                        item.hw && (
-                          <ul>
-                            {
-                              Object.keys(item.hw).map((elem, i) => (
-                                (elem !== 'id') && (<li key={i}>{elem}: {item.hw[elem]}</li>)
-                              ))
-                            }
-                          </ul>
-                        )
-                      }
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+          <Typography variant="h6">Your HW budget: {total}</Typography>
+          {items.map((item, idx) => {
+            let cardClass = 'card-zero';
+            if (item.amount > 0) { cardClass = 'card-plus'; }
+            if (item.amount < 0) { cardClass = 'card-minus'; }
+            return (
+              <React.Fragment key={idx}>
+                <Hidden smUp>
+                  <HwBudgetItemSmall hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
+                </Hidden>
+                <Hidden xsDown>
+                  {item.amount}
+                </Hidden>
+              </React.Fragment>
+            );
+          })}
         </React.Fragment>
       )}
     </article>
@@ -56,4 +42,8 @@ const mapStateToProps = (state) => ({
   budget: state.budget,
 });
 
-export const HwBudget = connect(mapStateToProps)(HwBudgetView);
+const mapDispatchToProps = (dispatch) => ({
+  onClick: (idx) => () => { dispatch(actions.hwBudgetItemChange(idx)); },
+});
+
+export const HwBudget = connect(mapStateToProps, mapDispatchToProps)(HwBudgetView);

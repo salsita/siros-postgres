@@ -14,7 +14,6 @@ function* fetchHwBudget() {
     hwBudgetUpdateError,
     userLogoutRequest,
     (response) => {
-      console.log(response);
       const items = response.items.map((item) => {
         let hw;
         if (item.hw) {
@@ -26,7 +25,8 @@ function* fetchHwBudget() {
         }
         return {
           ...item,
-          amount: formatCurrency(item.amount),
+          collapsed: true,
+          amountStr: formatCurrency(item.amount),
           date: formatDate(item.date),
           hw,
         };
