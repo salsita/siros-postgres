@@ -11,6 +11,7 @@ const { Types, Creators } = createActions({
   hwBudgetRequest: null, // handled in saga
   hwBudgetUpdateData: ['response'], // handled here
   hwBudgetUpdateError: ['error'], // handled here
+  hwBudgetItemChange: ['index'], // handled here
 });
 
 export const types = Types;
@@ -32,6 +33,17 @@ const updateError = (state = initialState, action) => ({
   error: action.error,
 });
 
+const changeCollapsed = (state = initialState, action) => {
+  if (!state.items || !state.items[action.index]) { return state; }
+  const updated = [...(state.items)];
+  const elem = updated[action.index];
+  elem.collapsed = !elem.collapsed;
+  return {
+    ...state,
+    items: updated,
+  };
+};
+
 const reset = (state = initialState, action) => ({ // eslint-disable-line no-unused-vars
   ...state,
   total: null,
@@ -45,6 +57,7 @@ export const reducer = createReducer(
   {
     [Types.HW_BUDGET_UPDATE_DATA]: updateData,
     [Types.HW_BUDGET_UPDATE_ERROR]: updateError,
+    [Types.HW_BUDGET_ITEM_CHANGE]: changeCollapsed,
     [userTypes.USER_LOGOUT_REQUEST]: reset,
   },
 );

@@ -9,3 +9,42 @@ div#root {
   display: flex;
   flex-direction: column;
 }
+
+main {
+  margin: 0px 8px 0px 8px;
+  overflow-y: auto;
+}
+
+article > div {
+  margin-top: 8px;
+}
+
+article > div:last-child {
+  margin-bottom: 4px;
+}
+
+div.card-inactive {
+  background-color: #cfd8dc;
+}
+
+div.card-marketplace {
+  background-color: #c5cAe9;
+}
+
+div.card-zero {
+  background-color: #cfd8dc;
+}
+
+div.card-plus {
+  background-color: #c8e6c9;
+}
+
+div.card-minus {
+  background-color: #ffcdd2;
+}
+
+div.small-card-actions {
+  padding-top: 0px;
+  margin-top: -8px;
+  float: right;
+}

@@ -5,8 +5,7 @@ import { names } from '../router/routes';
 import { HwList } from './hw-list/HwList';
 import { HwBudget } from './hw-budget/HwBudget';
 import { Marketplace } from './marketplace/Marketplace';
-
-import './Main.css';
+import './shared/Shared.css';
 
 const MainView = (props) => {
   const { user, route } = props;

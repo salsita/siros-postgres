@@ -1,0 +1,8 @@
+p.titled-paragraph-text {
+  padding-left: 24px;
+  margin-bottom: 4px;
+}
+
+p.titled-paragraph-text:last-child {
+  margin-bottom: 0px;
+}
