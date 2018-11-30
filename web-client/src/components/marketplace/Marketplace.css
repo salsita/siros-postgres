@@ -1,0 +1,53 @@
+form {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+form > div {
+  min-width: 120px !important;
+}
+
+div.select {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+li.select-item {
+  font-size: 14px;
+}
+
+/* EDIT ALL BELOW */
+
+p.hw-list-item-big-title {
+  font-weight: 500;
+  padding-top: 8px;
+}
+
+div.hw-list-item-big-container {
+  display: flex;
+  padding-top: 8px;
+}
+
+div.hw-list-item-big-box-left {
+  width: 50%;
+  padding-right: 4px;
+}
+
+div.hw-list-item-big-box-right {
+  width: 50%;
+  padding-left: 4px;
+}
+
+div.hw-list-item-big-box-right > div {
+  justify-content: flex-end;
+}
+
+div.hw-list-item-big-comment {
+  display: flex;
+  padding-top: 8px;
+}
+
+span.hw-list-item-big-comment-text {
+  font-style: italic;
+  padding-left: 4px;
+}
