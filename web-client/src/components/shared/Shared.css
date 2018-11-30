@@ -6,3 +6,24 @@ p.titled-paragraph-text {
 p.titled-paragraph-text:last-child {
   margin-bottom: 0px;
 }
+
+div.aligned-blocks {
+  display: flex;
+}
+
+div.items-block-left {
+  text-align: right;
+  padding-right: 4px;
+}
+
+div.items-block-left > div {
+  white-space: nowrap;
+}
+
+div.items-block-right {
+  overflow: hidden;
+}
+
+div.items-block-right > div {
+  white-space: nowrap;
+}
