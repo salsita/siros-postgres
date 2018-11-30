@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-import { HwListItemBlock } from './HwListItemBlock';
+import { AlignedBlocks } from '../shared/AlignedBlocks';
 
 export const HwListItemBig = (props) => {
   const { hwItem, cardClass } = props;
@@ -29,20 +29,14 @@ export const HwListItemBig = (props) => {
   const valuesRight = [hwItem.purchase_date, hwItem.purchase_price, hwItem.store];
   return (
     <Card className={cardClass}>
-      <CardContent className="hw-list-item-big">
+      <CardContent>
         <Typography className="hw-list-item-big-title">{hwItem.description}</Typography>
         <div className="hw-list-item-big-container">
           <div className="hw-list-item-big-box-left">
-            <div>
-              <HwListItemBlock side="left" textColor="textSecondary">{labelsLeft}</HwListItemBlock>
-              <HwListItemBlock side="right" textColor="textPrimary">{valuesLeft}</HwListItemBlock>
-            </div>
+            <AlignedBlocks left={labelsLeft} right={valuesLeft} />
           </div>
           <div className="hw-list-item-big-box-right">
-            <div>
-              <HwListItemBlock side="left" textColor="textSecondary">{labelsRight}</HwListItemBlock>
-              <HwListItemBlock side="right" textColor="textPrimary">{valuesRight}</HwListItemBlock>
-            </div>
+            <AlignedBlocks left={labelsRight} right={valuesRight} />
           </div>
         </div>
         {hwItem.comment && (
