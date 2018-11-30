@@ -35,6 +35,10 @@ export const HwBudgetItemBig = (props) => {
       labelsLeft.push('new user:');
       valuesLeft.push(hw.new_user);
     }
+    if (hw.repair_description) {
+      labelsLeft.push('repair descr.:');
+      valuesLeft.push(hw.repair_description);
+    }
     labelsRight.push('original purchase date:', 'original purchase price:', 'purchased in:');
     valuesRight.push(hw.purchase_date, hw.purchase_price, hw.store);
   }

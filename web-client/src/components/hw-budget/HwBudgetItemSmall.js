@@ -46,6 +46,8 @@ export const HwBudgetItemSmall = (props) => {
             <TitledParagraph header="original purchase date:" text={budgetItem.hw.purchase_date} />
             <TitledParagraph header="original purchase price:" text={budgetItem.hw.purchase_price} />
             <TitledParagraph header="purchased in:" text={budgetItem.hw.store} />
+            {budgetItem.hw.repair_description
+              && <TitledParagraph header="repair description:" text={budgetItem.hw.repair_description} />}
           </div>
         )}
       </CardContent>
