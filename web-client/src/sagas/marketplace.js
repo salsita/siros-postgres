@@ -1,6 +1,6 @@
 import { takeLatest, put } from 'redux-saga/effects';
 
-import { types, actions as marketplaceActions, marketplaceNoFilterText } from '../reducers/marketplace';
+import { types, actions as marketplaceActions, marketplaceNullFilterValue } from '../reducers/marketplace';
 import { actions as userActions } from '../reducers/user';
 import { fetchJSON, getCurrentPrice, formatCurrency } from './utils';
 
@@ -15,8 +15,10 @@ function* fetchMarketplace() {
     userLogoutRequest,
     (response) => {
       const today = (new Date()).toISOString().substr(0, 10);
-      const items = response.items.map((item) => ({
+      const items = response.items.map((item, idx) => ({
         ...item,
+        idx,
+        collapsed: true,
         purchase_price: formatCurrency(item.purchase_price),
         current_price: formatCurrency(getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price)),
       }));
@@ -29,8 +31,13 @@ function* fetchMarketplace() {
 }
 
 const localStorageFilterName = 'sirosActiveFilter';
-const storedFilter = localStorage.getItem(localStorageFilterName) || marketplaceNoFilterText;
-const storeFilter = (action) => { localStorage.setItem(localStorageFilterName, action.category); };
+const storedFilter = (() => {
+  const filterStr = localStorage.getItem(localStorageFilterName) || marketplaceNullFilterValue;
+  return (filterStr === marketplaceNullFilterValue) ? null : filterStr;
+})();
+const storeFilter = (action) => {
+  localStorage.setItem(localStorageFilterName, action.category ? action.category : marketplaceNullFilterValue);
+};
 
 export function* saga() {
   yield takeLatest(types.MARKETPLACE_REQUEST, fetchMarketplace);

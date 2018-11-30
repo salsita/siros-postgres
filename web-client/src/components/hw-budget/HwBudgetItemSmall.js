@@ -38,10 +38,13 @@ export const HwBudgetItemSmall = (props) => {
             <TitledParagraph header="category:" text={budgetItem.hw.category} />
             <TitledParagraph header="description:" text={budgetItem.hw.description} />
             {budgetItem.hw.serial_id && <TitledParagraph header="serial id:" text={budgetItem.hw.serial_id} />}
-            <TitledParagraph header="condition:" text={budgetItem.hw.condition} />
-            <TitledParagraph header="previous user:" text={budgetItem.hw.old_user} />
+            {budgetItem.hw.condition && <TitledParagraph header="condition:" text={budgetItem.hw.condition} />}
+            {(budgetItem.action === 'hw_buy') && budgetItem.hw.old_user
+              && <TitledParagraph header="previous user:" text={budgetItem.hw.old_user} />}
+            {(budgetItem.action !== 'hw_buy') && budgetItem.hw.new_user
+              && <TitledParagraph header="new user:" text={budgetItem.hw.new_user} />}
             <TitledParagraph header="original purchase date:" text={budgetItem.hw.purchase_date} />
-            <TitledParagraph header="oroginal purchase price:" text={budgetItem.hw.purchase_price} />
+            <TitledParagraph header="original purchase price:" text={budgetItem.hw.purchase_price} />
             <TitledParagraph header="purchased in:" text={budgetItem.hw.store} />
           </div>
         )}
