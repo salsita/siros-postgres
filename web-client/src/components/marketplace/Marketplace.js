@@ -2,62 +2,41 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import groupBy from 'lodash.groupby';
+import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 
-import { actions, marketplaceNoFilterText } from '../../reducers/marketplace';
+import { actions, marketplaceNullFilterValue } from '../../reducers/marketplace';
+import { MarketplaceItemSmallCollapsed } from './MarketplaceItemSmallCollapsed';
+import { MarketplaceItemSmallExpanded } from './MarketplaceItemSmallExpanded';
 import { Filters } from './Filters';
+import './Marketplace.css';
 
 const MarketplaceView = (props) => {
-  const {
-    error,
-    items,
-    filters,
-    activeFilter,
-    filterItems,
-  } = props;
+  const { error, items } = props;
+  const { filters, activeFilter } = props;
+  const { filterItems, onClick } = props;
   if (!error && !items) { return null; }
-  if (error) { return <div>{error}</div>; }
-
-  // For code reviewer: this layout is temporary and will change for sure :-)
+  if (error) { return <Typography variant="h6" color="error">{error}!</Typography>; }
   return (
     <article>
       <Filters
         filters={filters}
         active={activeFilter}
-        noFilterText={marketplaceNoFilterText}
+        filterNullValue={marketplaceNullFilterValue}
         onChange={filterItems}
       />
-      <table className="marketplace">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>HW id</th>
-            <th>Description</th>
-            <th>Current price</th>
-            <th>Condition</th>
-            <th>Purchase date</th>
-            <th>Purchase price</th>
-            <th>Store</th>
-            <th>Comment</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.category}</td>
-                <td>{item.id}</td>
-                <td>{item.description}</td>
-                <td>{item.current_price}</td>
-                <td>{item.condition}</td>
-                <td>{item.purchase_date}</td>
-                <td>{item.purchase_price}</td>
-                <td>{item.store}</td>
-                <td>{item.comment}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      {items && items.map((item) => (
+        <React.Fragment key={item.id}>
+          <Hidden smUp>
+            {item.collapsed
+              ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={onClick(item.idx)} />
+              : <MarketplaceItemSmallExpanded hwItem={item} onClick={onClick(item.idx)} />}
+          </Hidden>
+          <Hidden xsDown>
+            { null /* <HwListItemBig hwItem={item} cardClass={cardClass} /> */ }
+          </Hidden>
+        </React.Fragment>
+      ))}
     </article>
   );
 };
@@ -85,6 +64,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   filterItems: (event) => { dispatch(actions.marketplaceFilter(event.target.value)); },
+  onClick: (index) => () => { dispatch(actions.marketplaceItemChange(index)); },
 });
 
 export const Marketplace = connect(mapStateToProps, mapDispatchToProps)(MarketplaceView);

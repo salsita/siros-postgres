@@ -23,8 +23,18 @@ export const HwBudgetItemBig = (props) => {
       labelsLeft.push('serial id:');
       valuesLeft.push(hw.serial_id);
     }
-    labelsLeft.push('condition:', 'previous user:');
-    valuesLeft.push(hw.condition, hw.old_user);
+    if (hw.condition) {
+      labelsLeft.push('condition:');
+      valuesLeft.push(hw.condition);
+    }
+    if ((budgetItem.action === 'hw_buy') && hw.old_user) {
+      labelsLeft.push('previous user:');
+      valuesLeft.push(hw.old_user);
+    }
+    if ((budgetItem.action !== 'hw_buy') && hw.new_user) {
+      labelsLeft.push('new user:');
+      valuesLeft.push(hw.new_user);
+    }
     labelsRight.push('original purchase date:', 'original purchase price:', 'purchased in:');
     valuesRight.push(hw.purchase_date, hw.purchase_price, hw.store);
   }
