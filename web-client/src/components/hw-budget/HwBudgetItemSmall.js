@@ -6,35 +6,43 @@ import Button from '@material-ui/core/Button';
 
 import { TitledParagraph } from '../shared/TitledParagraph';
 
-const rx1 = /_/g;
-const rx2 = /repurchase/;
-const translateCategory = (str) => (str.replace(rx1, ' ').replace(rx2, 'rep.'));
+const rx1 = /hw_repurchase/;
+const rx2 = /hw_repair/;
+const rx3 = /correction/;
+const rx4 = /_/g;
+const translateType = (str) => (
+  str
+    .replace(rx1, 'repurch.')
+    .replace(rx2, 'repair')
+    .replace(rx3, 'correct.')
+    .replace(rx4, ' ')
+);
 
 export const HwBudgetItemSmall = (props) => {
-  const { hwItem, cardClass, onClick } = props;
+  const { budgetItem, cardClass, onClick } = props;
   return (
     <Card className={cardClass}>
       <CardContent className="hw-budget-item-small">
         <div className="hw-budget-item-small-header">
-          <Typography className="hw-budget-item-small-amount">{hwItem.amountStr}</Typography>
-          <Typography className="hw-budget-item-small-category">{translateCategory(hwItem.action)}</Typography>
-          <Typography className="hw-budget-item-small-date">{hwItem.date}</Typography>
+          <Typography className="hw-budget-item-small-amount">{budgetItem.amountStr}</Typography>
+          <Typography className="hw-budget-item-small-type">{translateType(budgetItem.action)}</Typography>
+          <Typography className="hw-budget-item-small-date">{budgetItem.date}</Typography>
           <div className="hw-budget-item-small-button">
-            {hwItem.hw && (<Button size="small" onClick={onClick}>
-               {hwItem.collapsed ? 'more' : 'less'}
+            {budgetItem.hw && (<Button size="small" onClick={onClick}>
+               {budgetItem.collapsed ? 'more' : 'less'}
              </Button>)}
           </div>
         </div>
-        {!hwItem.collapsed && (
+        {!budgetItem.collapsed && (
           <div className="hw-budget-item-small-details">
-            <TitledParagraph header="category:" text={hwItem.hw.category} />
-            <TitledParagraph header="description:" text={hwItem.hw.description} />
-            {hwItem.hw.serial_id && <TitledParagraph header="serial id:" text={hwItem.hw.serial_id} />}
-            <TitledParagraph header={`condition (on ${hwItem.date}):`} text={hwItem.hw.condition} />
-            <TitledParagraph header="previous user:" text={hwItem.hw.old_user} />
-            <TitledParagraph header="original purchase date:" text={hwItem.hw.purchase_date} />
-            <TitledParagraph header="original purchase price:" text={hwItem.hw.purchase_price} />
-            <TitledParagraph header="purchased in:" text={hwItem.hw.store} />
+            <TitledParagraph header="category:" text={budgetItem.hw.category} />
+            <TitledParagraph header="description:" text={budgetItem.hw.description} />
+            {budgetItem.hw.serial_id && <TitledParagraph header="serial id:" text={budgetItem.hw.serial_id} />}
+            <TitledParagraph header="condition:" text={budgetItem.hw.condition} />
+            <TitledParagraph header="previous user:" text={budgetItem.hw.old_user} />
+            <TitledParagraph header="original purchase date:" text={budgetItem.hw.purchase_date} />
+            <TitledParagraph header="oroginal purchase price:" text={budgetItem.hw.purchase_price} />
+            <TitledParagraph header="purchased in:" text={budgetItem.hw.store} />
           </div>
         )}
       </CardContent>

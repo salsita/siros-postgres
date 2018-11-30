@@ -15,7 +15,7 @@ p.hw-budget-item-small-amount {
   text-align: right;
 }
 
-p.hw-budget-item-small-category {
+p.hw-budget-item-small-type {
   width: 21%;
   padding-right: 4px;
   text-align: right;
@@ -38,4 +38,54 @@ div.hw-budget-item-small-details {
   margin-top: 4px;
   margin-bottom: 8px;
   margin-right: 16px;
+}
+
+div.hw-budget-item-big-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.hw-budget-item-big-header > p {
+  font-weight: 500;
+  padding-top: 8px;
+}
+
+p.hw-budget-item-big-amount {
+  width: 20%;
+  text-align: left;
+}
+
+p.hw-budget-item-big-type {
+  width: 20%;
+  text-align: center;
+}
+
+p.hw-budget-item-big-date{
+  width: 20%;
+  text-align: right;
+}
+
+p.hw-budget-item-big-title {
+  font-weight: 500;
+  font-style: italic;
+  padding-top: 16px;
+}
+
+div.hw-budget-item-big-container {
+  display: flex;
+  padding-top: 8px;
+}
+
+div.hw-budget-item-big-box-left {
+  width: 50%;
+  padding-right: 4px;
+}
+
+div.hw-budget-item-big-box-right {
+  width: 50%;
+  padding-left: 4px;
+}
+
+div.hw-budget-item-big-box-right > div {
+  justify-content: flex-end;
 }

@@ -5,6 +5,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import { actions } from '../../reducers/hw-budget';
 import { HwBudgetItemSmall } from './HwBudgetItemSmall';
+import { HwBudgetItemBig } from './HwBudgetItemBig';
 import './HwBudget.css';
 
 const HwBudgetView = (props) => {
@@ -24,10 +25,10 @@ const HwBudgetView = (props) => {
             return (
               <React.Fragment key={idx}>
                 <Hidden smUp>
-                  <HwBudgetItemSmall hwItem={item} cardClass={cardClass} onClick={onClick(idx)} />
+                  <HwBudgetItemSmall budgetItem={item} cardClass={cardClass} onClick={onClick(idx)} />
                 </Hidden>
                 <Hidden xsDown>
-                  {item.amount}
+                  <HwBudgetItemBig budgetItem={item} cardClass={cardClass} />
                 </Hidden>
               </React.Fragment>
             );
