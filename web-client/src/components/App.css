@@ -10,24 +10,28 @@ div#root {
   flex-direction: column;
 }
 
-main {
+article {
   overflow-y: auto;
 }
 
-@media (min-device-width: 600px) {
-  main {
-    margin: 0px 16px 0px 16px;
+@media (min-width: 600px) {
+  .before-article, article {
+    margin: 8px 16px 0px 16px;
   }
 }
 
-@media (max-device-width: 599px) {
-  main {
-    margin: 0px 8px 0px 8px;
+@media (max-width: 599px) {
+  .before-article, article {
+    margin: 8px 8px 0px 8px;
   }
 }
 
 article > div {
   margin-top: 8px;
+}
+
+article > div:first-child {
+  margin-top: 2px;
 }
 
 article > div:last-child {
