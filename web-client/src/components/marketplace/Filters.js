@@ -9,11 +9,12 @@ export const Filters = (props) => {
     filters,
     active,
     filterNullValue,
+    className,
     onChange,
   } = props;
   if (!filters) { return null; }
   return (
-    <form autoComplete="off">
+    <form autoComplete="off" className={className}>
       <FormControl>
         <InputLabel htmlFor="filter">category filter:</InputLabel>
         <Select

@@ -17,28 +17,33 @@ const MarketplaceView = (props) => {
   const { filters, activeFilter } = props;
   const { filterItems, onClick } = props;
   if (!error && !items) { return null; }
-  if (error) { return <Typography variant="h6" color="error">{error}!</Typography>; }
   return (
-    <article>
-      <Filters
-        filters={filters}
-        active={activeFilter}
-        filterNullValue={marketplaceNullFilterValue}
-        onChange={filterItems}
-      />
-      {items && items.map((item) => (
-        <React.Fragment key={item.id}>
-          <Hidden smUp>
-            {item.collapsed
-              ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={onClick(item.idx)} />
-              : <MarketplaceItemSmallExpanded hwItem={item} onClick={onClick(item.idx)} />}
-          </Hidden>
-          <Hidden xsDown>
-            <MarketplaceItemBig hwItem={item} />
-          </Hidden>
-        </React.Fragment>
-      ))}
-    </article>
+    <React.Fragment>
+      {items && (
+        <Filters
+          filters={filters}
+          active={activeFilter}
+          filterNullValue={marketplaceNullFilterValue}
+          className="before-article"
+          onChange={filterItems}
+        />
+      )}
+      <article>
+        {error && <Typography variant="h6" color="error">{error}!</Typography>}
+        {items && items.map((item) => (
+          <React.Fragment key={item.id}>
+            <Hidden smUp>
+              {item.collapsed
+                ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={onClick(item.idx)} />
+                : <MarketplaceItemSmallExpanded hwItem={item} onClick={onClick(item.idx)} />}
+            </Hidden>
+            <Hidden xsDown>
+              <MarketplaceItemBig hwItem={item} />
+            </Hidden>
+          </React.Fragment>
+        ))}
+      </article>
+    </React.Fragment>
   );
 };
 

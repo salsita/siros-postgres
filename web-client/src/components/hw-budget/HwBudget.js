@@ -13,29 +13,31 @@ const HwBudgetView = (props) => {
   const { onClick } = props;
   if (!error && !items) { return null; }
   return (
-    <article>
-      {error && <Typography variant="h6" color="error">{error}!</Typography>}
+    <React.Fragment>
       {items && (
-        <React.Fragment>
+        <div className="before-article">
           <Typography variant="h6">Your HW budget: {total}</Typography>
-          {items.map((item, idx) => {
-            let cardClass = 'card-zero';
-            if (item.amount > 0) { cardClass = 'card-plus'; }
-            if (item.amount < 0) { cardClass = 'card-minus'; }
-            return (
-              <React.Fragment key={idx}>
-                <Hidden smUp>
-                  <HwBudgetItemSmall budgetItem={item} cardClass={cardClass} onClick={onClick(idx)} />
-                </Hidden>
-                <Hidden xsDown>
-                  <HwBudgetItemBig budgetItem={item} cardClass={cardClass} />
-                </Hidden>
-              </React.Fragment>
-            );
-          })}
-        </React.Fragment>
+        </div>
       )}
-    </article>
+      <article>
+        {error && <Typography variant="h6" color="error">{error}!</Typography>}
+        {items && items.map((item, idx) => {
+          let cardClass = 'card-zero';
+          if (item.amount > 0) { cardClass = 'card-plus'; }
+          if (item.amount < 0) { cardClass = 'card-minus'; }
+          return (
+            <React.Fragment key={idx}>
+              <Hidden smUp>
+                <HwBudgetItemSmall budgetItem={item} cardClass={cardClass} onClick={onClick(idx)} />
+              </Hidden>
+              <Hidden xsDown>
+                <HwBudgetItemBig budgetItem={item} cardClass={cardClass} />
+              </Hidden>
+            </React.Fragment>
+          );
+        })}
+      </article>
+    </React.Fragment>
   );
 };
 
