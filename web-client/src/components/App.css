@@ -11,8 +11,19 @@ div#root {
 }
 
 main {
-  margin: 0px 8px 0px 8px;
   overflow-y: auto;
+}
+
+@media (min-device-width: 600px) {
+  main {
+    margin: 0px 16px 0px 16px;
+  }
+}
+
+@media (max-device-width: 599px) {
+  main {
+    margin: 0px 8px 0px 8px;
+  }
 }
 
 article > div {
