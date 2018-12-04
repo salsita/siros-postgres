@@ -1,6 +1,17 @@
 header {
-  margin: 8px 8px 0px 8px;
   flex-shrink: 0;
+}
+
+@media (max-device-width: 599px) {
+  header {
+    margin: 8px 8px 0px 8px;
+  }
+}
+
+@media (min-device-width: 600px) {
+  header {
+    margin: 16px 16px 0px 16px;
+  }
 }
 
 .right-box {

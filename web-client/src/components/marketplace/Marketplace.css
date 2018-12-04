@@ -16,38 +16,35 @@ li.select-item {
   font-size: 14px;
 }
 
-/* EDIT ALL BELOW */
-
-p.hw-list-item-big-title {
+p.marketplace-item-big-title {
   font-weight: 500;
   padding-top: 8px;
 }
 
-div.hw-list-item-big-container {
+div.marketplace-item-big-container {
   display: flex;
   padding-top: 8px;
 }
 
-div.hw-list-item-big-box-left {
+div.marketplace-item-big-box-left {
   width: 50%;
   padding-right: 4px;
 }
 
-div.hw-list-item-big-box-right {
+div.marketplace-item-big-box-right {
   width: 50%;
   padding-left: 4px;
 }
 
-div.hw-list-item-big-box-right > div {
+div.marketplace-item-big-box-right > div {
   justify-content: flex-end;
 }
 
-div.hw-list-item-big-comment {
+div.marketplace-item-big-comment {
   display: flex;
   padding-top: 8px;
 }
 
-span.hw-list-item-big-comment-text {
+span.marketplace-item-big-comment-text {
   font-style: italic;
-  padding-left: 4px;
 }
