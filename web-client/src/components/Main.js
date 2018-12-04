@@ -12,11 +12,11 @@ const MainView = (props) => {
   if (route.name === names.LOGIN) { return null; }
   if (!user.name && !user.email) { return null; }
   return (
-    <main>
+    <React.Fragment>
       {(route.name === names.LIST) && <HwList />}
       {(route.name === names.BUDGET) && <HwBudget />}
       {(route.name === names.MARKET) && <Marketplace />}
-    </main>
+    </React.Fragment>
   );
 };
 
