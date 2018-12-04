@@ -8,6 +8,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { actions, marketplaceNullFilterValue } from '../../reducers/marketplace';
 import { MarketplaceItemSmallCollapsed } from './MarketplaceItemSmallCollapsed';
 import { MarketplaceItemSmallExpanded } from './MarketplaceItemSmallExpanded';
+import { MarketplaceItemBig } from './MarketplaceItemBig';
 import { Filters } from './Filters';
 import './Marketplace.css';
 
@@ -33,7 +34,7 @@ const MarketplaceView = (props) => {
               : <MarketplaceItemSmallExpanded hwItem={item} onClick={onClick(item.idx)} />}
           </Hidden>
           <Hidden xsDown>
-            { null /* <HwListItemBig hwItem={item} cardClass={cardClass} /> */ }
+            <MarketplaceItemBig hwItem={item} />
           </Hidden>
         </React.Fragment>
       ))}
