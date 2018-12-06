@@ -4,11 +4,11 @@ import Button from '@material-ui/core/Button';
 
 export const Login = (props) => {
   const { onClick } = props;
-  let { reason } = props;
-  if (reason === 'domain') { reason = 'Wrong-domain account'; }
+  const { reason } = props;
+  const reasonMsg = (reason === 'domain') ? 'Wrong-domain account' : reason;
   return (
     <div className="right-box">
-      {reason && <Typography variant="caption" color="error" className="right-box-content">{reason}!</Typography>}
+      {reason && <Typography variant="caption" color="error" className="right-box-content">{reasonMsg}!</Typography>}
       <Button onClick={onClick} variant="contained" color="primary" className="right-box-content">
         Login with Google
       </Button>

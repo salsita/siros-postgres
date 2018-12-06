@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Siros DB schema",
   "dependencies": {
     "dotenv": "^6.1.0",

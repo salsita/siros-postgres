@@ -6,19 +6,23 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
 import { AlignedBlocks } from '../shared/AlignedBlocks';
+import { LabelValuePairs } from '../utils';
+
+const prepareHwData = (hwItem) => {
+  const data = new LabelValuePairs();
+  data.push('category:', hwItem.category);
+  data.push('description:', hwItem.description);
+  if (hwItem.active) { data.push('current price:', hwItem.current_price); }
+  return data;
+};
 
 export const HwListItemSmallCollapsed = (props) => {
   const { hwItem, cardClass, onClick } = props;
-  const labels = ['category:', 'description:'];
-  const values = [hwItem.category, hwItem.description];
-  if (hwItem.active) {
-    labels.push('current price:');
-    values.push(hwItem.current_price);
-  }
+  const hwData = prepareHwData(hwItem);
   return (
     <Card className={cardClass}>
       <CardContent>
-        <AlignedBlocks left={labels} right={values} />
+        <AlignedBlocks left={hwData.getLabels()} right={hwData.getValues()} />
       </CardContent>
       <CardActions className="small-card-actions">
         <Button size="small" onClick={onClick}>Show more</Button>
