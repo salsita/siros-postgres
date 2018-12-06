@@ -25,7 +25,7 @@ const MarketplaceView = (props) => {
           active={activeFilter}
           filterNullValue={marketplaceNullFilterValue}
           className="before-article"
-          onChange={filterItems}
+          onChange={(event) => filterItems(event.target.value)}
         />
       )}
       <article>
@@ -34,8 +34,8 @@ const MarketplaceView = (props) => {
           <React.Fragment key={item.id}>
             <Hidden smUp>
               {item.collapsed
-                ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={onClick(item.idx)} />
-                : <MarketplaceItemSmallExpanded hwItem={item} onClick={onClick(item.idx)} />}
+                ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={() => onClick(item.idx)} />
+                : <MarketplaceItemSmallExpanded hwItem={item} onClick={() => onClick(item.idx)} />}
             </Hidden>
             <Hidden xsDown>
               <MarketplaceItemBig hwItem={item} />
@@ -68,9 +68,9 @@ const mapStateToProps = (state) => ({
   error: state.market.error,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  filterItems: (event) => { dispatch(actions.marketplaceFilter(event.target.value)); },
-  onClick: (index) => () => { dispatch(actions.marketplaceItemChange(index)); },
-});
+const mapDispatchToProps = {
+  filterItems: actions.marketplaceFilter,
+  onClick: actions.marketplaceItemChange,
+};
 
 export const Marketplace = connect(mapStateToProps, mapDispatchToProps)(MarketplaceView);

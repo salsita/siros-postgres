@@ -32,8 +32,8 @@ const mapStateToProps = (state) => ({
   routeName: state.router.route.name,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onClick: (routeName) => { dispatch(routerActions.navigateTo(routeName)); },
-});
+const mapDispatchToProps = {
+  onClick: routerActions.navigateTo,
+};
 
 export const Nav = connect(mapStateToProps, mapDispatchToProps)(NavView);

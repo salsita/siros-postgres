@@ -5,38 +5,42 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import { AlignedBlocks } from '../shared/AlignedBlocks';
+import { LabelValuePairs } from '../utils';
+
+const prepareHwData = (hwItem) => {
+  const left = new LabelValuePairs();
+  const right = new LabelValuePairs();
+
+  left.push('category:', hwItem.category);
+  if (hwItem.serial_id) { left.push('serial id:', hwItem.serial_id); }
+  if (hwItem.active) {
+    left.push('condition:', hwItem.condition);
+    left.push('current price:', hwItem.current_price);
+    left.push('on marketplace:', hwItem.available ? 'yes' : 'no');
+  } else {
+    left.push('active:', 'no');
+  }
+
+  right.push('purchase date:', hwItem.purchase_date);
+  right.push('purchase price:', hwItem.purchase_price);
+  right.push('purchased in:', hwItem.store);
+
+  return { left, right };
+};
 
 export const HwListItemBig = (props) => {
   const { hwItem, cardClass } = props;
-  const labelsLeft = ['category:'];
-  const valuesLeft = [hwItem.category];
-  if (hwItem.serial_id) {
-    labelsLeft.push('serial id:');
-    valuesLeft.push(hwItem.serial_id);
-  }
-  if (hwItem.active) {
-    labelsLeft.push('condition:');
-    valuesLeft.push(hwItem.condition);
-    labelsLeft.push('current price:');
-    valuesLeft.push(hwItem.current_price);
-    labelsLeft.push('on marketplace:');
-    valuesLeft.push(hwItem.available ? 'yes' : 'no');
-  } else {
-    labelsLeft.push('active:');
-    valuesLeft.push('no');
-  }
-  const labelsRight = ['purchase date:', 'purchase price:', 'purchased in:'];
-  const valuesRight = [hwItem.purchase_date, hwItem.purchase_price, hwItem.store];
+  const hwData = prepareHwData(hwItem);
   return (
     <Card className={cardClass}>
       <CardContent>
         <Typography className="hw-list-item-big-title">{hwItem.description}</Typography>
         <div className="hw-list-item-big-container">
           <div className="hw-list-item-big-box-left">
-            <AlignedBlocks left={labelsLeft} right={valuesLeft} />
+            <AlignedBlocks left={hwData.left.getLabels()} right={hwData.left.getValues()} />
           </div>
           <div className="hw-list-item-big-box-right">
-            <AlignedBlocks left={labelsRight} right={valuesRight} />
+            <AlignedBlocks left={hwData.right.getLabels()} right={hwData.right.getValues()} />
           </div>
         </div>
         {hwItem.comment && (
