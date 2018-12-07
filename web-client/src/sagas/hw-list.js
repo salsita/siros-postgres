@@ -22,7 +22,6 @@ function* fetchHwList() {
       const today = (new Date()).toISOString().substr(0, 10);
       const items = response.items.map((item) => ({
         ...item,
-        collapsed: true,
         purchase_price: formatCurrency(item.purchase_price),
         purchase_date: formatDate(item.purchase_date),
         current_price: formatCurrency(getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price)),

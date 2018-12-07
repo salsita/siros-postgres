@@ -15,10 +15,8 @@ function* fetchMarketplace() {
     userLogoutRequest,
     (response) => {
       const today = (new Date()).toISOString().substr(0, 10);
-      const items = response.items.map((item, idx) => ({
+      const items = response.items.map((item) => ({
         ...item,
-        idx,
-        collapsed: true,
         purchase_price: formatCurrency(item.purchase_price),
         current_price: formatCurrency(getCurrentPrice(today, item.purchase_date, item.purchase_price, item.max_price)),
       }));
