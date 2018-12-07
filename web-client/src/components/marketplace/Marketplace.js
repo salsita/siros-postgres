@@ -6,8 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 
 import { actions, marketplaceNullFilterValue } from '../../reducers/marketplace';
-import { MarketplaceItemSmallCollapsed } from './MarketplaceItemSmallCollapsed';
-import { MarketplaceItemSmallExpanded } from './MarketplaceItemSmallExpanded';
+import { MarketplaceItemSmall } from './MarketplaceItemSmall';
 import { MarketplaceItemBig } from './MarketplaceItemBig';
 import { Filters } from './Filters';
 import './Marketplace.css';
@@ -15,7 +14,7 @@ import './Marketplace.css';
 const MarketplaceView = (props) => {
   const { error, items } = props;
   const { filters, activeFilter } = props;
-  const { filterItems, onClick } = props;
+  const { filterItems } = props;
   if (!error && !items) { return null; }
   return (
     <React.Fragment>
@@ -33,9 +32,7 @@ const MarketplaceView = (props) => {
         {items && items.map((item) => (
           <React.Fragment key={item.id}>
             <Hidden smUp>
-              {item.collapsed
-                ? <MarketplaceItemSmallCollapsed hwItem={item} onClick={() => onClick(item.idx)} />
-                : <MarketplaceItemSmallExpanded hwItem={item} onClick={() => onClick(item.idx)} />}
+              <MarketplaceItemSmall hwItem={item} />
             </Hidden>
             <Hidden xsDown>
               <MarketplaceItemBig hwItem={item} />
@@ -70,7 +67,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   filterItems: actions.marketplaceFilter,
-  onClick: actions.marketplaceItemChange,
 };
 
 export const Marketplace = connect(mapStateToProps, mapDispatchToProps)(MarketplaceView);

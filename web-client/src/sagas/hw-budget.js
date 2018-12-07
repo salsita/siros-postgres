@@ -25,7 +25,6 @@ function* fetchHwBudget() {
         }
         return {
           ...item,
-          collapsed: true,
           amountStr: formatCurrency(item.amount),
           date: formatDate(item.date),
           hw,

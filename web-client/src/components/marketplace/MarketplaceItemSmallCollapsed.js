@@ -9,7 +9,7 @@ import { AlignedBlocks } from '../shared/AlignedBlocks';
 import { LabelValuePairs } from '../utils';
 
 const prepareHwData = (hwItem) => {
-  const data = LabelValuePairs();
+  const data = new LabelValuePairs();
   data.push('category:', hwItem.category);
   data.push('description:', hwItem.description);
   data.push('current price:', hwItem.current_price);
@@ -22,7 +22,7 @@ export const MarketplaceItemSmallCollapsed = (props) => {
   return (
     <Card>
       <CardContent>
-        <AlignedBlocks left={hwData.getLabels()} right={hwData.getValues} />
+        <AlignedBlocks left={hwData.getLabels()} right={hwData.getValues()} />
       </CardContent>
       <CardActions className="small-card-actions">
         <Button size="small" onClick={onClick}>Show more</Button>
