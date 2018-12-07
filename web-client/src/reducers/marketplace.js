@@ -14,7 +14,6 @@ const { Types, Creators } = createActions({
   marketplaceUpdateData: ['response'], // handled here
   marketplaceUpdateError: ['error'], // handled here
   marketplaceFilter: ['category'], // handled here and in the saga
-  marketplaceItemChange: ['index'], // handled here
 });
 
 export const types = Types;
@@ -57,17 +56,6 @@ const filter = (state = initialState, action) => ({
   activeFilter: action.category === marketplaceNullFilterValue ? null : action.category,
 });
 
-const changeCollapsed = (state = initialState, action) => {
-  if (!state.items || !state.items[action.index]) { return state; }
-  const updated = [...(state.items)];
-  const elem = updated[action.index];
-  elem.collapsed = !elem.collapsed;
-  return {
-    ...state,
-    items: updated,
-  };
-};
-
 const reset = (state = initialState, action) => ({ // eslint-disable-line no-unused-vars
   ...state,
   filters: null,
@@ -82,7 +70,6 @@ export const reducer = createReducer(
     [Types.MARKETPLACE_UPDATE_DATA]: updateData,
     [Types.MARKETPLACE_UPDATE_ERROR]: updateError,
     [Types.MARKETPLACE_FILTER]: filter,
-    [Types.MARKETPLACE_ITEM_CHANGE]: changeCollapsed,
     [userTypes.USER_LOGOUT_REQUEST]: reset,
   },
 );
