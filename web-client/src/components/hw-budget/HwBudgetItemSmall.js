@@ -19,15 +19,9 @@ const translateType = (str) => (
 );
 
 export class HwBudgetItemSmall extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { collapsed: true };
-    this.onClick = this.onClick.bind(this);
-  }
+  state = { collapsed: true }
 
-  onClick() {
-    this.setState({ collapsed: !this.state.collapsed });
-  }
+  onClick = () => { this.setState({ collapsed: !this.state.collapsed }); }
 
   render() {
     const { budgetItem, cardClass } = this.props;

@@ -8,12 +8,12 @@ import { actions } from '../../reducers/user';
 
 const UserView = (props) => {
   const { user, route } = props;
-  const { onLoginClick, onLogoutClick } = props;
+  const { userLogin, userLogout } = props;
   if (route.name === names.LOGIN) {
-    return <Login reason={route.params.reason} onClick={onLoginClick}/>;
+    return <Login reason={route.params.reason} onClick={userLogin}/>;
   }
   if (user.name || user.email) {
-    return <Logout name={user.name} email={user.email} onClick={onLogoutClick}/>;
+    return <Logout name={user.name} email={user.email} onClick={userLogout}/>;
   }
   return null;
 };
@@ -23,9 +23,9 @@ const mapStateToProps = (state) => ({
   route: state.router.route,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onLoginClick: () => { dispatch(actions.userLoginRequest()); },
-  onLogoutClick: () => { dispatch(actions.userLogoutRequest()); },
-});
+const mapDispatchToProps = {
+  userLogin: actions.userLoginRequest,
+  userLogout: actions.userLogoutRequest,
+};
 
 export const User = connect(mapStateToProps, mapDispatchToProps)(UserView);

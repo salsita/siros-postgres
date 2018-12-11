@@ -4,15 +4,9 @@ import { MarketplaceItemSmallCollapsed } from './MarketplaceItemSmallCollapsed';
 import { MarketplaceItemSmallExpanded } from './MarketplaceItemSmallExpanded';
 
 export class MarketplaceItemSmall extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { collapsed: true };
-    this.onClick = this.onClick.bind(this);
-  }
+  state = { collapsed: true }
 
-  onClick() {
-    this.setState({ collapsed: !this.state.collapsed });
-  }
+  onClick = () => { this.setState({ collapsed: !this.state.collapsed }); }
 
   render() {
     const Variant = this.state.collapsed ? MarketplaceItemSmallCollapsed : MarketplaceItemSmallExpanded;

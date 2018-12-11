@@ -7,7 +7,7 @@ import { names, routes } from '../../router/routes';
 import './Nav.css';
 
 const NavView = (props) => {
-  const { routeName, user, onClick } = props;
+  const { routeName, user, navigateTo } = props;
   if (routeName === names.LOGIN) { return null; }
   if (!user.name && !user.email) { return null; }
   return (
@@ -19,7 +19,7 @@ const NavView = (props) => {
             size="small"
             variant="outlined"
             color={(item.name === routeName) ? 'primary' : 'default'}
-            onClick={() => { onClick(item.name); }}
+            onClick={() => { navigateTo(item.name); }}
           >{item.menuText}</Button>
         ))
       }
@@ -33,7 +33,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  onClick: routerActions.navigateTo,
+  navigateTo: routerActions.navigateTo,
 };
 
 export const Nav = connect(mapStateToProps, mapDispatchToProps)(NavView);
