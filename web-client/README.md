@@ -7,7 +7,7 @@ You can find information on how to perform common task with the CRA framework
 The web client is built using `react`, `redux`, `router5`, and `redux-saga` (there are more libraries used, please check
 `package.json`, but these are the core technologies).
 
-For styling, we plan on using Material UI.
+Material UI library (with a couple of extra CSS lines) is used for styling.
 
 ## Configuration
 
@@ -27,3 +27,5 @@ To start the server, simply run:
 ```
 $ yarn start
 ```
+
+You will need the API server counterpart running as well, ideally also in develop mode.
