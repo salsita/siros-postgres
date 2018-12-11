@@ -4,14 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 import cx from 'classnames';
 
-import { actions } from '../../reducers/hw-budget';
 import { HwBudgetItemSmall } from './HwBudgetItemSmall';
 import { HwBudgetItemBig } from './HwBudgetItemBig';
 import './HwBudget.css';
 
 const HwBudgetView = (props) => {
   const { error, items, total } = props.budget;
-  const { onClick } = props;
   if (!error && !items) { return null; }
   return (
     <React.Fragment>
@@ -32,7 +30,7 @@ const HwBudgetView = (props) => {
           return (
             <React.Fragment key={idx}>
               <Hidden smUp>
-                <HwBudgetItemSmall budgetItem={item} cardClass={cardClass} onClick={() => onClick(idx)} />
+                <HwBudgetItemSmall budgetItem={item} cardClass={cardClass} />
               </Hidden>
               <Hidden xsDown>
                 <HwBudgetItemBig budgetItem={item} cardClass={cardClass} />
@@ -49,8 +47,4 @@ const mapStateToProps = (state) => ({
   budget: state.budget,
 });
 
-const mapDispatchToProps = {
-  onClick: actions.hwBudgetItemChange,
-};
-
-export const HwBudget = connect(mapStateToProps, mapDispatchToProps)(HwBudgetView);
+export const HwBudget = connect(mapStateToProps)(HwBudgetView);
