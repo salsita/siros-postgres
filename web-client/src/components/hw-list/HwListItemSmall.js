@@ -4,15 +4,9 @@ import { HwListItemSmallCollapsed } from './HwListItemSmallCollapsed';
 import { HwListItemSmallExpanded } from './HwListItemSmallExpanded';
 
 export class HwListItemSmall extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { collapsed: true };
-    this.onClick = this.onClick.bind(this);
-  }
+  state = { collapsed: true }
 
-  onClick() {
-    this.setState({ collapsed: !this.state.collapsed });
-  }
+  onClick = () => { this.setState({ collapsed: !this.state.collapsed }); }
 
   render() {
     const Variant = this.state.collapsed ? HwListItemSmallCollapsed : HwListItemSmallExpanded;
