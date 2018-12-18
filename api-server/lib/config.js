@@ -21,4 +21,6 @@ const config = {
 // dynamic adjustments
 if (process.env.NODE_ENV === 'development') { config.logLevel = 'debug'; }
 
-module.exports = config;
+module.exports = {
+  config,
+};

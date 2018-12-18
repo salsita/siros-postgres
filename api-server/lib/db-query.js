@@ -153,4 +153,6 @@ class DbQuery extends Db {
   }
 }
 
-module.exports = DbQuery;
+module.exports = {
+  DbQuery,
+};

@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Siros admin scripts (command line)",
   "dependencies": {
     "dotenv": "^6.1.0",
