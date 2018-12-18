@@ -1,6 +1,6 @@
 const passport = require('koa-passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const API_PREFIX = require('./api').PREFIX;
+const API_PREFIX = require('./api').API.PREFIX;
 
 const CLIENT_ROUTES = {
   default: '/',
@@ -72,6 +72,8 @@ const addRoutes = (router, config) => {
 };
 
 module.exports = {
-  install,
-  addRoutes,
+  Auth: {
+    install,
+    addRoutes,
+  },
 };
