@@ -1,5 +1,5 @@
 import createRouter from 'router5';
-import browserPlugin from 'router5/plugins/browser';
+import browserPlugin from 'router5-plugin-browser';
 import transitionPath from 'router5-transition-path';
 
 import { names, routes } from './routes';
@@ -15,7 +15,8 @@ const onRouteActivateMiddleware = (routeList) => (router, dependencies) => (toSt
   done();
 };
 
-export const router = createRouter(routes, { defaultRoute: names.LIST }).usePlugin(browserPlugin({ useHash: false }));
+export const router = createRouter(routes, { defaultRoute: names.LIST });
+router.usePlugin(browserPlugin({ useHash: false }));
 router.useMiddleware(onRouteActivateMiddleware(routes));
 
 export { names, routes } from './routes';

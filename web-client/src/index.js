@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import { RouteProvider } from 'react-router5';
+import { RouterProvider } from 'react-router5';
 import { router5Middleware } from 'redux-router5';
 
 import { router } from './router/router';
@@ -27,9 +27,9 @@ sagaMiddleware.run(saga);
 router.start(() => {
   render(
     <Provider store={store}>
-      <RouteProvider router={router}>
+      <RouterProvider router={router}>
         <App />
-      </RouteProvider>
+      </RouterProvider>
     </Provider>,
     document.getElementById('root'),
   );

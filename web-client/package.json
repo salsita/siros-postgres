@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Siros Web client",
   "private": true,
   "scripts": {
@@ -20,20 +20,20 @@
     "lodash.uniq": "^4.5.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-redux": "^5.0.7",
-    "react-router5": "^6.5.3",
+    "react-redux": "^6.0.0",
+    "react-router5": "^7.0.0",
     "react-scripts": "^2.0.3",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-router5": "^6.0.5",
+    "redux-router5": "^7.0.0",
     "redux-saga": "^0.16.2",
     "reduxsauce": "^1.0.0",
     "reselect": "^4.0.0",
-    "router5": "^6.6.1",
-    "router5-transition-path": "^5.4.0"
+    "router5": "^7.0.0",
+    "router5-plugin-browser": "^7.0.1",
+    "router5-transition-path": "^7.0.0"
   },
   "devDependencies": {
-    "babel-loader": "^8.0.4",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.11.1"
