@@ -54,6 +54,8 @@ class StatefulRingBuffer {
   }
 }
 
+const getSecs = (millis = Date.now()) => Math.floor(millis / 1000);
+
 class Stats {
   // config (all fields are optional):
   // -----
@@ -85,7 +87,7 @@ class Stats {
     };
     if (this.config.recentStats < 1) { this.config.recentStats = 1; }
     this.data = {
-      startedAt: Date.now(),
+      startedAt: getSecs(),
       stats: {},
     };
     this.update = this.update.bind(this);
@@ -111,7 +113,7 @@ class Stats {
         }),
       );
       statsPerStatus.push({
-        ts: start,
+        ts: getSecs(start),
         duration: durationMs,
       });
       stats[ctx.status] = statsPerStatus;
@@ -138,6 +140,7 @@ class Stats {
   get(includeRecentStats = false, resetStats = false) {
     const result = {
       startedAt: this.data.startedAt,
+      uptime: getSecs() - this.data.startedAt,
       stats: {},
     };
     const { stats } = this.data;
@@ -163,7 +166,7 @@ class Stats {
 
   reset() {
     this.data = {
-      startedAt: Date.now(),
+      startedAt: getSecs(),
       stats: {},
     };
   }
