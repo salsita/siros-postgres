@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { RouterProvider } from 'react-router5';
 import { router5Middleware } from 'redux-router5';
@@ -26,11 +26,11 @@ sagaMiddleware.run(saga);
 
 router.start(() => {
   render(
-    <Provider store={store}>
+    <StoreProvider store={store}>
       <RouterProvider router={router}>
         <App />
       </RouterProvider>
-    </Provider>,
+    </StoreProvider>,
     document.getElementById('root'),
   );
   // registerServiceWorker();

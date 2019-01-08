@@ -43,7 +43,7 @@ export const HwBudgetItemBig = (props) => {
           <Typography className="hw-budget-item-big-date">{budgetItem.date}</Typography>
         </div>
         {budgetItem.hw && (
-          <React.Fragment>
+          <>
             <Typography className="hw-budget-item-big-title">{budgetItem.hw.description}</Typography>
             <div className="hw-budget-item-big-container">
               <div className="hw-budget-item-big-box-left">
@@ -53,7 +53,7 @@ export const HwBudgetItemBig = (props) => {
                 <AlignedBlocks left={hwData.right.getLabels()} right={hwData.right.getValues()} />
               </div>
             </div>
-          </React.Fragment>
+          </>
         )}
       </CardContent>
     </Card>

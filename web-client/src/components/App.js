@@ -17,11 +17,11 @@ const theme = createMuiTheme({
 });
 
 export const App = () => (
-  <React.Fragment>
+  <>
     <CssBaseline />
     <MuiThemeProvider theme={theme}>
       <Header />
       <Main />
     </MuiThemeProvider>
-  </React.Fragment>
+  </>
 );

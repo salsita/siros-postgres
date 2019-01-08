@@ -17,7 +17,7 @@ const MarketplaceView = (props) => {
   const { filterItems } = props;
   if (!error && !items) { return null; }
   return (
-    <React.Fragment>
+    <>
       {items && (
         <Filters
           filters={filters}
@@ -40,7 +40,7 @@ const MarketplaceView = (props) => {
           </React.Fragment>
         ))}
       </article>
-    </React.Fragment>
+    </>
   );
 };
 

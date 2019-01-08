@@ -12,7 +12,7 @@ const HwBudgetView = (props) => {
   const { error, items, total } = props.budget;
   if (!error && !items) { return null; }
   return (
-    <React.Fragment>
+    <>
       {items && (
         <div className="before-article">
           <Typography variant="h6">Your HW budget: {total}</Typography>
@@ -39,7 +39,7 @@ const HwBudgetView = (props) => {
           );
         })}
       </article>
-    </React.Fragment>
+    </>
   );
 };
 
