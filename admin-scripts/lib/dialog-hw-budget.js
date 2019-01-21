@@ -32,9 +32,62 @@ const printUsers = (users) => {
   process.stdout.write(`(${users.length} rows)\n\n`);
 };
 
+const printReport = (users) => {
+  let nameWidth = 5;
+  let amountWidth = 7;
+  let len;
+  let i;
+  let totalPlus = 0;
+  let totalMinus = 0;
+  let total = 0;
+  users.forEach((user) => {
+    len = user.name.length;
+    if (len > nameWidth) { nameWidth = len; }
+    len = user.amount.toString().length;
+    if (len > amountWidth) { amountWidth = len; }
+    if (user.amount > 0) {
+      totalPlus += user.amount;
+    } else {
+      totalMinus += user.amount;
+    }
+    total += user.amount;
+  });
+  let str = printf(` %-${nameWidth}s | %${amountWidth}s\n`, 'name:', 'budget:');
+  process.stdout.write(str);
+  str = '-';
+  for (i = 0; i < nameWidth; i += 1) { str += '-'; }
+  str += '-+-';
+  for (i = 0; i < amountWidth; i += 1) { str += '-'; }
+  str += '-\n';
+  process.stdout.write(str);
+  users.forEach((user) => {
+    str = printf(` %-${nameWidth}s | %${amountWidth}s\n`, user.name, user.amount.toString());
+    process.stdout.write(str);
+  });
+  process.stdout.write(`(${users.length} rows)\n\n`);
+  const totalsWidth = Math.max(
+    totalPlus.toString().length,
+    totalMinus.toString().length,
+    total.toString().length,
+  );
+  str = printf(` result:   | %${totalsWidth}s\n`, 'amount:');
+  process.stdout.write(str);
+  str = '-----------+-';
+  for (i = 0; i < totalsWidth; i += 1) { str += '-'; }
+  str += '-\n';
+  process.stdout.write(str);
+  str = printf(` plus  (+) | %${totalsWidth}s\n`, totalPlus.toString());
+  process.stdout.write(str);
+  str = printf(` minus (-) | %${totalsWidth}s\n`, totalMinus.toString());
+  process.stdout.write(str);
+  str = printf(` total (=) | %${totalsWidth}s\n`, total.toString());
+  process.stdout.write(str);
+  process.stdout.write('(3 rows)\n\n');
+};
+
 const questions = {
   [dialogStates.init]: {
-    text: '[main] enter user id, (l)ist existing active users, or (q)uit (<number>/L/q)',
+    text: '[main] enter user id, (l)ist existing active users, show overall (r)eport, or (q)uit (<number>/L/r/q)',
     handlers: [
       {
         match: /^[q]$/i,
@@ -45,6 +98,26 @@ const questions = {
         code: async (context) => {
           const users = await context.dbQuery.getBudgetUsers();
           if (users) { printUsers(users); }
+          return dialogStates.init;
+        },
+      },
+      {
+        match: /^[r]$/i,
+        code: async (context) => {
+          const users = await context.dbQuery.getBudgetUsers();
+          if (!users) { return dialogStates.init; }
+          process.stdout.write('\nstay tuned, this will take a while ...\n');
+          for (let i = 0; i < users.length; i += 1) {
+            const user = users[i];
+            // eslint-disable-next-line no-await-in-loop
+            const history = await context.dbQuery.getHwBudgetItems(user.id);
+            if (!history) { return dialogStates.init; }
+            let amount = 0;
+            history.forEach((item) => { amount += item.amount; });
+            user.amount = amount;
+          }
+          process.stdout.write('... and done!\n\n');
+          printReport(users);
           return dialogStates.init;
         },
       },
