@@ -23,6 +23,7 @@ const install = (app, config, logger) => {
         clientID: config.googleId,
         clientSecret: config.googleSecret,
         callbackURL: cbURL,
+        userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
       },
       (accessToken, refreshToken, profile, done) => {
         logger.debug(`*** passport profile:\n${JSON.stringify(profile, null, 2)}`);
