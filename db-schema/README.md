@@ -29,11 +29,17 @@ $ npm run migrate up
 
 The `api-server` is only reading the data from the DB, so it doesn't need to use the credentials
 of the admin user `siros` created above. It is safer to use dedicated read-only DB user `siros-api`
-that you can define (using `siros` DB user created above) as:
+that you can define (using admin DB user connected to the new DB) as:
 
 ```
 => CREATE USER "siros-api" WITH ENCRYPTED PASSWORD ' ... ';
 => GRANT CONNECT ON DATABASE siros TO "siros-api";
 => GRANT USAGE ON SCHEMA public TO "siros-api";
+```
+
+After creating the tables (or adding new ones later on, using the `siros` user), grant the SELECT permissions
+to the API user (using the `siros` user connected to `siros` DB) as:
+
+```
 => GRANT SELECT ON ALL TABLES IN SCHEMA public TO "siros-api";
 ```
