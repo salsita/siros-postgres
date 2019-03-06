@@ -1,6 +1,6 @@
 # API server
 
-The server does not perform and DB write operations, so we only need DB user with read-only access
+The server does not perform any DB write operations, so we only need DB user with read-only access
 (`siros-api` DB user, see DB schema [README.md](../db-schema/README.md) for details).
 
 ## `.env` file
