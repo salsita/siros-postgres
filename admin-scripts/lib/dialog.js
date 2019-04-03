@@ -5,6 +5,11 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+rl.on('close', () => {
+  process.stdout.write('[force-quit]\n');
+  process.exit(-1);
+});
+
 const readAnswer = (question) => new Promise((resolve) => {
   rl.question(`${question}\n> `, (answer) => {
     resolve(answer);
