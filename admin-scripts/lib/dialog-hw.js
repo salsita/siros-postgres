@@ -109,14 +109,22 @@ const printHw = (hw) => {
   let descrWidth = 6;
   let storeWidth = 6;
   let priceWidth = 6;
+  let curPriceWidth = 10;
   let condWidth = 5;
   let userWidth = 5;
   let maxWidth = 4;
   let commentWidth = 8;
 
+  const today = (new Date()).toISOString().substr(0, 10);
   let len;
   let i;
   hw.forEach((item) => {
+    //
+    let price = config.hwItems.getAgedPrice(item.purchase_price, item.purchase_date, today);
+    if (item.max_price !== null) { price = Math.min(item.max_price, price); }
+    if (item.condition === 'new') { price = item.purchase_price; }
+    item.current_price_calc = price;
+    //
     len = item.id.toString().length;
     if (len > idWidth) { idWidth = len; }
     len = item.category.length;
@@ -127,6 +135,8 @@ const printHw = (hw) => {
     if (len > storeWidth) { storeWidth = len; }
     len = item.purchase_price.toString().length;
     if (len > priceWidth) { priceWidth = len; }
+    len = item.current_price_calc.toString().length;
+    if (len > curPriceWidth) { curPriceWidth = len; }
     len = item.condition.length;
     if (len > condWidth) { condWidth = len; }
     len = item.user.length;
@@ -138,9 +148,8 @@ const printHw = (hw) => {
   });
   let str = printf(
     ` %-${idWidth}s | A | M | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | %-${storeWidth}s | `
-    + `pur. date: | %-${priceWidth}s | %-${userWidth}s | %-${maxWidth}s | comment:\n`,
-    'id:', 'cond:', 'category:', 'descr:', 'store:',
-    'price:', 'user:', 'max:',
+    + `pur. date: | %-${priceWidth}s | %-${curPriceWidth}s | %-${maxWidth}s | %-${userWidth}s | comment:\n`,
+    'id:', 'cond:', 'category:', 'descr:', 'store:', 'price:', 'cur.price:', 'max:', 'user:',
   );
   process.stdout.write(str);
   str = '-';
@@ -156,9 +165,11 @@ const printHw = (hw) => {
   str += '-+------------+-';
   for (i = 0; i < priceWidth; i += 1) { str += '-'; }
   str += '-+-';
-  for (i = 0; i < userWidth; i += 1) { str += '-'; }
+  for (i = 0; i < curPriceWidth; i += 1) { str += '-'; }
   str += '-+-';
   for (i = 0; i < maxWidth; i += 1) { str += '-'; }
+  str += '-+-';
+  for (i = 0; i < userWidth; i += 1) { str += '-'; }
   str += '-+-';
   for (i = 0; i < commentWidth; i += 1) { str += '-'; }
   str += '-\n';
@@ -173,9 +184,11 @@ const printHw = (hw) => {
       : '';
     str = printf(
       ` %${idWidth}s | %s | %s | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | %-${storeWidth}s | `
-      + `%s | %${priceWidth}s | %-${userWidth}s | %${maxWidth}s | %s\n`,
-      item.id.toString(), item.active ? 'x' : ' ', item.available ? 'x' : ' ', item.condition, item.category, descr, item.store,
-      item.purchase_date, item.purchase_price.toString(), item.user, item.max_price !== null ? item.max_price.toString() : '', comment,
+      + `%s | %${priceWidth}s | %${curPriceWidth}s | %${maxWidth}s | %-${userWidth}s | %s\n`,
+      item.id.toString(), item.active ? 'x' : ' ', item.available ? 'x' : ' ', item.condition, item.category, descr,
+      item.store, item.purchase_date, item.purchase_price.toString(),
+      item.active ? item.current_price_calc.toString() : '', item.max_price !== null ? item.max_price.toString() : '',
+      item.user, comment,
     );
     process.stdout.write(str);
   });
