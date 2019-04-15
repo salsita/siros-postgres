@@ -1,0 +1,15 @@
+div.powered-box {
+  height: 40vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+span.powered-bigger {
+  font-size: 15px;
+}
+
+span.powered-link {
+  color: #e91e63;
+  cursor: pointer;
+}

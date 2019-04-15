@@ -5,10 +5,12 @@ import { names } from '../router/routes';
 import { HwList } from './hw-list/HwList';
 import { HwBudget } from './hw-budget/HwBudget';
 import { Marketplace } from './marketplace/Marketplace';
+import { Powered } from './Powered';
 import './shared/Shared.css';
 
 const MainView = (props) => {
   const { user, route } = props;
+  if (route.name === names.LOGIN) { return <Powered />; }
   if (route.name === names.LOGIN) { return null; }
   if (!user.name && !user.email) { return null; }
   return (

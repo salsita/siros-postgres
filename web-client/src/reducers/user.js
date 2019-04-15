@@ -7,6 +7,8 @@ const initialState = {
 
 const { Types, Creators } = createActions({
   //
+  userGoToSalsita: null, // handled in user saga
+  //
   userLoginRequest: null, // handled in user saga
   userLogoutRequest: null, // handled in user saga
   //

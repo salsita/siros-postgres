@@ -72,12 +72,19 @@ const login = () => {
 
 // ---
 
+const goToSalsita = () => {
+  window.location.href = 'https://salsitasoft.com/';
+};
+
+// ---
+
 const getRouteName = (state) => (state.router.route.name);
 
 export function* saga() {
   yield takeLatest(types.USER_VERIFY_REQUEST, fetchUser);
   yield takeLatest(types.USER_LOGOUT_REQUEST, logout);
   yield takeLatest(types.USER_LOGIN_REQUEST, login);
+  yield takeLatest(types.USER_GO_TO_SALSITA, goToSalsita);
 
   // wait for initial routing to finish, then make sure the user is logged in (if NOT on /login)
   yield take(actionTypes.TRANSITION_SUCCESS);
