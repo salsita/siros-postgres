@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "Siros API server",
   "main": "server.js",
   "scripts": {
@@ -14,24 +14,24 @@
   "license": "MIT",
   "repository": "git@github.com:salsita/siros-postgres.git",
   "dependencies": {
-    "dotenv": "^6.2.0",
-    "koa": "^2.6.2",
+    "dotenv": "^7.0.0",
+    "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-compress": "^3.0.0",
-    "koa-helmet": "^4.0.0",
+    "koa-helmet": "^4.1.0",
     "koa-no-cache": "^2.0.0",
     "koa-passport": "^4.1.1",
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.1",
-    "passport-google-oauth20": "^1.0.0",
-    "pg": "^7.7.1",
+    "passport-google-oauth20": "^2.0.0",
+    "pg": "^7.9.0",
     "squel": "^5.12.2",
-    "winston": "^3.1.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "eslint": "^5.12.0",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.18.9"
+    "eslint-plugin-import": "^2.17.1",
+    "nodemon": "^1.18.11"
   }
 }
