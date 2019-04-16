@@ -29,6 +29,6 @@ production `node_modules` as needed, so after unpacking the artifacts they are r
 You only need to add `.env` files for some of them, of adjust configuration JS files.
 For detailed instructions please check respective README files of the components.
 
-# Credits
+## Credits
 
 Developed by [Salsita](https://salsitasoft.com/).
