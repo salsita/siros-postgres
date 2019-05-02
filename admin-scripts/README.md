@@ -2,14 +2,15 @@
 
 Here you can find command-line scripts for Siros administration tasks:
 * `siros-user`: create and update (system and real) users,
+* `siros-show-budget`: show budget for individual users,
+* `siros-update-budgets`: update budgets with initial and yearly increments,
+* `siros-edu`: manage education expenses,
 * `siros-hw`: create and update hw items,
+* `siros-protocol`: generate PDF documents for hand-over and sell events,
 * `siros-hw-repair`: account transactions for hw item repairs,
 * `siros-hw-transfer`: change owner of hw items and update budgets accordingly,
 * `siros-hw-sell`: remove hw items from active evidence after selling them outside Salsita,
 * `siros-show-hw-marketplace`: show list of hw items available on markeplace,
-* `siros-protocol`: generate PDF documents for hand-over and sell events,
-* `siros-update-hw-budgets`: update hw budgets with initial and yearly increments,
-* `siros-show-hw-budget`: show hw budget for individual users,
 * `siros-hw-discard`: discard hw items.
 
 For easy reading, the source code of the scripts are not optimized for code-sharing, many parts are copy-pasted.
@@ -34,9 +35,9 @@ To make sure the tables printed out to the output look nice, you may need to adj
 your terminal size. This can be done using `config.hwDisplay.descriptionWidth` and `config.hwDisplay.commentWidth`
 values in `lib/config.js` file. Both represent the maximum number of characters printed into these two columns.
 
-## Initial / yearly HW budget amounts
+## Initial / yearly budget amounts
 
-The amounts used by `siros-update-hw-budgets` script are configured in `lib/config.js` file in `config.hwBudget`
+The amounts used by `siros-update-budgets` script are configured in `lib/config.js` file in `config.budget`
 section. These are in CZK.
 
 ## Formula for price aging

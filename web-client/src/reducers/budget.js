@@ -8,9 +8,9 @@ const initialState = {
 };
 
 const { Types, Creators } = createActions({
-  hwBudgetRequest: null, // handled in saga
-  hwBudgetUpdateData: ['response'], // handled here
-  hwBudgetUpdateError: ['error'], // handled here
+  budgetRequest: null, // handled in saga
+  budgetUpdateData: ['response'], // handled here
+  budgetUpdateError: ['error'], // handled here
 });
 
 export const types = Types;
@@ -43,8 +43,8 @@ const reset = (state = initialState, action) => ({ // eslint-disable-line no-unu
 export const reducer = createReducer(
   initialState,
   {
-    [Types.HW_BUDGET_UPDATE_DATA]: updateData,
-    [Types.HW_BUDGET_UPDATE_ERROR]: updateError,
+    [Types.BUDGET_UPDATE_DATA]: updateData,
+    [Types.BUDGET_UPDATE_ERROR]: updateError,
     [userTypes.USER_LOGOUT_REQUEST]: reset,
   },
 );

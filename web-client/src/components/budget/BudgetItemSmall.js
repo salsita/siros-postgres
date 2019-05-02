@@ -18,7 +18,7 @@ const translateType = (str) => (
     .replace(rx4, ' ')
 );
 
-export class HwBudgetItemSmall extends PureComponent {
+export class BudgetItemSmall extends PureComponent {
   state = { collapsed: true }
 
   onClick = () => { this.setState({ collapsed: !this.state.collapsed }); }
@@ -28,17 +28,19 @@ export class HwBudgetItemSmall extends PureComponent {
     const { collapsed } = this.state;
     return (
       <Card className={cardClass}>
-        <CardContent className="hw-budget-item-small">
-          <div className="hw-budget-item-small-header">
-            <Typography className="hw-budget-item-small-amount">{budgetItem.amountStr}</Typography>
-            <Typography className="hw-budget-item-small-type">{translateType(budgetItem.action)}</Typography>
-            <Typography className="hw-budget-item-small-date">{budgetItem.date}</Typography>
-            <div className="hw-budget-item-small-button">
-              {budgetItem.hw && (<Button size="small" onClick={this.onClick}>{collapsed ? 'more' : 'less'}</Button>)}
+        <CardContent className="budget-item-small">
+          <div className="budget-item-small-header">
+            <Typography className="budget-item-small-amount">{budgetItem.amountStr}</Typography>
+            <Typography className="budget-item-small-type">{translateType(budgetItem.action)}</Typography>
+            <Typography className="budget-item-small-date">{budgetItem.date}</Typography>
+            <div className="budget-item-small-button">
+              {(budgetItem.hw || budgetItem.education) && (
+                <Button size="small" onClick={this.onClick}>{collapsed ? 'more' : 'less'}</Button>
+              )}
             </div>
           </div>
-          {!collapsed && (
-            <div className="hw-budget-item-small-details">
+          {!collapsed && budgetItem.hw && (
+            <div className="budget-item-small-details">
               <TitledParagraph header="category:" text={budgetItem.hw.category} />
               <TitledParagraph header="description:" text={budgetItem.hw.description} />
               {budgetItem.hw.serial_id && <TitledParagraph header="serial id:" text={budgetItem.hw.serial_id} />}
@@ -52,6 +54,12 @@ export class HwBudgetItemSmall extends PureComponent {
               <TitledParagraph header="purchased in:" text={budgetItem.hw.store} />
               {budgetItem.hw.repair_description
                 && <TitledParagraph header="repair description:" text={budgetItem.hw.repair_description} />}
+            </div>
+          )}
+          {!collapsed && budgetItem.education && (
+            <div className="budget-item-small-details">
+              <TitledParagraph header="category:" text={budgetItem.education.category} />
+              <TitledParagraph header="description:" text={budgetItem.education.description} />
             </div>
           )}
         </CardContent>

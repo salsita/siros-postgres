@@ -31,29 +31,47 @@ const prepareHwData = (budgetItem) => {
   return { left, right };
 };
 
-export const HwBudgetItemBig = (props) => {
+const prepareEduData = (budgetItem) => {
+  const result = new LabelValuePairs();
+
+  if (!budgetItem.education) { return result; }
+  const { education } = budgetItem;
+
+  result.push('category:', education.category);
+  result.push('description:', education.description);
+
+  return result;
+};
+
+export const BudgetItemBig = (props) => {
   const { budgetItem, cardClass } = props;
   const hwData = prepareHwData(budgetItem);
+  const eduData = prepareEduData(budgetItem);
   return (
     <Card className={cardClass}>
       <CardContent>
-        <div className="hw-budget-item-big-header">
-          <Typography className="hw-budget-item-big-amount">{budgetItem.amountStr}</Typography>
-          <Typography className="hw-budget-item-big-type">{translateType(budgetItem.action)}</Typography>
-          <Typography className="hw-budget-item-big-date">{budgetItem.date}</Typography>
+        <div className="budget-item-big-header">
+          <Typography className="budget-item-big-amount">{budgetItem.amountStr}</Typography>
+          <Typography className="budget-item-big-type">{translateType(budgetItem.action)}</Typography>
+          <Typography className="budget-item-big-date">{budgetItem.date}</Typography>
         </div>
         {budgetItem.hw && (
           <>
-            <Typography className="hw-budget-item-big-title">{budgetItem.hw.description}</Typography>
-            <div className="hw-budget-item-big-container">
-              <div className="hw-budget-item-big-box-left">
+            <Typography className="budget-item-big-title">{budgetItem.hw.description}</Typography>
+            <div className="budget-item-big-container">
+              <div className="budget-item-big-box-left">
                 <AlignedBlocks left={hwData.left.getLabels()} right={hwData.left.getValues()} />
               </div>
-              <div className="hw-budget-item-big-box-right">
+              <div className="budget-item-big-box-right">
                 <AlignedBlocks left={hwData.right.getLabels()} right={hwData.right.getValues()} />
               </div>
             </div>
           </>
+        )}
+        {budgetItem.education && (
+          <div className="budget-item-big-container">
+            <AlignedBlocks left={eduData.getLabels()} right={eduData.getValues()} />
+          </div>
         )}
       </CardContent>
     </Card>

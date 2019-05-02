@@ -110,7 +110,7 @@ const questions = {
           for (let i = 0; i < users.length; i += 1) {
             const user = users[i];
             // eslint-disable-next-line no-await-in-loop
-            const history = await context.dbQuery.getHwBudgetItems(user.id);
+            const history = await context.dbQuery.getBudgetItems(user.id);
             if (!history) { return dialogStates.init; }
             let amount = 0;
             history.forEach((item) => { amount += item.amount; });
@@ -138,7 +138,7 @@ const questions = {
       {
         match: /^[y]$/i,
         code: async (context) => {
-          const history = await context.dbQuery.getHwBudgetItems(context.userId);
+          const history = await context.dbQuery.getBudgetItems(context.userId);
           if (!history) { return dialogStates.init; }
           let amount = 0;
           /* eslint-disable no-await-in-loop */
@@ -155,20 +155,28 @@ const questions = {
               if (!item.hw) { return dialogStates.init; }
             }
             item.hw_repairs_id = undefined;
+            if (item.education_id) {
+              item.education = await context.dbQuery.getEduDetails(item.education_id);
+              item.education.category_id = undefined;
+              item.education.category = item.education.category_name;
+              item.education.category_name = undefined;
+              if (!item.education) { return dialogStates.init; }
+            }
+            item.education_id = undefined;
             process.stdout.write(`\n${JSON.stringify(item, null, 2)}`);
           }
-          process.stdout.write(`\n\ncurrent hw budget of user with id (${context.userId}) is ${amount}\n\n`);
+          process.stdout.write(`\n\ncurrent budget of user with id (${context.userId}) is ${amount}\n\n`);
           return dialogStates.init;
         },
       },
       {
         match: /^[n]{0,1}$/i,
         code: async (context) => {
-          const history = await context.dbQuery.getHwBudgetItems(context.userId);
+          const history = await context.dbQuery.getBudgetItems(context.userId);
           if (!history) { return dialogStates.init; }
           let amount = 0;
           history.forEach((item) => { amount += item.amount; });
-          process.stdout.write(`\ncurrent hw budget of user with id (${context.userId}) is ${amount}\n\n`);
+          process.stdout.write(`\ncurrent budget of user with id (${context.userId}) is ${amount}\n\n`);
           return dialogStates.init;
         },
       },

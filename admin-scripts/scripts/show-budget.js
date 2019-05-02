@@ -3,7 +3,7 @@ const winston = require('winston');
 
 const DbQuery = require('../lib/db-query');
 const { readAnswer, findHandler } = require('../lib/dialog');
-const { dialogStates, questions } = require('../lib/dialog-hw-budget');
+const { dialogStates, questions } = require('../lib/dialog-budget');
 
 dotenv.config();
 

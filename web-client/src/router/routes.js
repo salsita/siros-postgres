@@ -1,4 +1,4 @@
-import { actions as hwBudgetActions } from '../reducers/hw-budget';
+import { actions as budgetActions } from '../reducers/budget';
 import { actions as hwListActions } from '../reducers/hw-list';
 import { actions as marketplaceActions } from '../reducers/marketplace';
 
@@ -16,18 +16,18 @@ export const routes = [
     inMenu: false,
   },
   {
+    name: names.BUDGET,
+    path: `/${names.BUDGET}`,
+    onActivate: (/* params */) => (budgetActions.budgetRequest()),
+    inMenu: true,
+    menuText: 'Budget',
+  },
+  {
     name: names.LIST,
     path: `/${names.LIST}`,
     onActivate: (/* params */) => (hwListActions.hwListRequest()),
     inMenu: true,
     menuText: 'HW List',
-  },
-  {
-    name: names.BUDGET,
-    path: `/${names.BUDGET}`,
-    onActivate: (/* params */) => (hwBudgetActions.hwBudgetRequest()),
-    inMenu: true,
-    menuText: 'HW Budget',
   },
   {
     name: names.MARKET,

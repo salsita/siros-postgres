@@ -132,9 +132,9 @@ class DbQuery extends Db {
     }
   }
 
-  async getHwBudgetItems(userId, types) {
+  async getBudgetItems(userId, types) {
     if (!this.connected) {
-      this.logger.error(`[${this.name}] cannot perform getHwBudgetItems() operation in disconnected state`);
+      this.logger.error(`[${this.name}] cannot perform getBudgetItems() operation in disconnected state`);
       return null;
     }
     let query = squel.select()
@@ -142,8 +142,9 @@ class DbQuery extends Db {
       .field('amount')
       .field('hw_owner_history_id')
       .field('hw_repairs_id')
+      .field('education_id')
       .field("to_char(date, 'YYYY-MM-DD')", 'date')
-      .from('hw_budgets')
+      .from('budgets')
       .where('user_id = ?', userId);
     if (types === 'initial-yearly') { query = query.where("action = 'initial' OR action = 'yearly'"); }
     query = query
@@ -155,7 +156,7 @@ class DbQuery extends Db {
       this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
       return res;
     } catch (e) {
-      this.logger.error(`[${this.name}] error during getHwBudgetItems() method`);
+      this.logger.error(`[${this.name}] error during getBudgetItems() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }
@@ -234,7 +235,7 @@ class DbQuery extends Db {
       item.hw_repairs_id = null;
     });
     const query = squel.insert()
-      .into('hw_budgets')
+      .into('budgets')
       .setFieldsRows(updates)
       .toParam();
     try {
@@ -591,10 +592,10 @@ class DbQuery extends Db {
     if (!res) { return null; }
 
     res = await this.runInTransaction({
-      name: 'update hw_budgets',
+      name: 'update budgets',
       method: 'none',
       query: squel.insert()
-        .into('hw_budgets')
+        .into('budgets')
         .setFieldsRows([
           // seller
           {
@@ -679,10 +680,10 @@ class DbQuery extends Db {
     if (!res) { return null; }
 
     res = await this.runInTransaction({
-      name: 'update hw_budgets',
+      name: 'update budgets',
       method: 'none',
       query: squel.insert()
-        .into('hw_budgets')
+        .into('budgets')
         .setFields({
           user_id: options.oldUser,
           action: 'hw_repurchase',
@@ -749,10 +750,10 @@ class DbQuery extends Db {
     if (!res) { return null; }
 
     res = await this.runInTransaction({
-      name: 'update hw_budgets',
+      name: 'update budgets',
       method: 'none',
       query: squel.insert()
-        .into('hw_budgets')
+        .into('budgets')
         .setFields({
           user_id: options.chargeUser,
           action: 'hw_repair',
@@ -788,7 +789,7 @@ class DbQuery extends Db {
     const query1 = squel.select()
       .field('action')
       .field("to_char(date, 'YYYY-MM-DD')", 'date')
-      .from('hw_budgets')
+      .from('budgets')
       .where('user_id = ?', userId)
       .where("action = 'hw_buy' OR action = 'hw_sell'")
       .order('date')
@@ -806,7 +807,7 @@ class DbQuery extends Db {
     const query2 = squel.select()
       .field('b.action', 'action')
       .field("to_char(b.date, 'YYYY-MM-DD')", 'date')
-      .from('hw_budgets', 'b')
+      .from('budgets', 'b')
       .join('hw_owner_history', 'h', 'b.hw_owner_history_id = h.id')
       .where("b.action = 'hw_repurchase'")
       .where('h.new_user_id = ?', userId)
@@ -844,7 +845,7 @@ class DbQuery extends Db {
       .field('hw.serial_id', 'serial_id')
       .field('hist.amount', 'amount')
       .field('hist.condition', 'condition')
-      .from('hw_budgets', 'b')
+      .from('budgets', 'b')
       .join('hw_owner_history', 'hist', 'hist.id = b.hw_owner_history_id')
       .join('hw', 'hw', 'hw.id = hist.hw_id')
       .join('hw_categories', 'c', 'c.id = hw.category')
@@ -888,6 +889,217 @@ class DbQuery extends Db {
       return res.id;
     } catch (e) {
       this.logger.error(`[${this.name}] error during discardHw() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getEduEvents(options = {}) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getEduEvents() operation in disconnected state`);
+      return null;
+    }
+    let query = squel.select()
+      .field('e.id', 'id')
+      .field("to_char(e.date, 'YYYY-MM-DD')", 'date')
+      .field('c.category', 'category')
+      .field('u.name', 'name')
+      .field('e.amount', 'amount')
+      .field('e.description', 'description')
+      .from('education', 'e')
+      .join('users', 'u', 'e.user_id = u.id')
+      .join('edu_categories', 'c', 'c.id = e.category');
+    if (options.userId !== undefined) { query = query.where('e.user_id = ?', options.userId); }
+    if (options.categoryId !== undefined) { query = query.where('e.category = ?', options.categoryId); }
+    if (options.fromDate !== undefined) { query = query.where('e.date >= ?', options.fromDate); }
+    if (options.toDate !== undefined) { query = query.where('e.date <= ?', options.toDate); }
+    query = query
+      .order('e.date')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getEduEvents() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getEduCategories() {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getEduCategories() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .from('edu_categories')
+      .field('id')
+      .field('category')
+      .order('category')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.any(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getEduCategories() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async createEduCategory(category) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform createEduCategory() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.insert()
+      .into('edu_categories')
+      .setFields(category)
+      .returning('id')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res.id;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during createEduCategory() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async getEduCategory(id) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getEduCategory() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('category')
+      .from('edu_categories')
+      .where('id = ?', id)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.oneOrNone(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      if (res === null) { return 0; }
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getEduCategory() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async createEduEvent(options) {
+    let res;
+
+    res = await this.runInTransaction({
+      name: 'begin transaction',
+      method: 'none',
+      query: {
+        text: 'BEGIN',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'create record in education table',
+      method: 'one',
+      query: squel.insert()
+        .into('education')
+        .setFields({
+          category: options.categoryId,
+          description: options.description,
+          amount: options.amount,
+          user_id: options.userId,
+          date: options.date,
+        })
+        .returning('id')
+        .toParam(),
+    });
+    if (!res) { return null; }
+    const resId = res.id;
+
+    res = await this.runInTransaction({
+      name: 'update budgets',
+      method: 'none',
+      query: squel.insert()
+        .into('budgets')
+        .setFields({
+          user_id: options.userId,
+          action: 'education',
+          amount: -options.amount,
+          education_id: resId,
+          date: options.date,
+        })
+        .toParam(),
+    });
+    if (!res) { return null; }
+
+    res = await this.runInTransaction({
+      name: 'commit transaction',
+      method: 'none',
+      query: {
+        text: 'COMMIT',
+        values: [],
+      },
+    });
+    if (!res) { return null; }
+
+    return resId;
+  }
+
+  async getEduDetails(eduId) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform getEduDetails() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.select()
+      .field('e.category', 'category_id')
+      .field('c.category', 'category_name')
+      .field('e.description', 'description')
+      .field('e.id', 'id')
+      .from('education', 'e')
+      .join('edu_categories', 'c', 'c.id = e.category')
+      .where('e.id = ?', eduId)
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during getEduDetails() method`);
+      this.logger.error(`[${this.name}] ${e.message}`);
+      return null;
+    }
+  }
+
+  async updateEduEvent(id, changes) {
+    if (!this.connected) {
+      this.logger.error(`[${this.name}] cannot perform updateEduEvent() operation in disconnected state`);
+      return null;
+    }
+    const query = squel.update()
+      .table('education')
+      .setFields(changes)
+      .where('id = ?', id)
+      .returning('id')
+      .toParam();
+    try {
+      this.logger.debug(`[${this.name}] db query: ${JSON.stringify(query, null, 2)}`);
+      const res = await this.db.one(query);
+      this.logger.debug(`[${this.name}] db response: ${JSON.stringify(res, null, 2)}`);
+      return res.id;
+    } catch (e) {
+      this.logger.error(`[${this.name}] error during updateEduEvent() method`);
       this.logger.error(`[${this.name}] ${e.message}`);
       return null;
     }

@@ -1,17 +1,17 @@
 import { takeLatest } from 'redux-saga/effects';
 
-import { types, actions as hwBudgetActions } from '../reducers/hw-budget';
+import { types, actions as budgetActions } from '../reducers/budget';
 import { actions as userActions } from '../reducers/user';
 import { fetchJSON, formatCurrency, formatDate } from './utils';
 
-const { hwBudgetUpdateData, hwBudgetUpdateError } = hwBudgetActions;
+const { budgetUpdateData, budgetUpdateError } = budgetActions;
 const { userLogoutRequest } = userActions;
 
-function* fetchHwBudget() {
+function* fetchBudget() {
   return yield* fetchJSON(
-    '/api/v1/hw-budget',
-    hwBudgetUpdateData,
-    hwBudgetUpdateError,
+    '/api/v1/budget',
+    budgetUpdateData,
+    budgetUpdateError,
     userLogoutRequest,
     (response) => {
       const items = response.items.map((item) => {
@@ -40,5 +40,5 @@ function* fetchHwBudget() {
 }
 
 export function* saga() {
-  yield takeLatest(types.HW_BUDGET_REQUEST, fetchHwBudget);
+  yield takeLatest(types.BUDGET_REQUEST, fetchBudget);
 }

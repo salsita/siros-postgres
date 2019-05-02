@@ -15,7 +15,7 @@ const onRouteActivateMiddleware = (routeList) => (router, dependencies) => (toSt
   done();
 };
 
-export const router = createRouter(routes, { defaultRoute: names.LIST });
+export const router = createRouter(routes, { defaultRoute: names.BUDGET });
 router.usePlugin(browserPlugin({ useHash: false }));
 router.useMiddleware(onRouteActivateMiddleware(routes));
 

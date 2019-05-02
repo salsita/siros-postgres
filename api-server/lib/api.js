@@ -1,6 +1,6 @@
 const apiMe = require('./api-me');
 const apiHwList = require('./api-hw-list');
-const apiHwBudget = require('./api-hw-budget');
+const apiBudget = require('./api-budget');
 const apiMarketplace = require('./api-marketplace');
 const apiStats = require('./api-stats');
 
@@ -20,7 +20,7 @@ const addRoutes = (router, logger) => {
   const inst = install.bind(null, router, logger);
   inst(apiMe);
   inst(apiHwList);
-  inst(apiHwBudget);
+  inst(apiBudget);
   inst(apiMarketplace);
   inst(apiStats);
 };

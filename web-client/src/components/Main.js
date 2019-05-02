@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { names } from '../router/routes';
+import { Budget } from './budget/Budget';
 import { HwList } from './hw-list/HwList';
-import { HwBudget } from './hw-budget/HwBudget';
 import { Marketplace } from './marketplace/Marketplace';
 import { Powered } from './Powered';
 import './shared/Shared.css';
@@ -15,8 +15,8 @@ const MainView = (props) => {
   if (!user.name && !user.email) { return null; }
   return (
     <>
+      {(route.name === names.BUDGET) && <Budget />}
       {(route.name === names.LIST) && <HwList />}
-      {(route.name === names.BUDGET) && <HwBudget />}
       {(route.name === names.MARKET) && <Marketplace />}
     </>
   );

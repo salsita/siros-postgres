@@ -1,5 +1,5 @@
 const config = {
-  hwBudget: {
+  budget: {
     startDate: '2015-04-01', // when the budget calculation starts
     initial: {
       // initial budget
@@ -31,9 +31,9 @@ const config = {
       // after 5 years: 5% of the price
       // in between linear decrease
       //
-      // if ageDate is < config.hwBudget.startDate, return 0 (we did not track budgets back then)
+      // if ageDate is < config.budget.startDate, return 0 (we did not track budgets back then)
 
-      if (ageDate < config.hwBudget.startDate) { return 0; }
+      if (ageDate < config.budget.startDate) { return 0; }
 
       const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       const pDateStr = purchaseDate.split('-');

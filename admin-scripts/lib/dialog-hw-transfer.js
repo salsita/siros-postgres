@@ -389,7 +389,7 @@ const questions = {
           let price = config.hwItems.getAgedPrice(hw.purchase_price, hw.purchase_date, context.transfer.date);
           if (hw.max_price !== null) { price = Math.min(hw.max_price, price); }
           if (hw.condition === 'new') { price = hw.purchase_price; }
-          if (context.transfer.date < config.hwBudget.startDate) { price = 0; }
+          if (context.transfer.date < config.budget.startDate) { price = 0; }
           context.transfer.price = price;
           questions[dialogStates.transferPrice].text = `[transfer] enter effective price (number, press enter for (${context.transfer.price}))`;
           return dialogStates.transferPrice;
@@ -403,7 +403,7 @@ const questions = {
           let price = config.hwItems.getAgedPrice(hw.purchase_price, hw.purchase_date, context.transfer.date);
           if (hw.max_price !== null) { price = Math.min(hw.max_price, price); }
           if (hw.condition === 'new') { price = hw.purchase_price; }
-          if (context.transfer.date < config.hwBudget.startDate) { price = 0; }
+          if (context.transfer.date < config.budget.startDate) { price = 0; }
           context.transfer.price = price;
           questions[dialogStates.transferPrice].text = `[transfer] enter effective price (number, press enter for (${context.transfer.price}))`;
           return dialogStates.transferPrice;

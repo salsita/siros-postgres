@@ -37,7 +37,7 @@ class DbQuery extends Db {
     return res;
   }
 
-  async getHwBudget(userEmail) {
+  async getBudget(userEmail) {
     const cl = await this.client();
 
     try {
@@ -46,15 +46,16 @@ class DbQuery extends Db {
         .field('b.amount')
         .field('b.hw_owner_history_id')
         .field('b.hw_repairs_id')
+        .field('b.education_id')
         .field("to_char(b.date, 'YYYY-MM-DD')", 'date')
-        .from('hw_budgets', 'b')
+        .from('budgets', 'b')
         .join('users', 'u', 'b.user_id = u.id')
         .where('u.email = ?', userEmail)
         .order('date', false)
         .order('b.amount')
         .toParam();
 
-      const res = await cl.q(query, `getHwBudget(email: ${userEmail})`);
+      const res = await cl.q(query, `getBudget(email: ${userEmail})`);
 
       let total = 0;
       /* eslint-disable no-await-in-loop */
@@ -65,6 +66,8 @@ class DbQuery extends Db {
         item.hw_owner_history_id = undefined;
         if (item.hw_repairs_id) { item.hw = await this.getHwRepairDetails(cl, item.hw_repairs_id); }
         item.hw_repairs_id = undefined;
+        if (item.education_id) { item.education = await this.getEduDetails(cl, item.education_id); }
+        item.education_id = undefined;
       }
 
       cl.release();
@@ -121,6 +124,19 @@ class DbQuery extends Db {
       .toParam();
 
     return (await client.q(query, `getHwRepairDetails(client, repairId: ${repairId})`))[0];
+  }
+
+  async getEduDetails(client, eduId) {
+    const query = squel.select()
+      .field('c.category', 'category')
+      .field('e.description', 'description')
+      .field('e.id', 'id')
+      .from('education', 'e')
+      .join('edu_categories', 'c', 'c.id = e.category')
+      .where('e.id = ?', eduId)
+      .toParam();
+
+    return (await client.q(query, `getEduDetails(client, eduId: ${eduId})`))[0];
   }
 
   async getMarketplace() {

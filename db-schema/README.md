@@ -8,7 +8,10 @@ Before you can use the definitions, you need to create the DB itself:
 
 ```
 => CREATE DATABASE siros;
+=> REVOKE CONNECT ON DATABASE siros from PUBLIC;
+=> REVOKE ALL PRIVILEGES ON DATABASE siros from PUBLIC;
 => CREATE USER siros WITH ENCRYPTED PASSWORD ' ... ';
+=> GRANT CONNECT ON DATABASE siros TO siros;
 => GRANT ALL PRIVILEGES ON DATABASE siros TO siros;
 ```
 

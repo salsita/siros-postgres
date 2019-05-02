@@ -32,13 +32,13 @@ const main = async () => {
   for (let i = 0; i < users.length; i += 1) {
     const user = users[i];
     logger.info(`processing user "${user.name}" with id (${user.id})`);
-    const history = await dbQuery.getHwBudgetItems(user.id, 'initial-yearly');
+    const history = await dbQuery.getBudgetItems(user.id, 'initial-yearly');
     if (!history) { process.exit(1); }
     const updates = [];
-    if (!history.length && (user.start_date >= config.hwBudget.startDate)) {
+    if (!history.length && (user.start_date >= config.budget.startDate)) {
       updates.push({
         action: 'initial',
-        amount: config.hwBudget.initial[user.part_time ? 'partTime' : 'fullTime'],
+        amount: config.budget.initial[user.part_time ? 'partTime' : 'fullTime'],
         date: user.start_date,
       });
     }
@@ -46,10 +46,10 @@ const main = async () => {
     const startDate = user.start_date.split('-');
     let anniversary = `${year}-${startDate[1]}-${startDate[2]}`;
     while (anniversary <= today) {
-      if (anniversary >= config.hwBudget.startDate) {
+      if (anniversary >= config.budget.startDate) {
         updates.push({
           action: 'yearly',
-          amount: config.hwBudget.yearly[user.part_time ? 'partTime' : 'fullTime'],
+          amount: config.budget.yearly[user.part_time ? 'partTime' : 'fullTime'],
           date: anniversary,
         });
       }
