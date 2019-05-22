@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Siros Web client",
   "private": true,
   "scripts": {
@@ -22,7 +22,7 @@
     "react-dom": "^16.5.2",
     "react-redux": "^7.0.0",
     "react-router5": "^7.0.0",
-    "react-scripts": "^2.0.3",
+    "react-scripts": "^3.0.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-router5": "^7.0.0",

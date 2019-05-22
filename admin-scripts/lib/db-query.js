@@ -1020,6 +1020,7 @@ class DbQuery extends Db {
           amount: options.amount,
           user_id: options.userId,
           date: options.date,
+          invoice_id: options.invoiceId,
         })
         .returning('id')
         .toParam(),
@@ -1065,6 +1066,7 @@ class DbQuery extends Db {
       .field('e.category', 'category_id')
       .field('c.category', 'category_name')
       .field('e.description', 'description')
+      .field('e.invoice_id', 'invoice_id')
       .field('e.id', 'id')
       .from('education', 'e')
       .join('edu_categories', 'c', 'c.id = e.category')

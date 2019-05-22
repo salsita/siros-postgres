@@ -16,18 +16,20 @@ const dialogStates = {
   createAmount: 10,
   createUserId: 11,
   createDate: 12,
-  createEvent: 13,
+  createInvoiceId: 13,
+  createEvent: 14,
 
-  editId: 14,
-  editCategory: 15,
-  editCreateCategoryName: 16,
-  editCreateCategory: 17,
-  editDescription: 18,
-  editEvent: 19,
+  editId: 15,
+  editCategory: 16,
+  editCreateCategoryName: 17,
+  editCreateCategory: 18,
+  editDescription: 19,
+  editInvoiceId: 20,
+  editEvent: 21,
 
-  reportFrom: 20,
-  reportTo: 21,
-  reportList: 22,
+  reportFrom: 22,
+  reportTo: 23,
+  reportList: 24,
 };
 
 const printEvents = (events) => {
@@ -424,16 +426,26 @@ const questions = {
     handlers: [
       {
         match: /^$/,
-        code: (context) => {
-          const text = `\nabout to create the following event:\n${JSON.stringify(context.newEvent, null, 2)}\n\n`;
-          process.stdout.write(text);
-          return dialogStates.createEvent;
-        },
+        code: () => dialogStates.createInvoiceId,
       },
       {
         match: /^20\d{2}-\d{2}-\d{2}$/,
         code: (context, answer) => {
           context.newEvent.date = answer;
+          return dialogStates.createInvoiceId;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.createInvoiceId]: {
+    text: '[create] enter invoice id (string, press enter to skip)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          const str = answer.trim();
+          context.newEvent.invoiceId = (str === '' ? null : str);
           const text = `\nabout to create the following event:\n${JSON.stringify(context.newEvent, null, 2)}\n\n`;
           process.stdout.write(text);
           return dialogStates.createEvent;
@@ -566,6 +578,21 @@ const questions = {
         code: (context, answer) => {
           const str = (answer === '' ? context.editEvent.description : answer.trim());
           if (str !== context.editEvent.description) { context.changes.description = str; }
+          return dialogStates.editInvoiceId;
+        },
+      },
+    ],
+  },
+
+  [dialogStates.editInvoiceId]: {
+    text: '[edit] enter invoice id (string, press enter to keep the original value)',
+    handlers: [
+      {
+        match: /.*/,
+        code: (context, answer) => {
+          let str = (answer === '' ? context.editEvent.invoice_id : answer.trim());
+          if (str === '') { str = null; }
+          if (str !== context.editEvent.invoice_id) { context.changes.invoice_id = str; }
           return printChanges(context.editId, context.changes);
         },
       },
