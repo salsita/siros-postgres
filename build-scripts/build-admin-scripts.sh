@@ -4,7 +4,7 @@ set -e
 # expecting to be in 'admin-scripts' directory already
 npm ci --production
 mkdir -p ../build
-rm -f ../build/siros-admin-scripts*.tgz
+rm -f ../build/siros-admin-scripts*
 PACKAGE_NIX="siros-admin-scripts@${npm_package_version}-nix.tgz"
 PACKAGE_WIN="siros-admin-scripts@${npm_package_version}-win.zip"
 rm -rf protocols
