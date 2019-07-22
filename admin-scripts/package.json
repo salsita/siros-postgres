@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "description": "Siros admin scripts (command line)",
   "dependencies": {
     "dotenv": "^8.0.0",
@@ -14,12 +14,15 @@
   "devDependencies": {
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0"
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jest": "^22.11.1",
+    "jest": "^24.8.0"
   },
   "scripts": {
     "build": "../build-scripts/build-admin-scripts.sh",
+    "jest": "jest",
     "lint": "eslint lib scripts",
-    "test": "npm run lint"
+    "test": "npm run lint && npm run jest"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "repository": "git@github.com:salsita/siros-postgres.git",

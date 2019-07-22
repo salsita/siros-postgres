@@ -1,16 +1,59 @@
+const budgetNames = {
+  PERIOD0: 'period0',
+  PERIOD1: 'period1',
+  PERIOD2: 'period2',
+};
+
+const budgetStartDate = '2015-04-01'; // when the budget calculation starts
+
 const config = {
   budget: {
-    startDate: '2015-04-01', // when the budget calculation starts
-    initial: {
-      // initial budget
-      fullTime: 45000,
-      partTime: 22500,
-    },
-    yearly: {
-      // yearly increase
-      fullTime: 22500,
-      partTime: 11250,
-    },
+    startDate: budgetStartDate,
+    names: budgetNames, // for name referecing, to bind business logic with specific periods
+    rules: [
+      {
+        initial: {
+          // initial budget
+          fullTime: 0,
+          partTime: 0,
+        },
+        yearly: {
+          // yearly increase
+          fullTime: 0,
+          partTime: 0,
+        },
+        name: budgetNames.PERIOD0,
+        validUntil: budgetStartDate,
+      },
+      {
+        initial: {
+          // initial budget
+          fullTime: 45000,
+          partTime: 22500,
+        },
+        yearly: {
+          // yearly increase
+          fullTime: 22500,
+          partTime: 11250,
+        },
+        name: budgetNames.PERIOD1,
+        validUntil: '2019-08-01',
+      },
+      {
+        initial: {
+          // initial budget
+          fullTime: 65000,
+          partTime: 32500,
+        },
+        yearly: {
+          // yearly increase
+          fullTime: 25000,
+          partTime: 12500,
+        },
+        name: budgetNames.PERIOD2,
+        validUntil: '2999-12-31',
+      },
+    ],
   },
 
   hwDisplay: {
@@ -68,5 +111,15 @@ const config = {
     outputDir: '../protocols',
   },
 };
+
+const pickBudgetRule = (date) => {
+  const { budget } = config;
+  for (let i = 0; i < budget.rules.length; i += 1) {
+    if (date < budget.rules[i].validUntil) { return budget.rules[i]; }
+  }
+  return null;
+};
+
+config.budget.pickRule = pickBudgetRule;
 
 module.exports = config;
