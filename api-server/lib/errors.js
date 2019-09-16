@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 const formatError = (err) => {
   let message = 'SERVER ERROR';
   if (err.name) { message += ` [${err.name}]`; }

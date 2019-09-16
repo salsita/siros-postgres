@@ -1,16 +1,16 @@
 {
   "name": "siros-postgres",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Siros DB schema",
   "dependencies": {
-    "dotenv": "^8.0.0",
-    "node-pg-migrate": "^3.21.1",
-    "pg": "^7.11.0"
+    "dotenv": "^8.1.0",
+    "node-pg-migrate": "^3.22.1",
+    "pg": "^7.12.1"
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0"
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   },
   "scripts": {
     "build": "../build-scripts/build-db-schema.sh",

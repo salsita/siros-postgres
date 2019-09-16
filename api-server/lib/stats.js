@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 class StatefulRingBuffer {
   // maxSize: how many recent items to keep, when 0 (default, no items) `cbOut` callback is NEVER invoked
   // initialState: object holding the stats to be updated with each items going in/out the buffer

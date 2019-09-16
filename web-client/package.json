@@ -1,6 +1,6 @@
 {
   "name": "siros-postgres",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Siros Web client",
   "private": true,
   "scripts": {
@@ -34,7 +34,7 @@
     "router5-transition-path": "^7.0.0"
   },
   "devDependencies": {
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.11.1"
   },
