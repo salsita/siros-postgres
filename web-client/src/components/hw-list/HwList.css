@@ -5,16 +5,17 @@ p.hw-list-item-big-title {
 
 div.hw-list-item-big-container {
   display: flex;
+  justify-content: space-around;
   padding-top: 8px;
 }
 
 div.hw-list-item-big-box-left {
-  width: 50%;
+  max-width: 45%;
   padding-right: 4px;
 }
 
 div.hw-list-item-big-box-right {
-  width: 50%;
+  max-width: 55%;
   padding-left: 4px;
 }
 

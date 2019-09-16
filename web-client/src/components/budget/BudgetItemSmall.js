@@ -43,6 +43,7 @@ export class BudgetItemSmall extends PureComponent {
             <div className="budget-item-small-details">
               <TitledParagraph header="category:" text={budgetItem.hw.category} />
               <TitledParagraph header="description:" text={budgetItem.hw.description} />
+              <TitledParagraph header="internal id:" text={budgetItem.hw.id} />
               {budgetItem.hw.serial_id && <TitledParagraph header="serial id:" text={budgetItem.hw.serial_id} />}
               {budgetItem.hw.condition && <TitledParagraph header="condition:" text={budgetItem.hw.condition} />}
               {(budgetItem.action === 'hw_buy') && budgetItem.hw.old_user

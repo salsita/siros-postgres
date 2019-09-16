@@ -18,6 +18,7 @@ const prepareHwData = (budgetItem) => {
   const { hw } = budgetItem;
 
   left.push('category:', hw.category);
+  left.push('internal id:', hw.id);
   if (hw.serial_id) { left.push('serial id:', hw.serial_id); }
   if (hw.condition) { left.push('condition:', hw.condition); }
   if ((budgetItem.action === 'hw_buy') && hw.old_user) { left.push('previous user:', hw.old_user); }

@@ -14,6 +14,7 @@ export const MarketplaceItemSmallExpanded = (props) => {
       <CardContent>
         <TitledParagraph header="category:" text={hwItem.category} />
         <TitledParagraph header="description:" text={hwItem.description} />
+        <TitledParagraph header="internal id:" text={hwItem.id} />
         {hwItem.serial_id && <TitledParagraph header="serial id:" text={hwItem.serial_id} />}
         <TitledParagraph header="purchase date:" text={hwItem.purchase_date} />
         <TitledParagraph header="purchase price:" text={hwItem.purchase_price} />

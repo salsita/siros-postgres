@@ -23,16 +23,17 @@ p.marketplace-item-big-title {
 
 div.marketplace-item-big-container {
   display: flex;
+  justify-content: space-around;
   padding-top: 8px;
 }
 
 div.marketplace-item-big-box-left {
-  width: 50%;
+  max-width: 45%;
   padding-right: 4px;
 }
 
 div.marketplace-item-big-box-right {
-  width: 50%;
+  max-width: 55%;
   padding-left: 4px;
 }
 

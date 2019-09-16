@@ -10,7 +10,7 @@ div.budget-item-small-header {
 }
 
 p.budget-item-small-amount {
-  width: 21%;
+  width: 23%;
   padding-right: 4px;
   text-align: right;
 }
@@ -21,14 +21,14 @@ p.budget-item-small-type {
   text-align: right;
 }
 
-p.budget-item-small-date{
-  width: 34%;
+p.budget-item-small-date {
+  width: 37%;
   padding-right: 4px;
   text-align: right;
 }
 
 div.budget-item-small-button {
-  width: 24%;
+  width: 19%;
   min-height: 32px;
   display: flex;
   justify-content: center;
@@ -60,7 +60,7 @@ p.budget-item-big-type {
   text-align: center;
 }
 
-p.budget-item-big-date{
+p.budget-item-big-date {
   width: 20%;
   text-align: right;
 }
@@ -73,16 +73,17 @@ p.budget-item-big-title {
 
 div.budget-item-big-container {
   display: flex;
+  justify-content: space-around;
   padding-top: 8px;
 }
 
 div.budget-item-big-box-left {
-  width: 50%;
+  max-width: 45%;
   padding-right: 4px;
 }
 
 div.budget-item-big-box-right {
-  width: 50%;
+  max-width: 55%;
   padding-left: 4px;
 }
 

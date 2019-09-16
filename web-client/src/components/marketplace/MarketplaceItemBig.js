@@ -12,6 +12,7 @@ const prepareHwData = (hwItem) => {
   const right = new LabelValuePairs();
 
   left.push('category:', hwItem.category);
+  left.push('internal id:', hwItem.id);
   if (hwItem.serial_id) { left.push('serial id:', hwItem.serial_id); }
   left.push('condition:', hwItem.condition);
   left.push('current owner:', hwItem.owner);
