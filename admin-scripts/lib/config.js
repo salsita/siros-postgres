@@ -9,7 +9,7 @@ const budgetStartDate = '2015-04-01'; // when the budget calculation starts
 const config = {
   budget: {
     startDate: budgetStartDate,
-    names: budgetNames, // for name referecing, to bind business logic with specific periods
+    names: budgetNames, // for name referencing, to bind business logic with specific periods
     rules: [
       {
         initial: {

@@ -143,4 +143,23 @@ describe('getBudgetUpdates', () => {
       }
     });
   });
+  test('bug-fix #1', () => {
+    const res = getUpdates(
+      { start_date: '2018-09-03', part_time: false },
+      [],
+      '2019-09-23',
+    );
+    expect(res).toEqual([
+      {
+        action: 'initial',
+        amount: 45000,
+        date: '2018-09-03',
+      },
+      {
+        action: 'yearly',
+        amount: 25000,
+        date: '2019-09-03',
+      },
+    ]);
+  });
 });
