@@ -1,0 +1,11 @@
+{
+  "extends": ["config:base", ":automergeMinor", ":automergeLinters", "schedule:weekly", "group:allNonMajor"],
+  "postUpgradeTasks": {
+    "commands": [
+      "npm --prefix admin-scripts run lint -- --fix",
+      "npm --prefix api-server run lint -- --fix",
+      "npm --prefix db-schema run lint -- --fix",
+      "npm --prefix web-client run lint -- --fix"
+    ]
+  }
+}
