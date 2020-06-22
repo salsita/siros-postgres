@@ -1089,7 +1089,7 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@material-ui/core@^4.0.0":
+"@material-ui/core@4.4.2":
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.4.2.tgz#66a9423e533833d2867827e6fdf526adbdceb7c0"
   integrity sha512-hnZ4SP/hWJ9sUoNMkStz/y/CL2c7j4JpVIB2py3+vpBFU9TgHL3noBk3Fr0gltRvvlYA9ekpiGsGZ2ukk1R7Eg==
@@ -2587,7 +2587,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.6:
+classnames@2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -3738,7 +3738,7 @@ escodegen@^1.11.0, escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-airbnb-base@^14.0.0:
+eslint-config-airbnb-base@14.0.0:
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-14.0.0.tgz#8a7bcb9643d13c55df4dd7444f138bf4efa61e17"
   integrity sha512-2IDHobw97upExLmsebhtfoD3NAKhV4H0CJWP3Uprd/uk+cHuWYOczPVxQ8PxLFUAw7o3Th1RAU8u1DoUpr+cMA==
@@ -3788,7 +3788,7 @@ eslint-plugin-flowtype@3.13.0:
   dependencies:
     lodash "^4.17.15"
 
-eslint-plugin-import@2.18.2, eslint-plugin-import@^2.14.0:
+eslint-plugin-import@2.18.2:
   version "2.18.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.18.2.tgz#02f1180b90b077b33d447a17a2326ceb400aceb6"
   integrity sha512-5ohpsHAiUBRNaBWAF08izwUGlbrJoJJ+W9/TBwsGoR1MnlgfwMIKrFeSjWbt6moabiXW9xNvtFz+97KHRfI4HQ==
@@ -3825,7 +3825,7 @@ eslint-plugin-react-hooks@^1.6.1:
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.7.0.tgz#6210b6d5a37205f0b92858f895a4e827020a7d04"
   integrity sha512-iXTCFcOmlWvw4+TOE8CLWj6yX1GwzT0Y6cUfHHZqWnSk144VmVIRcVGtUAzrLES7C798lmvnt02C7rxaOX1HNA==
 
-eslint-plugin-react@7.14.3, eslint-plugin-react@^7.11.1:
+eslint-plugin-react@7.14.3:
   version "7.14.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.14.3.tgz#911030dd7e98ba49e1b2208599571846a66bdf13"
   integrity sha512-EzdyyBWC4Uz2hPYBiEJrKCUi2Fn+BJ9B/pJQcjw5X+x/H2Nm59S4MJIvL4O5NEE0+WbnQwEBxWY03oUk+Bc3FA==
@@ -6227,7 +6227,7 @@ lodash._reinterpolate@^3.0.0:
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
   integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
 
-lodash.groupby@^4.6.0:
+lodash.groupby@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.groupby/-/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"
   integrity sha1-Cwih3PaDl8OXhVwyOXg4Mt90A9E=
@@ -6262,7 +6262,7 @@ lodash.unescape@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
-lodash.uniq@^4.5.0:
+lodash.uniq@4.5.0, lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
@@ -8339,7 +8339,7 @@ react-dev-utils@^9.0.3:
     strip-ansi "5.2.0"
     text-table "0.2.0"
 
-react-dom@^16.5.2:
+react-dom@16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.9.0.tgz#5e65527a5e26f22ae3701131bcccaee9fb0d3962"
   integrity sha512-YFT2rxO9hM70ewk9jq0y6sQk8cL02xm4+IzYBz75CQGlClQQ1Bxq0nhHF6OtSbit+AIahujJgb/CPRibFkMNJQ==
@@ -8359,7 +8359,7 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
-react-redux@^7.0.0:
+react-redux@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.1.1.tgz#ce6eee1b734a7a76e0788b3309bf78ff6b34fa0a"
   integrity sha512-QsW0vcmVVdNQzEkrgzh2W3Ksvr8cqpAv5FhEk7tNEft+5pp7rXxAudTz3VOPawRkLIepItpkEIyLcN/VVXzjTg==
@@ -8371,7 +8371,7 @@ react-redux@^7.0.0:
     prop-types "^15.7.2"
     react-is "^16.9.0"
 
-react-router5@^7.0.0:
+react-router5@7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/react-router5/-/react-router5-7.1.0.tgz#e626505d3f4f0b766078d9a64d129e71055b01cd"
   integrity sha512-OVMaRPOhJP5/1U2ExEz9kpv/cdnpt08bKo/+bUgsimDTJ+eD0NrM4wqa1nkpZFUJaICfHccjuHfcxcA5/N0cDw==
@@ -8379,7 +8379,7 @@ react-router5@^7.0.0:
     prop-types "~15.6.2"
     router5-transition-path "^7.0.1"
 
-react-scripts@^3.0.0:
+react-scripts@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.1.1.tgz#1796bc92447f3a2d3072c3b71ca99f88d099c48d"
   integrity sha512-dbjTG9vJC61OI62hIswQYg5xHvwlxDTH6QXz6ICEuA5AqkFQWk1LKl76sk8fVL2WsyumbBc4FErALwKcEV2vNA==
@@ -8450,7 +8450,7 @@ react-transition-group@^4.0.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@^16.5.2:
+react@16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.9.0.tgz#40ba2f9af13bc1a38d75dbf2f4359a5185c4f7aa"
   integrity sha512-+7LQnFBwkiw+BobzOF6N//BdoNw0ouwmSJTEm9cglOOmsg/TMiFHZLe2sEoN5M7LgJTj9oHH0gxklfnQe66S1w==
@@ -8538,28 +8538,28 @@ recursive-readdir@2.2.2:
   dependencies:
     minimatch "3.0.4"
 
-redux-logger@^3.0.6:
+redux-logger@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
   integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
   dependencies:
     deep-diff "^0.3.5"
 
-redux-router5@^7.0.0:
+redux-router5@7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/redux-router5/-/redux-router5-7.0.2.tgz#3bc19f95731f764a7671b282c3c4c970f35ac589"
   integrity sha512-Fmx1d0LVXlsGoaq9xm3sVVBp7WIIJWYk+K7jQ5xPlV3gEHUifrKq59lmMar24pwnogmuMQ8GxxvRxYfrYGg7yQ==
   dependencies:
     router5-transition-path "^7.0.1"
 
-redux-saga@^1.0.0:
+redux-saga@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.0.5.tgz#03317261bc5fa7ee2ecb778f4e4848f573557bbb"
   integrity sha512-ytGFtaHyz6NQMQp7/LpQ/6CtOkbPRCcAeljUpc4c95hRm5U6dFvrRiZHeBPuQZ56L3oXfTX3hiYh8/3ZudsiNg==
   dependencies:
     "@redux-saga/core" "^1.0.3"
 
-"redux@>=0.10 <5", redux@^4.0.0:
+redux@4.0.4, "redux@>=0.10 <5":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
   integrity sha512-vKv4WdiJxOWKxK0yRoaK3Y4pxxB0ilzVx6dszU2W8wLxlb2yikRph4iV/ymtdJ6ZxpBLFbyrxklnT5yBbQSl3Q==
@@ -8567,7 +8567,7 @@ redux-saga@^1.0.0:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
 
-reduxsauce@^1.0.0:
+reduxsauce@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/reduxsauce/-/reduxsauce-1.1.0.tgz#9d503d2c5069bc315e05cd029682c3566e086363"
   integrity sha512-INjuCTmDntZqUfJFPy6qRAdSYnR16d1jH7H0TDqZW+0RA3QqOo3YK05TG07Ssh7zlxHT+eeZPojHkb2R/O6moQ==
@@ -8751,7 +8751,7 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-reselect@^4.0.0:
+reselect@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
   integrity sha512-qUgANli03jjAyGlnbYVAV5vvnOmJnODyABz51RdBN7M4WaVu8mecZWgyQNkG8Yqe3KRGRt0l4K4B3XVEULC4CA==
@@ -8872,17 +8872,17 @@ route-node@3.4.2:
     path-parser "4.2.0"
     search-params "2.1.3"
 
-router5-plugin-browser@^7.0.1:
+router5-plugin-browser@7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/router5-plugin-browser/-/router5-plugin-browser-7.0.2.tgz#a13376a1d72fd696b0d5da5a697e7aeb39f5fd24"
   integrity sha512-iDrHIDVj6wyvJBKo6fTTkrQor8/vKOXOJQD30HnFcWMHP0Amiu3vzEi6HwM3HjTr5L1AKVzMINBI3fonsdINkw==
 
-router5-transition-path@^7.0.0, router5-transition-path@^7.0.1:
+router5-transition-path@7.0.1, router5-transition-path@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/router5-transition-path/-/router5-transition-path-7.0.1.tgz#2e941fa2021fb1e4b301ec44a5c999635f787180"
   integrity sha512-ZAiz78ey4T1CDjgFiOUK4fX6AF5ZC8tuw4jCpfsfHWFt5r6URtx/2Sc1ENFPkA6Yrl2crUCGxVWUZCBFwtH9GA==
 
-router5@^7.0.0:
+router5@7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/router5/-/router5-7.0.2.tgz#10b6ba554bfefe3233ead8b74c07f66c72b70590"
   integrity sha512-QPTKHjJVn8pozHoPvVREGTogo06M/1dY6UHMMUyoAc7gG3UMx5QBMjyiREnqtac0U0Cp4T5RsZ0bkBXNsSjfYg==
