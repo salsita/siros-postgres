@@ -16,7 +16,7 @@
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jest": "23.16.0",
-    "jest": "24.9.0"
+    "jest": "26.0.1"
   },
   "scripts": {
     "build": "../build-scripts/build-admin-scripts.sh",
