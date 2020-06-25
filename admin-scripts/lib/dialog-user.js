@@ -223,7 +223,6 @@ const questions = {
     ],
   },
 
-
   [dialogStates.editUserId]: {
     text: '[edit user] enter user id to edit, (l)ist existing users, or go (b)ack (<number>/L/b)',
     handlers: [
