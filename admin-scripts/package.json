@@ -3,20 +3,20 @@
   "version": "1.6.1",
   "description": "Siros admin scripts (command line)",
   "dependencies": {
-    "dotenv": "8.1.0",
-    "pdfmake": "0.1.59",
-    "pg": "7.12.1",
-    "pg-promise": "9.1.4",
-    "printf": "0.5.2",
+    "dotenv": "8.2.0",
+    "pdfmake": "0.1.65",
+    "pg": "7.18.2",
+    "pg-promise": "9.3.6",
+    "printf": "0.5.3",
     "squel": "5.13.0",
-    "winston": "3.2.1"
+    "winston": "3.3.3"
   },
   "devDependencies": {
     "eslint": "7.3.1",
-    "eslint-config-airbnb-base": "14.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jest": "23.16.0",
-    "jest": "26.0.1"
+    "eslint-config-airbnb-base": "14.2.0",
+    "eslint-plugin-import": "2.21.2",
+    "eslint-plugin-jest": "23.17.1",
+    "jest": "26.1.0"
   },
   "scripts": {
     "build": "../build-scripts/build-admin-scripts.sh",
