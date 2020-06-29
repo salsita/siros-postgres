@@ -4,7 +4,7 @@ const session = require('koa-session');
 const noCache = require('koa-no-cache');
 const helmet = require('koa-helmet');
 const compress = require('koa-compress');
-const Router = require('koa-router');
+const Router = require('@koa/router');
 
 const { config } = require('./lib/config');
 const { create: createLogger } = require('./lib/logger');
