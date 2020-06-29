@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "eslint-config-airbnb-base": "14.2.0",
-    "eslint-plugin-import": "2.21.2",
-    "eslint-plugin-react": "7.20.0"
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-react": "7.20.1"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "license": "MIT",
