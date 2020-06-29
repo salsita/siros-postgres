@@ -24,7 +24,7 @@
     "koa-router": "^7.4.0",
     "koa-session": "^5.12.3",
     "passport-google-oauth20": "^2.0.0",
-    "pg": "^7.12.1",
+    "pg": "^8.0.0",
     "squel": "^5.13.0",
     "winston": "^3.2.1"
   },
