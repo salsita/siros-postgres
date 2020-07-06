@@ -14,7 +14,7 @@
   },
   "proxy": "http://localhost:3001",
   "dependencies": {
-    "@material-ui/core": "4.10.2",
+    "@material-ui/core": "4.11.0",
     "classnames": "2.2.6",
     "lodash.groupby": "4.6.0",
     "lodash.uniq": "4.5.0",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-react": "7.20.1"
+    "eslint-plugin-react": "7.20.3"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "license": "MIT",
