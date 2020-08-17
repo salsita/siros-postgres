@@ -22,7 +22,7 @@
     "react-dom": "16.13.1",
     "react-redux": "7.2.1",
     "react-router5": "8.0.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.3",
     "redux": "4.0.5",
     "redux-logger": "3.0.6",
     "redux-router5": "8.0.1",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-react": "7.20.5"
+    "eslint-plugin-react": "7.20.6"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "license": "MIT",
