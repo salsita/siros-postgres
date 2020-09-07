@@ -71,7 +71,7 @@ describe('budget.pickRule()', () => {
   test('2015-03-31', () => {
     expect(pickRule('2015-03-31').name).toBe(names.PERIOD0);
   });
-  test(startDate, () => {
+  test(`startDate ${startDate}`, () => {
     expect(pickRule(startDate).name).toBe(names.PERIOD1);
   });
   test('2018-05-12', () => {
