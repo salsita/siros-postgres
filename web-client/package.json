@@ -15,9 +15,7 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "@material-ui/core": "4.11.0",
-    "babel-eslint": "10.1.0",
     "classnames": "2.2.6",
-    "eslint": "7.8.1",
     "lodash.groupby": "4.6.0",
     "lodash.uniq": "4.5.0",
     "react": "16.13.1",
@@ -36,6 +34,8 @@
     "router5-transition-path": "8.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "10.1.0",
+    "eslint": "7.8.1",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-react": "7.20.6"
