@@ -7,15 +7,15 @@
     "pdfmake": "0.1.68",
     "pg": "8.3.3",
     "pg-promise": "10.6.1",
-    "printf": "0.5.3",
+    "printf": "0.6.0",
     "squel": "5.13.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "eslint": "7.8.1",
+    "eslint": "7.9.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-jest": "24.0.0",
+    "eslint-plugin-jest": "24.0.1",
     "jest": "26.4.2"
   },
   "scripts": {
