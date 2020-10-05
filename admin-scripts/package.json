@@ -5,8 +5,8 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "pdfmake": "0.1.68",
-    "pg": "8.3.3",
-    "pg-promise": "10.6.1",
+    "pg": "8.4.0",
+    "pg-promise": "10.6.2",
     "printf": "0.6.0",
     "squel": "5.13.0",
     "winston": "3.3.3"
