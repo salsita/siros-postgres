@@ -5,10 +5,10 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "node-pg-migrate": "5.8.0",
-    "pg": "8.4.0"
+    "pg": "8.4.1"
   },
   "devDependencies": {
-    "eslint": "7.10.0",
+    "eslint": "7.11.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.1"
   },
