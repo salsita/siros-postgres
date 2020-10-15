@@ -16,12 +16,10 @@ const getBudgetUpdates = (user, history, today) => {
     }
   }
   // when do the yearly refreshes start?
-  let offset = 1;
-  if (rule.name === config.budget.names.PERIOD2) { offset = 2; }
-  //
-  let year = parseInt(user.start_date.split('-')[0], 10) + offset;
-  const lastRecord = (history.length ? history[history.length - 1].date : user.start_date);
+  const offset = rule.name === config.budget.names.PERIOD2 ? 2 : 1;
   const startDate = user.start_date.split('-');
+  const lastRecord = (history.length ? history[history.length - 1].date : user.start_date);
+  let year = parseInt(startDate[0], 10) + offset;
   let anniversary = `${year}-${startDate[1]}-${startDate[2]}`;
   while (anniversary <= today) {
     if (anniversary > lastRecord) {
