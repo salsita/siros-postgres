@@ -7,7 +7,7 @@
     "check-outdated": "./build-scripts/check-outdated.sh",
     "postinstall": "./build-scripts/install-packages.sh",
     "set-version": "./build-scripts/set-version.sh",
-    "version": "npm run set-version && git add '**/package*.json'",
+    "version": "npm run set-version && yarn --cwd web-client gen-ver && git add '**/package*.json' '**/yarn.lock' '**/version.js'",
     "test": "./build-scripts/test.sh"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
