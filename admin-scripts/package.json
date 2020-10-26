@@ -6,17 +6,17 @@
     "dotenv": "8.2.0",
     "pdfmake": "0.1.68",
     "pg": "8.4.1",
-    "pg-promise": "10.7.0",
+    "pg-promise": "10.7.1",
     "printf": "0.6.0",
     "squel": "5.13.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "eslint": "7.11.0",
+    "eslint": "7.12.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jest": "24.1.0",
-    "jest": "26.5.3"
+    "jest": "26.6.1"
   },
   "scripts": {
     "build": "../build-scripts/build-admin-scripts.sh",
