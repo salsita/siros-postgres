@@ -226,7 +226,7 @@ const questions = {
       {
         match: /^\d+$/,
         code: async (context, answer) => {
-          const events = await context.dbQuery.getEduEvents({ usedId: parseInt(answer, 10) });
+          const events = await context.dbQuery.getEduEvents({ userId: parseInt(answer, 10) });
           if (!events) { return dialogStates.init; }
           printEvents(events);
           return dialogStates.init;
