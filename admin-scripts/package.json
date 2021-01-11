@@ -6,7 +6,7 @@
     "dotenv": "8.2.0",
     "pdfmake": "0.1.69",
     "pg": "8.5.1",
-    "pg-promise": "10.8.6",
+    "pg-promise": "10.8.7",
     "printf": "0.6.0",
     "squel": "5.13.0",
     "winston": "3.3.3"
