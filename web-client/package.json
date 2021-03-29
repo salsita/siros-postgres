@@ -18,9 +18,9 @@
     "classnames": "2.2.6",
     "lodash.groupby": "4.6.0",
     "lodash.uniq": "4.5.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-redux": "7.2.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.3",
     "react-router5": "8.0.1",
     "react-scripts": "4.0.3",
     "redux": "4.0.5",
@@ -37,7 +37,7 @@
     "babel-eslint": "10.1.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-react": "7.22.0"
+    "eslint-plugin-react": "7.23.1"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "license": "MIT",
