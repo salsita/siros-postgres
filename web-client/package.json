@@ -15,7 +15,7 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "@material-ui/core": "4.11.3",
-    "classnames": "2.2.6",
+    "classnames": "2.3.1",
     "lodash.groupby": "4.6.0",
     "lodash.uniq": "4.5.0",
     "react": "17.0.2",
