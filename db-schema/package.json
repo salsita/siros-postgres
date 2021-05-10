@@ -3,12 +3,12 @@
   "version": "1.7.1",
   "description": "Siros DB schema",
   "dependencies": {
-    "dotenv": "8.2.0",
+    "dotenv": "8.6.0",
     "node-pg-migrate": "5.9.0",
     "pg": "8.6.0"
   },
   "devDependencies": {
-    "eslint": "7.25.0",
+    "eslint": "7.26.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1"
   },
