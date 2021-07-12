@@ -4,7 +4,7 @@
   "description": "Siros admin scripts (command line)",
   "dependencies": {
     "dotenv": "8.6.0",
-    "pdfmake": "0.1.71",
+    "pdfmake": "0.2.0",
     "pg": "8.6.0",
     "pg-promise": "10.10.2",
     "printf": "0.6.1",
