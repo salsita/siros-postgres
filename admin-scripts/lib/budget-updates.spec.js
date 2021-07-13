@@ -4,6 +4,8 @@ const dates = [
   '02-15',
   '04-01',
   '06-15',
+  '07-13',
+  '07-14',
   '08-01',
   '10-15',
 ];
@@ -12,6 +14,7 @@ const years = [
   2013,
   2015,
   2019,
+  2021,
   2025,
 ];
 
@@ -25,7 +28,19 @@ years.forEach((y) => {
     const resultsPart = [];
     const resultsFull = [];
     let yy;
-    if (date >= '2019-08-01') {
+    if (date >= '2021-07-13') {
+      resultsPart.push({
+        action: 'initial',
+        amount: 55000,
+        date,
+      });
+      resultsFull.push({
+        action: 'initial',
+        amount: 65000,
+        date,
+      });
+      yy = y + 2;
+    } else if (date >= '2019-08-01') {
       resultsPart.push({
         action: 'initial',
         amount: 32500,
@@ -55,14 +70,24 @@ years.forEach((y) => {
     while (yy < STOP_YEAR) {
       const act = `${yy}-${d}`;
       if (act >= '2015-04-01') {
+        let partIncreaseAmount;
+        if (act >= '2021-07-13') {
+          partIncreaseAmount = 21000;
+        } else if (act >= '2019-08-01') {
+          partIncreaseAmount = 12500;
+        } else {
+          partIncreaseAmount = 11250;
+        }
+        const fullIncreaseAmount = act >= '2019-08-01' ? 25000 : 22500;
+
         resultsPart.push({
           action: 'yearly',
-          amount: (act >= '2019-08-01' ? 12500 : 11250),
+          amount: partIncreaseAmount,
           date: act,
         });
         resultsFull.push({
           action: 'yearly',
-          amount: (act >= '2019-08-01' ? 25000 : 22500),
+          amount: fullIncreaseAmount,
           date: act,
         });
       }
