@@ -55,7 +55,7 @@ const config = {
         },
         name: budgetNames.PERIOD2,
         firstIncreaseYears: 2,
-        validUntil: '2021-07-13',
+        validUntil: '2021-08-01',
       },
       {
         initial: {
