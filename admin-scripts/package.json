@@ -5,14 +5,14 @@
   "dependencies": {
     "dotenv": "8.6.0",
     "pdfmake": "0.2.0",
-    "pg": "8.6.0",
-    "pg-promise": "10.10.2",
+    "pg": "8.7.1",
+    "pg-promise": "10.11.0",
     "printf": "0.6.1",
     "squel": "5.13.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "eslint": "7.31.0",
+    "eslint": "7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.23.4",
     "eslint-plugin-jest": "24.4.0",

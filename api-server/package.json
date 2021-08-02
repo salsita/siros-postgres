@@ -24,12 +24,12 @@
     "koa-passport": "4.1.4",
     "koa-session": "6.2.0",
     "passport-google-oauth20": "2.0.0",
-    "pg": "8.6.0",
+    "pg": "8.7.1",
     "squel": "5.13.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "eslint": "7.31.0",
+    "eslint": "7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.23.4",
     "nodemon": "2.0.12"
