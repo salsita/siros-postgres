@@ -14,11 +14,11 @@
   "license": "MIT",
   "repository": "git@github.com:salsita/siros-postgres.git",
   "dependencies": {
-    "@koa/router": "10.1.0",
+    "@koa/router": "10.1.1",
     "dotenv": "8.6.0",
     "koa": "2.13.1",
     "koa-bodyparser": "4.3.0",
-    "koa-compress": "5.0.1",
+    "koa-compress": "5.1.0",
     "koa-helmet": "6.1.0",
     "koa-no-cache": "2.0.0",
     "koa-passport": "4.1.4",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "eslint": "7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-plugin-import": "2.24.0",
+    "eslint-plugin-import": "2.24.2",
     "nodemon": "2.0.12"
   }
 }
