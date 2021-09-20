@@ -37,7 +37,7 @@
     "babel-eslint": "10.1.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.24.2",
-    "eslint-plugin-react": "7.25.1"
+    "eslint-plugin-react": "7.25.3"
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "license": "MIT",
