@@ -3,6 +3,7 @@ const budgetNames = {
   PERIOD1: 'period1',
   PERIOD2: 'period2',
   PERIOD3: 'period3',
+  PERIOD4: 'period4',
 };
 
 const budgetStartDate = '2015-04-01'; // when the budget calculation starts
@@ -69,6 +70,21 @@ const config = {
           partTime: 21000,
         },
         name: budgetNames.PERIOD3,
+        firstIncreaseYears: 2,
+        validUntil: '2022-07-01',
+      },
+      {
+        initial: {
+          // initial budget
+          fullTime: 75000,
+          partTime: 75000,
+        },
+        yearly: {
+          // yearly increase
+          fullTime: 30000,
+          partTime: 30000,
+        },
+        name: budgetNames.PERIOD4,
         firstIncreaseYears: 2,
         validUntil: '2999-12-31',
       },
