@@ -104,16 +104,17 @@ const printStores = (stores) => {
 const printHw = (hw) => {
   const descrWidthMax = config.hwDisplay.descriptionWidth;
   const commentWidthMax = config.hwDisplay.commentWidth;
+  const serialIdWidthMax = config.hwDisplay.serialIdWidth;
   let idWidth = 3;
   let categoryWidth = 9;
   let descrWidth = 6;
-  let storeWidth = 6;
+  let purchDateWidth = 10;
   let priceWidth = 6;
   let curPriceWidth = 10;
   let condWidth = 5;
   let userWidth = 5;
-  let maxWidth = 4;
   let commentWidth = 8;
+  let serialIdWidth = 8;
 
   const today = (new Date()).toISOString().substr(0, 10);
   let len;
@@ -121,7 +122,6 @@ const printHw = (hw) => {
   hw.forEach((item) => {
     //
     let price = config.hwItems.getAgedPrice(item.purchase_price, item.purchase_date, today);
-    if (item.max_price !== null) { price = Math.min(item.max_price, price); }
     if (item.condition === 'new') { price = item.purchase_price; }
     item.current_price_calc = price;
     //
@@ -131,8 +131,6 @@ const printHw = (hw) => {
     if (len > categoryWidth) { categoryWidth = len; }
     len = item.description ? Math.min(descrWidthMax, item.description.length) : 0;
     if (len > descrWidth) { descrWidth = len; }
-    len = item.store.length;
-    if (len > storeWidth) { storeWidth = len; }
     len = item.purchase_price.toString().length;
     if (len > priceWidth) { priceWidth = len; }
     len = item.current_price_calc.toString().length;
@@ -141,15 +139,15 @@ const printHw = (hw) => {
     if (len > condWidth) { condWidth = len; }
     len = item.user.length;
     if (len > userWidth) { userWidth = len; }
-    len = item.max_price !== null ? item.max_price.toString().length : 0;
-    if (len > maxWidth) { maxWidth = len; }
+    len = item.serial_id !== null ? Math.min(serialIdWidthMax, item.serial_id.length) : 0;
+    if (len > serialIdWidth) { serialIdWidth = len; }
     len = item.comment ? Math.min(commentWidthMax, item.comment.length) : 0;
     if (len > commentWidth) { commentWidth = len; }
   });
   let str = printf(
-    ` %-${idWidth}s | A | M | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | %-${storeWidth}s | `
-    + `pur. date: | %-${priceWidth}s | %-${curPriceWidth}s | %-${maxWidth}s | %-${userWidth}s | comment:\n`,
-    'id:', 'cond:', 'category:', 'descr:', 'store:', 'price:', 'cur.price:', 'max:', 'user:',
+    ` %-${idWidth}s | A | M | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | `
+    + `pur. date: | %-${priceWidth}s | %-${curPriceWidth}s | %-${userWidth}s | %-${serialIdWidth}s | comment:\n`,
+    'id:', 'cond:', 'category:', 'descr:', 'price:', 'cur.price:', 'user:', 'serial_id:',
   );
   process.stdout.write(str);
   str = '-';
@@ -161,15 +159,15 @@ const printHw = (hw) => {
   str += '-+-';
   for (i = 0; i < descrWidth; i += 1) { str += '-'; }
   str += '-+-';
-  for (i = 0; i < storeWidth; i += 1) { str += '-'; }
-  str += '-+------------+-';
+  for (i = 0; i < purchDateWidth; i += 1) { str += '-'; }
+  str += '-+-';
   for (i = 0; i < priceWidth; i += 1) { str += '-'; }
   str += '-+-';
   for (i = 0; i < curPriceWidth; i += 1) { str += '-'; }
   str += '-+-';
-  for (i = 0; i < maxWidth; i += 1) { str += '-'; }
-  str += '-+-';
   for (i = 0; i < userWidth; i += 1) { str += '-'; }
+  str += '-+-';
+  for (i = 0; i < serialIdWidth; i += 1) { str += '-'; }
   str += '-+-';
   for (i = 0; i < commentWidth; i += 1) { str += '-'; }
   str += '-\n';
@@ -182,13 +180,16 @@ const printHw = (hw) => {
     const comment = item.comment
       ? (item.comment.length <= commentWidthMax ? item.comment : `${item.comment.substr(0, commentWidthMax - 3)}...`)
       : '';
+    const serialId = item.serial_id
+      ? (item.serial_id.length <= serialIdWidthMax ? item.serial_id : `${item.serial_id.substr(0, serialIdWidthMax - 3)}...`)
+      : '';
     str = printf(
-      ` %${idWidth}s | %s | %s | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | %-${storeWidth}s | `
-      + `%s | %${priceWidth}s | %${curPriceWidth}s | %${maxWidth}s | %-${userWidth}s | %s\n`,
+      ` %${idWidth}s | %s | %s | %-${condWidth}s | %-${categoryWidth}s | %-${descrWidth}s | `
+      + `%s | %${priceWidth}s | %${curPriceWidth}s | %-${userWidth}s | %-${serialIdWidth}s | %s\n`,
       item.id.toString(), item.active ? 'x' : ' ', item.available ? 'x' : ' ', item.condition, item.category, descr,
-      item.store, item.purchase_date, item.purchase_price.toString(),
-      item.active ? item.current_price_calc.toString() : '', item.max_price !== null ? item.max_price.toString() : '',
-      item.user, comment,
+      item.purchase_date, item.purchase_price.toString(),
+      item.active ? item.current_price_calc.toString() : '',
+      item.user, serialId, comment,
     );
     process.stdout.write(str);
   });

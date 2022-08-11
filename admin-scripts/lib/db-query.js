@@ -380,6 +380,7 @@ class DbQuery extends Db {
       .field('h.active', 'active')
       .field('h.available', 'available')
       .field('h.comment', 'comment')
+      .field('h.serial_id', 'serial_id')
       .from('hw', 'h')
       .join('hw_categories', 'c', 'h.category = c.id')
       .join('stores', 's', 'h.store = s.id')
