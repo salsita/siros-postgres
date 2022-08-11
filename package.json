@@ -12,5 +12,8 @@
   },
   "author": "Roman Kaspar <roman@salsitasoft.com> (https://salsitasoft.com/)",
   "repository": "git@github.com:salsita/siros-postgres.git",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": "14.16.1"
+  }
 }

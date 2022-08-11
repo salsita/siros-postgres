@@ -108,7 +108,7 @@ const printHw = (hw) => {
   let idWidth = 3;
   let categoryWidth = 9;
   let descrWidth = 6;
-  let purchDateWidth = 10;
+  const purchDateWidth = 10;
   let priceWidth = 6;
   let curPriceWidth = 10;
   let condWidth = 5;
