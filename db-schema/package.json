@@ -4,7 +4,7 @@
   "description": "Siros DB schema",
   "dependencies": {
     "dotenv": "8.6.0",
-    "node-pg-migrate": "5.10.0",
+    "node-pg-migrate": "6.2.2",
     "pg": "8.7.1"
   },
   "devDependencies": {
