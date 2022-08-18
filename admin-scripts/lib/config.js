@@ -95,6 +95,7 @@ const config = {
     // limits for display column widths
     descriptionWidth: 65,
     commentWidth: 34,
+    serialIdWidth: 30,
   },
 
   hwItems: {
