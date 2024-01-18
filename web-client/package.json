@@ -34,7 +34,7 @@
     "router5-transition-path": "8.0.1"
   },
   "devDependencies": {
-    "babel-eslint": "10.1.0",
+    "@babel/eslint-parser": "7.11.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-react": "7.27.1"
