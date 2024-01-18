@@ -87,7 +87,7 @@ years.forEach((y) => {
           partIncreaseAmount = 1;
           fullIncreaseAmount = 1;
         } else
-          if (act >= '2022-07-01') {
+        if (act >= '2022-07-01') {
           partIncreaseAmount = 30000;
           fullIncreaseAmount = 30000;
         } else {
