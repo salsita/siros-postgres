@@ -3,7 +3,7 @@
   "version": "1.7.1",
   "description": "Siros admin scripts (command line)",
   "dependencies": {
-    "dotenv": "8.6.0",
+    "dotenv": "16.4.5",
     "pdfmake": "0.2.4",
     "pg": "8.7.1",
     "pg-promise": "10.11.1",
