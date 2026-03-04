@@ -11,7 +11,10 @@ class Db {
     if (!url) {
       logger.error(`[${this.name}] no URL provided`);
     }
-    this.db = pgp(url);
+    this.db = pgp({
+      connectionString: url,
+      ssl: { rejectUnauthorized: false },
+    });
     this.connected = false;
   }
 
