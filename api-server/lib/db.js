@@ -12,6 +12,7 @@ class Db {
     this.pool = new Pool({
       connectionString: url,
       connectionTimeoutMillis: 10000, // 10 seconds
+      ssl: { rejectUnauthorized: false },
     });
   }
 
